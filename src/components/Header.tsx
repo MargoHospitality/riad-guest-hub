@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import { useApp } from "@/contexts/AppContext";
+import logoFallback from "@/assets/logo.png";
 import LanguageSelector from "./LanguageSelector";
 import MenuDrawer from "./MenuDrawer";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { branding } = useApp();
+  
+  const logo = branding?.logo_url || logoFallback;
+  const propertyName = branding?.property_name || "Riad Massiba";
 
   return (
     <>
@@ -19,7 +24,7 @@ const Header = () => {
           <Menu className="w-6 h-6 text-foreground" />
         </button>
         <Link to="/">
-          <img src={logo} alt="Riad Massiba" className="h-12 object-contain hover:opacity-80 transition-opacity" />
+          <img src={logo} alt={propertyName} className="h-12 object-contain hover:opacity-80 transition-opacity" />
         </Link>
         <LanguageSelector />
       </header>
