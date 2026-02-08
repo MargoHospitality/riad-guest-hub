@@ -8,6 +8,7 @@ import CheckinTransport from "./pages/CheckinTransport";
 import CheckinGuestDetails from "./pages/CheckinGuestDetails";
 import CheckinRestauration from "./pages/CheckinRestauration";
 import CheckinBedding from "./pages/CheckinBedding";
+import CheckinOtherRequests from "./pages/CheckinOtherRequests";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/checkin/guest-details" element={<CheckinGuestDetails />} />
           <Route path="/checkin/step3" element={<CheckinRestauration />} />
           <Route path="/checkin/step4" element={<CheckinBedding />} />
+          <Route path="/checkin/step5" element={<CheckinOtherRequests />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
