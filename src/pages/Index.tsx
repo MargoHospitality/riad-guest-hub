@@ -5,7 +5,7 @@ import RoomDetails from "@/components/RoomDetails";
 import TransportCard from "@/components/TransportCard";
 import StayInfo from "@/components/StayInfo";
 import QuickActions from "@/components/QuickActions";
-import ContactSection from "@/components/ContactSection";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 
 const Index = () => (
@@ -17,8 +17,8 @@ const Index = () => (
     <TransportCard />
     <StayInfo />
     <QuickActions />
-    <ContactSection />
     <Footer />
+    <WhatsAppButton />
   </div>
 );
 
