@@ -21,12 +21,12 @@ interface MenuDrawerProps {
 const menuItems = [
   { icon: Home, label: "Accueil", path: "/" },
   { icon: Globe, label: "Comment utiliser la Guest App", path: "/guide" },
-  { icon: PersonStanding, label: "Check-In/Check-Out", path: "/checkin/guest-details" },
+  { icon: PersonStanding, label: "Check-In/Check-Out", path: "/checkin-info" },
   { icon: UtensilsCrossed, label: "Restauration", path: "/restauration" },
   { icon: Leaf, label: "Bien-être & confort", path: "/wellness" },
   { icon: Car, label: "Parking", path: "/parking" },
   { icon: Wifi, label: "Se connecter au Wi-Fi", path: "/wifi" },
-  { icon: MapPin, label: "Carte/Itinéraire", path: "/map" },
+  { icon: MapPin, label: "Carte/Itinéraire", externalUrl: "https://maps.app.goo.gl/iACvR7utyjxYs4bv8" },
 ];
 
 const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
@@ -92,12 +92,42 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
           <ul className="py-2">
             {menuItems.map((item, index) => {
               const Icon = item.icon;
-              const active = isActive(item.path);
+              const active = item.path ? isActive(item.path) : false;
               
+              const content = (
+                <>
+                  <Icon className="w-5 h-5 flex-shrink-0 text-[#A04040]" />
+                  <span
+                    className={`ml-4 flex-1 text-[#2C2C2C] text-[15px] ${
+                      active ? "font-semibold" : "font-medium"
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                  <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                </>
+              );
+
+              if (item.externalUrl) {
+                return (
+                  <li key={index}>
+                    <a
+                      href={item.externalUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={onClose}
+                      className="flex items-center px-5 py-4 border-b border-gray-100 transition-colors hover:bg-[#8B9B5A]/5"
+                    >
+                      {content}
+                    </a>
+                  </li>
+                );
+              }
+
               return (
                 <li key={index}>
                   <Link
-                    to={item.path}
+                    to={item.path || "/"}
                     onClick={onClose}
                     className={`flex items-center px-5 py-4 border-b border-gray-100 transition-colors ${
                       active
@@ -105,17 +135,7 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
                         : "hover:bg-[#8B9B5A]/5"
                     }`}
                   >
-                    <Icon
-                      className="w-5 h-5 flex-shrink-0 text-[#A04040]"
-                    />
-                    <span
-                      className={`ml-4 flex-1 text-[#2C2C2C] text-[15px] ${
-                        active ? "font-semibold" : "font-medium"
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                    {content}
                   </Link>
                 </li>
               );
