@@ -24,12 +24,12 @@ const ReservationSummary = () => {
   };
 
   // Use real dates if token validated, otherwise fallback
-  const checkInDate = validation?.reservation?.check_in 
-    ? formatDate(validation.reservation.check_in)
+  const checkInDate = validation?.reservation?.check_in_date 
+    ? formatDate(validation.reservation.check_in_date)
     : { day: 'févr. 11', weekday: 'mercredi' };
     
-  const checkOutDate = validation?.reservation?.check_out
-    ? formatDate(validation.reservation.check_out)
+  const checkOutDate = validation?.reservation?.check_out_date
+    ? formatDate(validation.reservation.check_out_date)
     : { day: 'févr. 14', weekday: 'samedi' };
 
   return (
