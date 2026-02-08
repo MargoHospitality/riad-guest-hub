@@ -1,6 +1,7 @@
-import { Menu, User } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
+import LanguageSelector from "./LanguageSelector";
 
 const Header = () => (
   <header className="flex items-center justify-between px-4 py-3 bg-card">
@@ -10,9 +11,7 @@ const Header = () => (
     <Link to="/">
       <img src={logo} alt="Riad Massiba" className="h-12 object-contain hover:opacity-80 transition-opacity" />
     </Link>
-    <button className="p-2 rounded-lg hover:bg-secondary">
-      <User className="w-6 h-6 text-foreground" />
-    </button>
+    <LanguageSelector />
   </header>
 );
 
