@@ -1,4 +1,3 @@
-import { Plane } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const TransportCard = () => {
@@ -12,14 +11,9 @@ const TransportCard = () => {
   return (
     <section className="px-4 pb-4">
       <div className="border-2 border-transport-border bg-transport rounded-xl p-5 flex flex-col gap-3">
-        <div className="flex items-start gap-4">
-          <div className="p-2.5 rounded-full bg-accent/10 shrink-0">
-            <Plane className="w-6 h-6 text-accent" />
-          </div>
-          <div>
-            <p className="font-semibold text-foreground text-lg">Service de transport</p>
-            <p className="text-sm text-muted-foreground mt-0.5">Réservez votre transfert aéroport-riad</p>
-          </div>
+        <div>
+          <p className="font-semibold text-foreground text-lg">Réservez votre transfert aéroport-riad</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Pour une arrivée en toute tranquillité</p>
         </div>
         <Button
           onClick={handleTransportRequest}
