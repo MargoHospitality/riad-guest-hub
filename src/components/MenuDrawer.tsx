@@ -70,8 +70,8 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
       {/* Drawer */}
       <div
         ref={drawerRef}
-        className={`fixed top-0 left-0 h-full w-[85%] max-w-[320px] bg-white z-50 shadow-xl transform transition-transform duration-300 ease-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed bottom-0 left-0 right-0 h-[85%] max-h-[600px] bg-white z-50 shadow-xl transform transition-transform duration-300 ease-out rounded-t-2xl ${
+          isOpen ? "translate-y-0" : "translate-y-full"
         }`}
         role="dialog"
         aria-modal="true"
