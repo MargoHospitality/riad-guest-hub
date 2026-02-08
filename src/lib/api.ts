@@ -152,21 +152,26 @@ export function applyBrandingColors(branding: BrandingData) {
   
   const root = document.documentElement;
   
-  // Apply primary color
+  // Apply primary color (used in buttons, main elements)
   if (branding.primary_color) {
     root.style.setProperty('--color-primary', branding.primary_color);
     
-    // Convert hex to HSL for shadcn/ui compatibility
     const hsl = hexToHSL(branding.primary_color);
     root.style.setProperty('--primary', hsl);
+    // Also apply to ring for focus states
+    root.style.setProperty('--ring', hsl);
   }
   
-  // Apply secondary color
+  // Apply secondary color (used in accents, icons, borders)
   if (branding.secondary_color) {
     root.style.setProperty('--color-secondary', branding.secondary_color);
     
     const hsl = hexToHSL(branding.secondary_color);
     root.style.setProperty('--secondary', hsl);
+    // Also apply to accent (icons, highlights)
+    root.style.setProperty('--accent', hsl);
+    // And transport border
+    root.style.setProperty('--transport-border', hsl);
   }
 }
 
