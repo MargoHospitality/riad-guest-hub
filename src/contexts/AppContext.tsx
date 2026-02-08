@@ -24,18 +24,7 @@ const AppContext = createContext<AppContextValue | undefined>(undefined);
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [token] = useState<string | null>(getTokenFromUrl());
 
-  // Fetch branding data
-  const {
-    data: brandingData,
-    isLoading: isLoadingBranding,
-    error: brandingError,
-  } = useQuery({
-    queryKey: ['branding'],
-    queryFn: () => fetchBranding(),
-    staleTime: 1000 * 60 * 60, // 1 hour
-  });
-
-  // Validate token if present
+  // Validate token if present (includes branding in response)
   const {
     data: validationData,
     isLoading: isLoadingValidation,
@@ -47,6 +36,23 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
+  // Fallback: Fetch default branding if no token
+  const {
+    data: fallbackBrandingData,
+    isLoading: isLoadingFallbackBranding,
+    error: fallbackBrandingError,
+  } = useQuery({
+    queryKey: ['branding'],
+    queryFn: () => fetchBranding(),
+    enabled: !token, // Only fetch if no token
+    staleTime: 1000 * 60 * 60, // 1 hour
+  });
+
+  // Use branding from token validation if available, otherwise fallback
+  const brandingData = validationData?.branding || fallbackBrandingData || null;
+  const isLoadingBranding = token ? isLoadingValidation : isLoadingFallbackBranding;
+  const brandingError = token ? validationError : fallbackBrandingError;
+
   // Apply branding colors when loaded
   useEffect(() => {
     if (brandingData) {
@@ -55,7 +61,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [brandingData]);
 
   const value: AppContextValue = {
-    branding: brandingData || null,
+    branding: brandingData,
     validation: validationData || null,
     isLoadingBranding,
     isLoadingValidation,
