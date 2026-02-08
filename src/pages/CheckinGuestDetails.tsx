@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { User, Info, X } from "lucide-react";
+import { User } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -20,7 +20,6 @@ interface GuestDetailsForm {
   countryCode: string;
   gender: string;
   country: string;
-  arrivalTime: string;
   contactViaEmail: boolean;
   contactViaSMS: boolean;
 }
@@ -39,7 +38,6 @@ const CheckinGuestDetails = () => {
     handleSubmit,
     control,
     watch,
-    setValue,
     reset,
     formState: { errors, isValid },
   } = useForm<GuestDetailsForm>({
@@ -52,7 +50,6 @@ const CheckinGuestDetails = () => {
       countryCode: "+1",
       gender: "not_specified",
       country: "",
-      arrivalTime: "",
       contactViaEmail: false,
       contactViaSMS: false,
     },
@@ -61,7 +58,6 @@ const CheckinGuestDetails = () => {
   const firstName = watch("firstName");
   const lastName = watch("lastName");
   const email = watch("email");
-  const arrivalTime = watch("arrivalTime");
 
   const isFormValid = firstName?.trim() && lastName?.trim() && email?.trim() && email?.includes("@");
 
@@ -82,7 +78,6 @@ const CheckinGuestDetails = () => {
         countryCode: "+1",
         gender: "not_specified",
         country: "",
-        arrivalTime: "",
         contactViaEmail: false,
         contactViaSMS: false,
       });
@@ -192,36 +187,6 @@ const CheckinGuestDetails = () => {
             <CountrySelect value={field.value} onChange={field.onChange} />
           )}
         />
-
-        {/* Section: Additional Information */}
-        <div className="bg-muted rounded-lg px-4 py-3 flex items-center gap-3 mt-6">
-          <Info className="w-5 h-5 text-accent" />
-          <span className="font-semibold text-foreground">Additional information</span>
-        </div>
-
-        {/* Arrival Time */}
-        <div className="bg-card border border-border rounded-xl p-4">
-          <Label className="text-xs text-muted-foreground mb-1 block">
-            Heure d'arrivée
-          </Label>
-          <div className="flex items-center justify-between">
-            <Input
-              type="time"
-              {...register("arrivalTime")}
-              className="border-0 bg-transparent p-0 h-auto text-foreground focus-visible:ring-0 text-base w-auto"
-              placeholder="--:--"
-            />
-            {arrivalTime && (
-              <button
-                type="button"
-                onClick={() => setValue("arrivalTime", "")}
-                className="text-muted-foreground hover:text-foreground p-1"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            )}
-          </div>
-        </div>
 
         {/* Contact Preferences */}
         <div className="pt-4">
