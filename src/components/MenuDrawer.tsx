@@ -4,7 +4,6 @@ import {
   X,
   Home,
   Globe,
-  Plane,
   PersonStanding,
   Leaf,
   Car,
@@ -21,7 +20,6 @@ interface MenuDrawerProps {
 const menuItems = [
   { icon: Home, label: "Accueil", path: "/" },
   { icon: Globe, label: "Comment utiliser la Guest App", path: "/guide" },
-  { icon: Plane, label: "Service de transport", path: "/transport" },
   { icon: PersonStanding, label: "Check-In/Check-Out", path: "/checkin/guest-details" },
   { icon: Leaf, label: "Bien-être & confort", path: "/wellness" },
   { icon: Car, label: "Parking", path: "/parking" },
