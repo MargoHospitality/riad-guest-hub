@@ -115,6 +115,32 @@ export async function fetchFeaturedItems(propertyId: string = PROPERTY_ID): Prom
   return result.data || [];
 }
 
+export interface PageInfo {
+  code: string;
+  title: string;
+  route: string;
+  icon: string;
+}
+
+/**
+ * Fetch available pages for the property
+ */
+export async function fetchAvailablePages(propertyId: string = PROPERTY_ID): Promise<PageInfo[]> {
+  const response = await fetch(`${GEA_API_URL}/pages/${propertyId}`);
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch pages: ${response.statusText}`);
+  }
+  
+  const result = await response.json();
+  
+  if (!result.success) {
+    throw new Error(result.error || 'Failed to fetch pages');
+  }
+  
+  return result.data || [];
+}
+
 /**
  * Apply branding colors to CSS variables
  */

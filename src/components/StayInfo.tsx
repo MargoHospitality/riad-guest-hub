@@ -1,76 +1,66 @@
 import { Link } from "react-router-dom";
-import { Globe, PersonStanding, UtensilsCrossed, Heart, Car, Wifi, MapPin, ChevronRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAvailablePages } from "@/lib/api";
+import { 
+  Globe, 
+  PersonStanding, 
+  UtensilsCrossed, 
+  Heart, 
+  Car, 
+  Wifi, 
+  MapPin, 
+  ChevronRight,
+  FileText
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-interface InfoItem {
-  icon: LucideIcon;
-  label: string;
-  path?: string;
-  externalUrl?: string;
-}
+// Icon mapping
+const iconMap: Record<string, LucideIcon> = {
+  phone: Globe,
+  user: PersonStanding,
+  utensils: UtensilsCrossed,
+  heart: Heart,
+  car: Car,
+  wifi: Wifi,
+  "map-pin": MapPin,
+};
 
-const items: InfoItem[] = [
-  { icon: Globe, label: "Comment utiliser la Guest App", path: "/guide" },
-  { icon: PersonStanding, label: "Check-In/Check-Out", path: "/checkin-info" },
-  { icon: UtensilsCrossed, label: "Restauration", path: "/restauration" },
-  { icon: Heart, label: "Bien-être & confort", path: "/wellness" },
-  { icon: Car, label: "Parking", path: "/parking" },
-  { icon: Wifi, label: "Se connecter au Wi-Fi", path: "/wifi" },
-  { icon: MapPin, label: "Carte/Itinéraire", externalUrl: "https://maps.app.goo.gl/iACvR7utyjxYs4bv8" },
-];
+const StayInfo = () => {
+  const { data: pages, isLoading } = useQuery({
+    queryKey: ["availablePages"],
+    queryFn: () => fetchAvailablePages(),
+    staleTime: 1000 * 60 * 60, // 1 hour
+  });
 
-const StayInfo = () => (
-  <section className="px-4 pb-6">
-    <h2 className="text-xl font-bold text-foreground mb-4 font-serif">
-      Préparez votre séjour
-    </h2>
-    <div className="flex flex-col">
-      {items.map((item, i) => {
-        const content = (
-          <>
-            <item.icon className="w-5 h-5 text-accent shrink-0" />
-            <span className="flex-1 text-left text-foreground">{item.label}</span>
-            <ChevronRight className="w-4 h-4 text-accent" />
-          </>
-        );
+  // Don't render section if no pages configured
+  if (!pages || pages.length === 0) {
+    return null;
+  }
 
-        if (item.externalUrl) {
-          return (
-            <a
-              key={i}
-              href={item.externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-4 py-3.5 border-b border-border last:border-b-0 hover:bg-secondary/50 transition-colors -mx-1 px-1 rounded"
-            >
-              {content}
-            </a>
-          );
-        }
-
-        if (item.path) {
+  return (
+    <section className="px-4 pb-6">
+      <h2 className="text-xl font-bold text-foreground mb-4 font-serif">
+        Préparez votre séjour
+      </h2>
+      <div className="flex flex-col">
+        {pages.map((page) => {
+          const Icon = iconMap[page.icon] || FileText;
+          
           return (
             <Link
-              key={i}
-              to={item.path}
+              key={page.code}
+              to={page.route}
               className="flex items-center gap-4 py-3.5 border-b border-border last:border-b-0 hover:bg-secondary/50 transition-colors -mx-1 px-1 rounded"
             >
-              {content}
+              <Icon className="w-5 h-5 text-accent shrink-0" />
+              <span className="flex-1 text-left text-foreground">{page.title}</span>
+              <ChevronRight className="w-4 h-4 text-accent" />
             </Link>
           );
-        }
-
-        return (
-          <button
-            key={i}
-            className="flex items-center gap-4 py-3.5 border-b border-border last:border-b-0 hover:bg-secondary/50 transition-colors -mx-1 px-1 rounded"
-          >
-            {content}
-          </button>
-        );
-      })}
-    </div>
-  </section>
-);
+        })}
+      </div>
+    </section>
+  );
+};
 
 export default StayInfo;
