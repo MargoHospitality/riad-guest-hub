@@ -4,7 +4,6 @@ import {
   X,
   Home,
   Globe,
-  Star,
   Plane,
   PersonStanding,
   Leaf,
@@ -20,15 +19,14 @@ interface MenuDrawerProps {
 }
 
 const menuItems = [
-  { icon: Home, label: "Accueil", path: "/", highlight: false },
-  { icon: Globe, label: "Comment utiliser la Guest App", path: "/guide", highlight: false },
-  { icon: Star, label: "Personnalisez votre séjour", path: "/checkin/step1", highlight: false },
-  { icon: Plane, label: "Service de transport", path: "/transport", highlight: true },
-  { icon: PersonStanding, label: "Check-In/Check-Out", path: "/checkin/guest-details", highlight: false },
-  { icon: Leaf, label: "Bien-être & confort", path: "/wellness", highlight: false },
-  { icon: Car, label: "Parking", path: "/parking", highlight: false },
-  { icon: Wifi, label: "Se connecter au Wi-Fi", path: "/wifi", highlight: false },
-  { icon: MapPin, label: "Carte/Itinéraire", path: "/map", highlight: false },
+  { icon: Home, label: "Accueil", path: "/" },
+  { icon: Globe, label: "Comment utiliser la Guest App", path: "/guide" },
+  { icon: Plane, label: "Service de transport", path: "/transport" },
+  { icon: PersonStanding, label: "Check-In/Check-Out", path: "/checkin/guest-details" },
+  { icon: Leaf, label: "Bien-être & confort", path: "/wellness" },
+  { icon: Car, label: "Parking", path: "/parking" },
+  { icon: Wifi, label: "Se connecter au Wi-Fi", path: "/wifi" },
+  { icon: MapPin, label: "Carte/Itinéraire", path: "/map" },
 ];
 
 const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
