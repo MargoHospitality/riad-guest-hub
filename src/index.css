@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:wght@400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -86,9 +86,9 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: 'Inter', sans-serif;
+    font-family: 'DM Sans', sans-serif;
   }
   h1, h2, h3 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Serif Display', serif;
   }
 }
