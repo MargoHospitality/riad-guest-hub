@@ -77,7 +77,7 @@ const CheckinTransport = () => {
 
   const handleMargoFlowRedirect = () => {
     const callbackUrl = `${window.location.origin}/?token=${token}&resume=checkin`;
-    window.location.href = `https://margoflow.com/transport/request?token=${token}&callback=${encodeURIComponent(callbackUrl)}`;
+    window.location.href = `https://flow.margo-hospitality.com/transport/request?token=${token}&callback=${encodeURIComponent(callbackUrl)}`;
   };
 
   const handleNoTransport = () => {

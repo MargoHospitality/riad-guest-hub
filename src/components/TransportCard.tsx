@@ -6,7 +6,7 @@ const TransportCard = () => {
     // Redirect externe vers Margo Flow
     const token = "xxx"; // Token à récupérer dynamiquement
     const callback = encodeURIComponent(window.location.origin + "/?token=" + token);
-    window.location.href = `https://margoflow.com/transport/request?token=${token}&callback=${callback}`;
+    window.location.href = `https://flow.margo-hospitality.com/transport/request?token=${token}&callback=${callback}`;
   };
 
   return (
