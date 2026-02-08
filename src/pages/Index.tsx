@@ -1,14 +1,25 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import Header from "@/components/Header";
+import HeroSection from "@/components/HeroSection";
+import ReservationSummary from "@/components/ReservationSummary";
+import RoomDetails from "@/components/RoomDetails";
+import TransportCard from "@/components/TransportCard";
+import StayInfo from "@/components/StayInfo";
+import QuickActions from "@/components/QuickActions";
+import ContactSection from "@/components/ContactSection";
+import Footer from "@/components/Footer";
 
-const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
-    </div>
-  );
-};
+const Index = () => (
+  <div className="min-h-screen bg-background max-w-md mx-auto">
+    <Header />
+    <HeroSection />
+    <ReservationSummary />
+    <RoomDetails />
+    <TransportCard />
+    <StayInfo />
+    <QuickActions />
+    <ContactSection />
+    <Footer />
+  </div>
+);
 
 export default Index;
