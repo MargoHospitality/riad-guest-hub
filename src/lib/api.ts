@@ -14,15 +14,18 @@ export interface BrandingData {
 
 export interface ValidationData {
   valid: boolean;
-  property_id?: string;
-  reservation?: {
-    id: string;
+  reservation: {
+    reservation_id: string;
+    property_id: string;
+    guest_email: string;
     guest_name: string;
-    check_in: string;
-    check_out: string;
-    room_name: string;
+    check_in_date: string;
+    check_out_date: string;
+    room_name?: string;
+    adults?: number;
+    children?: number;
   };
-  message?: string;
+  branding: BrandingData;
 }
 
 /**

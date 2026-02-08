@@ -1,4 +1,4 @@
-import { Moon, Pencil } from "lucide-react";
+import { Moon, Users, Baby, Pencil } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 
 const RoomDetails = () => {
@@ -30,11 +30,21 @@ const RoomDetails = () => {
       <div className="border border-border rounded-xl p-4 bg-card">
         <div className="flex items-center justify-between">
           <div className="flex-1">
-            <p className="font-semibold text-foreground">{reservation.guest_name || "Réservation"}</p>
+            <p className="font-semibold text-foreground">{reservation.room_name || reservation.guest_name || "Réservation"}</p>
             <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
               <span className="flex items-center gap-1 font-medium text-foreground">
                 {nights} <Moon className="w-4 h-4 text-accent" />
               </span>
+              {reservation.adults && (
+                <span className="flex items-center gap-1 font-medium text-foreground">
+                  {reservation.adults} <Users className="w-4 h-4 text-accent" />
+                </span>
+              )}
+              {typeof reservation.children === 'number' && (
+                <span className="flex items-center gap-1 font-medium text-foreground">
+                  {reservation.children} <Baby className="w-4 h-4 text-accent" />
+                </span>
+              )}
             </div>
             <p className="text-sm text-muted-foreground mt-1">
               ID de réservation : {reservation.reservation_id}
