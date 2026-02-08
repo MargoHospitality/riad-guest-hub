@@ -1,5 +1,5 @@
 import { ArrowLeft, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import logo from "@/assets/logo.png";
 
 interface CheckinHeaderProps {
@@ -26,7 +26,9 @@ const CheckinHeader = ({ backPath, token }: CheckinHeaderProps) => {
       >
         <ArrowLeft className="w-5 h-5 text-foreground" />
       </button>
-      <img src={logo} alt="Riad Massiba" className="h-12" />
+      <Link to="/">
+        <img src={logo} alt="Riad Massiba" className="h-12 hover:opacity-80 transition-opacity" />
+      </Link>
       <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-border bg-background hover:bg-muted transition-colors">
         <User className="w-5 h-5 text-foreground" />
       </button>
