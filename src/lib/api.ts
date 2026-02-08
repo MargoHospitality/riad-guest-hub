@@ -17,6 +17,7 @@ export interface ValidationData {
   reservation: {
     reservation_id: string;
     property_id: string;
+    cloudbeds_property_id: string | null;
     guest_email: string;
     guest_name: string;
     check_in_date: string;

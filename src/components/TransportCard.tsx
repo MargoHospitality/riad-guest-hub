@@ -13,11 +13,17 @@ const TransportCard = () => {
       return;
     }
     
-    const { property_id, reservation_id, check_in_date } = validation.reservation;
+    const { cloudbeds_property_id, reservation_id, check_in_date } = validation.reservation;
+    
+    if (!cloudbeds_property_id) {
+      console.error("No Cloudbeds property ID available for this property");
+      return;
+    }
     
     // URL Margo Flow avec tous les paramètres pré-remplis
+    // Margo Flow attend le Cloudbeds property ID (9462, 319843, etc.)
     const params = new URLSearchParams({
-      riad: property_id,
+      riad: cloudbeds_property_id,
       reservation: reservation_id,
       checkin: check_in_date
     });
