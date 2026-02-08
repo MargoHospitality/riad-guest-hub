@@ -13,12 +13,13 @@ const TransportCard = () => {
       return;
     }
     
-    // Redirect vers Margo Flow avec le token + reservation_id
-    const callback = encodeURIComponent(window.location.href);
+    // Paramètres requis pour Margo Flow
+    const propertyId = validation.reservation.property_id;
     const reservationId = validation.reservation.reservation_id;
+    const checkInDate = validation.reservation.check_in_date;
     
-    // URL Margo Flow avec token et callback
-    window.location.href = `https://flow.margo-hospitality.com/transport/request?reservationId=${reservationId}&token=${token}&callback=${callback}`;
+    // URL Margo Flow avec les paramètres requis
+    window.location.href = `https://flow.margo-hospitality.com/transport?propertyId=${propertyId}&reservationId=${reservationId}&checkInDate=${checkInDate}`;
   };
 
   return (
