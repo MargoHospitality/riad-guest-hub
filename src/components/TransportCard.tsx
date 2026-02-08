@@ -1,12 +1,12 @@
 import { Plane } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const TransportCard = () => {
-  const navigate = useNavigate();
-
   const handleTransportRequest = () => {
-    navigate("/checkin/transport");
+    // Redirect externe vers Margo Flow
+    const token = "xxx"; // Token à récupérer dynamiquement
+    const callback = encodeURIComponent(window.location.origin + "/?token=" + token);
+    window.location.href = `https://margoflow.com/transport/request?token=${token}&callback=${callback}`;
   };
 
   return (
