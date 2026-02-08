@@ -108,7 +108,7 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
                     }`}
                   >
                     <Icon
-                      className="w-5 h-5 flex-shrink-0 text-[#2C2C2C]"
+                      className="w-5 h-5 flex-shrink-0 text-[#A04040]"
                     />
                     <span
                       className={`ml-4 flex-1 text-[#2C2C2C] text-[15px] ${
