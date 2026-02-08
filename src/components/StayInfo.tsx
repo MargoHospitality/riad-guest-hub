@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Globe, Plane, PersonStanding, Heart, Car, Wifi, MapPin, ChevronRight } from "lucide-react";
+import { Globe, PersonStanding, Heart, Car, Wifi, MapPin, ChevronRight } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 interface InfoItem {
@@ -10,7 +10,6 @@ interface InfoItem {
 
 const items: InfoItem[] = [
   { icon: Globe, label: "Comment utiliser la Guest App", path: "/guide" },
-  { icon: Plane, label: "Service de transport" },
   { icon: PersonStanding, label: "Check-In/Check-Out" },
   { icon: Heart, label: "Bien-être & confort" },
   { icon: Car, label: "Parking" },
