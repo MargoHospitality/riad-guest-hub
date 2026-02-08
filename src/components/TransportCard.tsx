@@ -1,15 +1,24 @@
 import { Car } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
+import { useApp } from "@/contexts/AppContext";
 
 const TransportCard = () => {
   const { t } = useTranslation();
+  const { token, validation } = useApp();
   
   const handleTransportRequest = () => {
-    // Redirect externe vers Margo Flow
-    const token = "xxx"; // Token à récupérer dynamiquement
-    const callback = encodeURIComponent(window.location.origin + "/?token=" + token);
-    window.location.href = `https://flow.margo-hospitality.com/transport/request?token=${token}&callback=${callback}`;
+    if (!token || !validation?.reservation) {
+      console.error("No token or reservation data available");
+      return;
+    }
+    
+    // Redirect vers Margo Flow avec le token + reservation_id
+    const callback = encodeURIComponent(window.location.href);
+    const reservationId = validation.reservation.reservation_id;
+    
+    // URL Margo Flow avec token et callback
+    window.location.href = `https://flow.margo-hospitality.com/transport/request?reservationId=${reservationId}&token=${token}&callback=${callback}`;
   };
 
   return (
