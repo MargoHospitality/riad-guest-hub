@@ -21,7 +21,7 @@ const items: InfoItem[] = [
 const StayInfo = () => (
   <section className="px-4 pb-6">
     <h2 className="text-xl font-bold text-foreground mb-4 font-serif">
-      Information à propos de votre séjour
+      Préparez votre séjour
     </h2>
     <div className="flex flex-col">
       {items.map((item, i) => {
