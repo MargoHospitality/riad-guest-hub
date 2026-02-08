@@ -13,13 +13,11 @@ const TransportCard = () => {
       return;
     }
     
-    // Paramètres requis pour Margo Flow
+    // Paramètre riad (property_id) pour pré-sélection dans Margo Flow
     const propertyId = validation.reservation.property_id;
-    const reservationId = validation.reservation.reservation_id;
-    const checkInDate = validation.reservation.check_in_date;
     
-    // URL Margo Flow avec les paramètres requis
-    window.location.href = `https://flow.margo-hospitality.com/transport?propertyId=${propertyId}&reservationId=${reservationId}&checkInDate=${checkInDate}`;
+    // URL Margo Flow avec pré-sélection du riad
+    window.location.href = `https://margo-flow.vercel.app/?riad=${propertyId}`;
   };
 
   return (
