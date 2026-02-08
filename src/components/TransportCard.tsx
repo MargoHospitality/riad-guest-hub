@@ -14,7 +14,7 @@ const TransportCard = () => {
 
   return (
     <section className="px-4 pb-4">
-      <div className="border-2 border-transport-border bg-transport rounded-xl p-5 flex flex-col gap-3">
+      <div className="border-2 border-transport-border bg-transparent rounded-xl p-5 flex flex-col gap-3">
         <div className="flex items-start gap-4">
           <div className="p-2.5 rounded-full bg-accent/10 shrink-0">
             <Car className="w-6 h-6 text-accent" />

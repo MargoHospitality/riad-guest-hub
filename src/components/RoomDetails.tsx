@@ -46,8 +46,8 @@ const RoomDetails = () => {
                 </span>
               )}
             </div>
-            <p className="text-sm text-muted-foreground mt-1">
-              ID de réservation : {reservation.reservation_id}
+            <p className="text-sm mt-1">
+              ID de réservation : <span className="font-bold text-primary">{reservation.reservation_id}</span>
             </p>
           </div>
           <button className="p-2 rounded-full hover:bg-secondary">
