@@ -1,7 +1,10 @@
 import { Car } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 const TransportCard = () => {
+  const { t } = useTranslation();
+  
   const handleTransportRequest = () => {
     // Redirect externe vers Margo Flow
     const token = "xxx"; // Token à récupérer dynamiquement
@@ -17,15 +20,15 @@ const TransportCard = () => {
             <Car className="w-6 h-6 text-accent" />
           </div>
           <div>
-            <p className="font-semibold text-foreground text-lg">Profitez de nos offres de transport</p>
-            <p className="text-sm text-muted-foreground mt-0.5">Pour une arrivée en toute tranquillité</p>
+            <p className="font-semibold text-foreground text-lg">{t('transport.title')}</p>
+            <p className="text-sm text-muted-foreground mt-0.5">{t('transport.subtitle')}</p>
           </div>
         </div>
         <Button
           onClick={handleTransportRequest}
           className="w-full h-12 text-base font-semibold"
         >
-          Demander un transport
+          {t('transport.requestButton')}
         </Button>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useLocation, Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import {
   X,
   Home,
@@ -30,6 +31,7 @@ const menuItems = [
 ];
 
 const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
+  const { t } = useTranslation();
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -77,7 +79,7 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-5 border-b border-gray-100">
-          <span className="text-gray-400 text-base font-normal">Répertoire</span>
+          <span className="text-gray-400 text-base font-normal">{t('menu.title')}</span>
           <button
             onClick={onClose}
             className="p-1 hover:bg-gray-100 rounded-lg transition-colors"

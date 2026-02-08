@@ -1,0 +1,51 @@
+{
+  "hero": {
+    "welcome": "Bienvenue au {{propertyName}}"
+  },
+  "reservation": {
+    "checkIn": "Enregistrement",
+    "checkOut": "Départ",
+    "onlineCheckIn": "Enregistrement en ligne"
+  },
+  "roomDetails": {
+    "bookingId": "ID de réservation : {{id}}"
+  },
+  "transport": {
+    "title": "Profitez de nos offres de transport",
+    "subtitle": "Pour une arrivée en toute tranquillité",
+    "requestButton": "Demander un transport"
+  },
+  "sections": {
+    "prepareStay": "Préparez votre séjour",
+    "featured": "À la une"
+  },
+  "menu": {
+    "title": "Menu"
+  },
+  "footer": {
+    "memberOf": "{{propertyName}} est un membre honorable de Margo Hospitality"
+  },
+  "weekdays": {
+    "monday": "lundi",
+    "tuesday": "mardi",
+    "wednesday": "mercredi",
+    "thursday": "jeudi",
+    "friday": "vendredi",
+    "saturday": "samedi",
+    "sunday": "dimanche"
+  },
+  "months": {
+    "jan": "janv.",
+    "feb": "févr.",
+    "mar": "mars",
+    "apr": "avr.",
+    "may": "mai",
+    "jun": "juin",
+    "jul": "juil.",
+    "aug": "août",
+    "sep": "sept.",
+    "oct": "oct.",
+    "nov": "nov.",
+    "dec": "déc."
+  }
+}

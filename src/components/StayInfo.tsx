@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { fetchAvailablePages } from "@/lib/api";
 import { 
   Globe, 
@@ -26,6 +27,7 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const StayInfo = () => {
+  const { t } = useTranslation();
   const { data: pages, isLoading } = useQuery({
     queryKey: ["availablePages"],
     queryFn: () => fetchAvailablePages(),
@@ -40,7 +42,7 @@ const StayInfo = () => {
   return (
     <section className="px-4 pb-6">
       <h2 className="text-xl font-bold text-foreground mb-4 font-serif">
-        Préparez votre séjour
+        {t('sections.prepareStay')}
       </h2>
       <div className="flex flex-col">
         {pages.map((page) => {

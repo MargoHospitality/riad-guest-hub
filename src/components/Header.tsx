@@ -3,7 +3,7 @@ import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import logoFallback from "@/assets/logo.png";
-import LanguageSelector from "./LanguageSelector";
+import LanguageSwitcher from "./LanguageSwitcher";
 import MenuDrawer from "./MenuDrawer";
 
 const Header = () => {
@@ -26,7 +26,7 @@ const Header = () => {
         <Link to="/">
           <img src={logo} alt={propertyName} className="h-12 object-contain hover:opacity-80 transition-opacity" />
         </Link>
-        <LanguageSelector />
+        <LanguageSwitcher />
       </header>
       
       <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />

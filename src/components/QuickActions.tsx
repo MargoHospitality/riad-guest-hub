@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { fetchFeaturedItems } from "@/lib/api";
 
 const QuickActions = () => {
+  const { t } = useTranslation();
   const { data: featuredItems, isLoading } = useQuery({
     queryKey: ["featuredItems"],
     queryFn: () => fetchFeaturedItems(),
@@ -15,7 +17,7 @@ const QuickActions = () => {
 
   return (
     <section className="px-4 pb-6">
-      <h2 className="text-xl font-bold text-foreground mb-4 font-serif">À la une</h2>
+      <h2 className="text-xl font-bold text-foreground mb-4 font-serif">{t('sections.featured')}</h2>
       <div className="grid grid-cols-2 gap-3">
         {featuredItems.map((item) => (
           <a
