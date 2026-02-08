@@ -17,6 +17,7 @@ import CheckinGuestDetails from "./pages/CheckinGuestDetails";
 import CheckinRestauration from "./pages/CheckinRestauration";
 import CheckinBedding from "./pages/CheckinBedding";
 import CheckinOtherRequests from "./pages/CheckinOtherRequests";
+import DynamicContentPage from "./components/DynamicContentPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,8 @@ const App = () => (
             <Route path="/checkin/step3" element={<CheckinRestauration />} />
             <Route path="/checkin/step4" element={<CheckinBedding />} />
             <Route path="/checkin/step5" element={<CheckinOtherRequests />} />
+            {/* Dynamic custom pages from GEA (e.g. /page/how-to-use) */}
+            <Route path="/page/:pageCode" element={<DynamicContentPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

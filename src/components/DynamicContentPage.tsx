@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import { fetchPageContent } from "@/lib/api";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -7,16 +8,19 @@ import WhatsAppButton from "./WhatsAppButton";
 import { Loader2 } from "lucide-react";
 
 interface DynamicContentPageProps {
-  pageSlug: string;
+  pageSlug?: string;
   fallbackTitle?: string;
   fallbackContent?: React.ReactNode;
 }
 
 const DynamicContentPage = ({ 
-  pageSlug, 
+  pageSlug: pageSlugProp, 
   fallbackTitle = "Page",
   fallbackContent 
 }: DynamicContentPageProps) => {
+  // Get pageCode from URL params if not provided as prop
+  const { pageCode } = useParams<{ pageCode: string }>();
+  const pageSlug = pageSlugProp || pageCode || "";
   const { data: pageData, isLoading, error } = useQuery({
     queryKey: ["pageContent", pageSlug],
     queryFn: () => fetchPageContent(pageSlug),
