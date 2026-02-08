@@ -1,47 +1,16 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import Breadcrumb from "@/components/Breadcrumb";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import { Heart } from "lucide-react";
-import patioImg from "@/assets/patio.jpg";
+import DynamicContentPage from "@/components/DynamicContentPage";
 
 const WellnessPage = () => {
   return (
-    <div className="min-h-screen bg-background max-w-md mx-auto flex flex-col">
-      <Header />
-      <Breadcrumb currentPage="Bien-être & confort" />
-      
-      {/* Hero Image */}
-      <div className="w-full h-56">
-        <img 
-          src={patioImg} 
-          alt="Cour intérieure du Riad Massiba" 
-          className="w-full h-full object-cover"
-        />
-      </div>
-
-      {/* Main Content */}
-      <main className="flex-1 px-4 py-6">
-        {/* Page Title */}
-        <div className="flex items-center gap-3 mb-6">
-          <Heart className="w-6 h-6 text-accent flex-shrink-0" />
-          <h1 className="text-xl font-bold text-foreground font-serif">
-            Bien-être & confort
-          </h1>
-        </div>
-
-        {/* Content placeholder */}
-        <article className="text-foreground leading-relaxed space-y-4">
-          <p className="text-muted-foreground">
-            Contenu à venir...
-          </p>
-        </article>
-      </main>
-
-      <div className="pb-10" />
-      <Footer />
-      <WhatsAppButton />
-    </div>
+    <DynamicContentPage
+      pageSlug="wellness"
+      fallbackTitle="Bien-être & confort"
+      fallbackContent={
+        <p className="text-sm text-muted-foreground">
+          Configurez le contenu de cette page dans GEA → Pages Guest App → "wellness"
+        </p>
+      }
+    />
   );
 };
 

@@ -1,29 +1,47 @@
-import airportImg from "@/assets/airport.jpg";
-import dinnerImg from "@/assets/dinner.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { fetchFeaturedItems } from "@/lib/api";
 
-const cards = [
-  { img: airportImg, label: "Votre transport" },
-  { img: dinnerImg, label: "Dinner d'accueil" },
-];
+const QuickActions = () => {
+  const { data: featuredItems, isLoading } = useQuery({
+    queryKey: ["featuredItems"],
+    queryFn: () => fetchFeaturedItems(),
+    staleTime: 1000 * 60 * 60, // 1 hour
+  });
 
-const QuickActions = () => (
-  <section className="px-4 pb-6">
-    <h2 className="text-xl font-bold text-foreground mb-4 font-serif">A la une</h2>
-    <div className="grid grid-cols-2 gap-3">
-      {cards.map((card, i) => (
-        <button key={i} className="group text-left">
-          <div className="rounded-xl overflow-hidden aspect-[4/3]">
-            <img
-              src={card.img}
-              alt={card.label}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
-          </div>
-          <p className="mt-2 text-sm font-medium text-foreground">{card.label}</p>
-        </button>
-      ))}
-    </div>
-  </section>
-);
+  // Don't render section if no items configured
+  if (!featuredItems || featuredItems.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="px-4 pb-6">
+      <h2 className="text-xl font-bold text-foreground mb-4 font-serif">À la une</h2>
+      <div className="grid grid-cols-2 gap-3">
+        {featuredItems.map((item) => (
+          <a
+            key={item.id}
+            href={item.link_url || "#"}
+            className="group text-left"
+          >
+            <div className="rounded-xl overflow-hidden aspect-[4/3]">
+              {item.image_url ? (
+                <img
+                  src={item.image_url}
+                  alt={item.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-full h-full bg-secondary flex items-center justify-center">
+                  <span className="text-secondary-foreground text-sm">Image</span>
+                </div>
+              )}
+            </div>
+            <p className="mt-2 text-sm font-medium text-foreground">{item.title}</p>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export default QuickActions;

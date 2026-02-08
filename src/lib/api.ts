@@ -88,6 +88,33 @@ export async function fetchPageContent(pageSlug: string, propertyId: string = PR
   return result.data;
 }
 
+export interface FeaturedItem {
+  id: string;
+  title: string;
+  image_url: string;
+  link_url?: string;
+  order_index: number;
+}
+
+/**
+ * Fetch featured items for the property
+ */
+export async function fetchFeaturedItems(propertyId: string = PROPERTY_ID): Promise<FeaturedItem[]> {
+  const response = await fetch(`${GEA_API_URL}/featured-items/${propertyId}`);
+  
+  if (!response.ok) {
+    throw new Error(`Failed to fetch featured items: ${response.statusText}`);
+  }
+  
+  const result = await response.json();
+  
+  if (!result.success) {
+    throw new Error(result.error || 'Failed to fetch featured items');
+  }
+  
+  return result.data || [];
+}
+
 /**
  * Apply branding colors to CSS variables
  */
