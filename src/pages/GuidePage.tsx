@@ -7,12 +7,12 @@ import patioImg from "@/assets/patio.jpg";
 
 const GuidePage = () => {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background max-w-md mx-auto flex flex-col">
       <Header />
       <Breadcrumb currentPage="Comment utiliser la Guest App" />
       
       {/* Hero Image */}
-      <div className="w-full h-[200px] sm:h-[250px]">
+      <div className="w-full h-56">
         <img 
           src={patioImg} 
           alt="Cour intérieure du Riad Massiba" 
@@ -21,7 +21,7 @@ const GuidePage = () => {
       </div>
 
       {/* Main Content */}
-      <main className="flex-1 px-5 py-6 max-w-[800px] mx-auto w-full">
+      <main className="flex-1 px-4 py-6">
         {/* Page Title */}
         <div className="flex items-center gap-3 mb-6">
           <Smartphone className="w-6 h-6 text-accent flex-shrink-0" />
