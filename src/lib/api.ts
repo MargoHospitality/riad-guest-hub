@@ -250,7 +250,7 @@ export interface TransportStatus {
  * Check transport request status for a reservation
  */
 export async function checkTransportStatus(reservationId: string): Promise<TransportStatus> {
-  const MARGO_FLOW_URL = 'https://fnbqegolwitkgjmlesbc.supabase.co/functions/v1';
+  const MARGO_FLOW_URL = 'https://bndrfqfzrolxfmdfqaqa.supabase.co/functions/v1';
   
   const response = await fetch(
     `${MARGO_FLOW_URL}/check-transport-status?reservation_id=${encodeURIComponent(reservationId)}`,
