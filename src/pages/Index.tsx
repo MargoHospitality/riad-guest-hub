@@ -2,7 +2,7 @@ import { useApp } from "@/contexts/AppContext";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ReservationSummary from "@/components/ReservationSummary";
-import RoomDetails from "@/components/RoomDetails";
+
 import StayInfo from "@/components/StayInfo";
 import QuickActions from "@/components/QuickActions";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -22,9 +22,6 @@ const Index = () => {
       <Header />
       <HeroSection />
       <ReservationSummary />
-      <div className="pt-2">
-        <RoomDetails />
-      </div>
       <StayInfo />
       <QuickActions />
       <Footer />
