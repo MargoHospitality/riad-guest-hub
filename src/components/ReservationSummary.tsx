@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays } from "lucide-react";
+import { ArrowRight, CalendarDays, BedDouble, Users, Baby, Hash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
@@ -33,28 +33,6 @@ const ReservationSummary = () => {
   return (
     <section className="px-4 -mt-6 relative z-10">
       <div className="bg-card rounded-2xl shadow-md overflow-hidden">
-        {/* Room header */}
-        {validation?.reservation && (
-          <div className="px-4 pt-4 pb-1">
-            <h3 className="text-[15px] font-semibold text-foreground font-serif">
-              {validation.reservation.room_name || 'Chambre'}
-            </h3>
-            <div className="flex items-center gap-1.5 mt-0.5 text-muted-foreground">
-              <span className="text-xs">Rés. #{validation.reservation.reservation_id}</span>
-              <span className="text-xs">·</span>
-              {(validation.reservation.adults ?? 0) > 0 && (
-                <span className="text-xs">{validation.reservation.adults} {(validation.reservation.adults ?? 0) > 1 ? 'adultes' : 'adulte'}</span>
-              )}
-              {(validation.reservation.children ?? 0) > 0 && (
-                <>
-                  <span className="text-xs">·</span>
-                  <span className="text-xs">{validation.reservation.children} {(validation.reservation.children ?? 0) > 1 ? 'enfants' : 'enfant'}</span>
-                </>
-              )}
-            </div>
-          </div>
-        )}
-
         {/* Dates row */}
         <div className="flex items-center px-4 py-4">
           <div className="flex items-center gap-3 flex-1">
@@ -81,6 +59,34 @@ const ReservationSummary = () => {
             </div>
           </div>
         </div>
+
+        {/* Room & Reservation details */}
+        {validation?.reservation && (
+          <div className="px-4 py-3 border-t border-border flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-1.5 bg-primary/8 text-primary rounded-full px-3 py-1">
+              <BedDouble className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium">{validation.reservation.room_name || 'Chambre'}</span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-muted text-muted-foreground rounded-full px-3 py-1">
+              <Hash className="w-3 h-3" />
+              <span className="text-xs font-medium">{validation.reservation.reservation_id}</span>
+            </div>
+            <div className="flex items-center gap-3 ml-auto">
+              {(validation.reservation.adults ?? 0) > 0 && (
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Users className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">{validation.reservation.adults}</span>
+                </div>
+              )}
+              {(validation.reservation.children ?? 0) > 0 && (
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Baby className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">{validation.reservation.children}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Check-in button */}
         <button 
