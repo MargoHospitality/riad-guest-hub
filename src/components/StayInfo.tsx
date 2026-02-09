@@ -10,10 +10,10 @@ import {
   Car, 
   Wifi, 
   MapPin, 
-  ChevronRight,
   FileText,
   UserCheck,
-  Sparkles
+  Sparkles,
+  ExternalLink
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -40,15 +40,32 @@ const StayInfo = () => {
 
   if (!pages || pages.length === 0) return null;
 
+  const cardContent = (page: typeof pages[0], Icon: LucideIcon) => (
+    <>
+      <div className="w-11 h-11 rounded-xl bg-accent/10 flex items-center justify-center mb-3">
+        <Icon className="w-5 h-5 text-accent" />
+      </div>
+      <span className="text-[13px] font-medium text-foreground leading-tight text-center">
+        {page.title}
+      </span>
+      {page.externalUrl && (
+        <ExternalLink className="w-3 h-3 text-muted-foreground absolute top-2.5 right-2.5" />
+      )}
+    </>
+  );
+
   return (
-    <section className="px-4 pt-4 pb-2">
-      <h2 className="text-lg font-bold text-foreground mb-3 font-serif">
-        {t('sections.prepareStay')}
-      </h2>
-      <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
+    <section className="px-4 pt-6 pb-2">
+      <div className="flex items-center gap-3 mb-4">
+        <h2 className="text-lg font-bold text-foreground font-serif">
+          {t('sections.prepareStay')}
+        </h2>
+        <div className="flex-1 h-px bg-border" />
+      </div>
+      
+      <div className="grid grid-cols-3 gap-2.5">
         {pages.map((page, index) => {
           const Icon = iconMap[page.icon] || FileText;
-          const isLast = index === pages.length - 1;
 
           if (page.externalUrl) {
             return (
@@ -57,13 +74,10 @@ const StayInfo = () => {
                 href={page.externalUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 px-4 py-3.5 hover:bg-secondary/50 transition-colors ${
-                  !isLast ? 'border-b border-border' : ''
-                }`}
+                className="relative flex flex-col items-center justify-center bg-card rounded-2xl p-4 pt-5 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
-                <Icon className="w-4.5 h-4.5 text-accent shrink-0" />
-                <span className="flex-1 text-sm text-foreground">{page.title}</span>
-                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                {cardContent(page, Icon)}
               </a>
             );
           }
@@ -72,13 +86,10 @@ const StayInfo = () => {
             <Link
               key={page.code}
               to={page.route}
-              className={`flex items-center gap-3 px-4 py-3.5 hover:bg-secondary/50 transition-colors ${
-                !isLast ? 'border-b border-border' : ''
-              }`}
+              className="relative flex flex-col items-center justify-center bg-card rounded-2xl p-4 pt-5 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
-              <Icon className="w-4.5 h-4.5 text-accent shrink-0" />
-              <span className="flex-1 text-sm text-foreground">{page.title}</span>
-              <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              {cardContent(page, Icon)}
             </Link>
           );
         })}
