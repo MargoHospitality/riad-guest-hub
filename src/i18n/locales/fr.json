@@ -13,7 +13,29 @@
   "transport": {
     "title": "Profitez de nos offres de transport",
     "subtitle": "Pour une arrivée en toute tranquillité",
-    "requestButton": "Demander un transport"
+    "requestButton": "Demander un transport",
+    "pending": {
+      "title": "Transport",
+      "subtitle": "En attente de confirmation de la propriété",
+      "modifyButton": "Modifier la demande"
+    },
+    "confirmed": {
+      "title": "Transport Confirmé",
+      "subtitle": "Votre navette est réservée",
+      "detailsButton": "Voir les détails"
+    },
+    "types": {
+      "airport_pickup": "Navette Aéroport",
+      "train_station_pickup": "Navette Gare",
+      "hotel_pickup": "Transfert Hôtel",
+      "bus_station_pickup": "Navette Gare Routière"
+    },
+    "paymentModes": {
+      "at_riad": "Paiement au riad",
+      "to_driver": "Paiement au chauffeur"
+    },
+    "people_one": "personne",
+    "people_other": "personnes"
   },
   "sections": {
     "prepareStay": "Préparez votre séjour",

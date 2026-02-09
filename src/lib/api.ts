@@ -227,3 +227,44 @@ export function getTokenFromUrl(): string | null {
   const params = new URLSearchParams(window.location.search);
   return params.get('token');
 }
+
+// ============================================
+// Transport Status (Margo Flow Integration)
+// ============================================
+
+export interface TransportStatus {
+  status: 'none' | 'pending' | 'confirmed';
+  request: {
+    transport_type: string;
+    transport_type_name: string;
+    transport_date: string;
+    transport_time: string;
+    pax: number;
+    computed_price: number;
+    payment_mode: string;
+    guest_comment?: string | null;
+  } | null;
+}
+
+/**
+ * Check transport request status for a reservation
+ */
+export async function checkTransportStatus(reservationId: string): Promise<TransportStatus> {
+  const MARGO_FLOW_URL = 'https://fnbqegolwitkgjmlesbc.supabase.co/functions/v1';
+  
+  const response = await fetch(
+    `${MARGO_FLOW_URL}/check-transport-status?reservation_id=${encodeURIComponent(reservationId)}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  
+  if (!response.ok) {
+    throw new Error(`Failed to check transport status: ${response.statusText}`);
+  }
+  
+  return response.json();
+}

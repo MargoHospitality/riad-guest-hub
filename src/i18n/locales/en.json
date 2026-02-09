@@ -13,7 +13,29 @@
   "transport": {
     "title": "Enjoy our transport offers",
     "subtitle": "For a peaceful arrival",
-    "requestButton": "Request transport"
+    "requestButton": "Request transport",
+    "pending": {
+      "title": "Transport",
+      "subtitle": "Awaiting property confirmation",
+      "modifyButton": "Modify request"
+    },
+    "confirmed": {
+      "title": "Transport Confirmed",
+      "subtitle": "Your shuttle is booked",
+      "detailsButton": "View details"
+    },
+    "types": {
+      "airport_pickup": "Airport Shuttle",
+      "train_station_pickup": "Train Station Shuttle",
+      "hotel_pickup": "Hotel Transfer",
+      "bus_station_pickup": "Bus Station Shuttle"
+    },
+    "paymentModes": {
+      "at_riad": "Payment at riad",
+      "to_driver": "Payment to driver"
+    },
+    "people_one": "person",
+    "people_other": "people"
   },
   "sections": {
     "prepareStay": "Prepare your stay",
