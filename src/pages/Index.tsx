@@ -5,6 +5,7 @@ import ReservationSummary from "@/components/ReservationSummary";
 
 import StayInfo from "@/components/StayInfo";
 import QuickActions from "@/components/QuickActions";
+import ContactSection from "@/components/ContactSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -24,6 +25,7 @@ const Index = () => {
       <ReservationSummary />
       <StayInfo />
       <QuickActions />
+      <ContactSection />
       <Footer />
       <WhatsAppButton />
     </div>
