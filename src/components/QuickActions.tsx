@@ -7,7 +7,7 @@ const QuickActions = () => {
   const { data: featuredItems, isLoading } = useQuery({
     queryKey: ["featuredItems"],
     queryFn: () => fetchFeaturedItems(),
-    staleTime: 1000 * 60 * 60,
+    staleTime: 1000 * 60 * 5,
   });
 
   if (!featuredItems || featuredItems.length === 0) return null;
