@@ -1,4 +1,4 @@
-import { Moon, Users, Baby, Pencil } from "lucide-react";
+import { Moon, Users, Baby } from "lucide-react";
 import { useApp } from "@/contexts/AppContext";
 
 const RoomDetails = () => {
@@ -6,53 +6,48 @@ const RoomDetails = () => {
   
   if (isLoadingValidation) {
     return (
-      <section className="px-4 pb-4">
-        <div className="border border-border rounded-xl p-4 bg-card animate-pulse">
-          <div className="h-16 bg-secondary/50 rounded"></div>
+      <section className="px-4 pt-4 pb-2">
+        <div className="bg-card rounded-2xl p-4 shadow-sm animate-pulse">
+          <div className="h-12 bg-muted rounded" />
         </div>
       </section>
     );
   }
   
-  if (!validation?.reservation) {
-    return null;
-  }
+  if (!validation?.reservation) return null;
   
   const { reservation } = validation;
-  
-  // Calculate number of nights
   const checkIn = new Date(reservation.check_in_date);
   const checkOut = new Date(reservation.check_out_date);
   const nights = Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
   
   return (
-    <section className="px-4 pb-4">
-      <div className="border border-border rounded-xl p-4 bg-card">
+    <section className="px-4 pt-4 pb-2">
+      <div className="bg-card rounded-2xl p-4 shadow-sm">
         <div className="flex items-center justify-between">
-          <div className="flex-1">
-            <p className="font-semibold text-foreground">{reservation.room_name || reservation.guest_name || "Réservation"}</p>
-            <div className="flex items-center gap-3 mt-1 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1 font-medium text-foreground">
-                {nights} <Moon className="w-4 h-4 text-accent" />
-              </span>
-              {reservation.adults && (
-                <span className="flex items-center gap-1 font-medium text-foreground">
-                  {reservation.adults} <Users className="w-4 h-4 text-accent" />
-                </span>
-              )}
-              {typeof reservation.children === 'number' && (
-                <span className="flex items-center gap-1 font-medium text-foreground">
-                  {reservation.children} <Baby className="w-4 h-4 text-accent" />
-                </span>
-              )}
-            </div>
-            <p className="text-sm mt-1">
-              ID de réservation : <span className="font-bold text-primary">{reservation.reservation_id}</span>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-foreground text-[15px] truncate">
+              {reservation.room_name || reservation.guest_name || "Réservation"}
+            </p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              ID {reservation.reservation_id}
             </p>
           </div>
-          <button className="p-2 rounded-full hover:bg-secondary">
-            <Pencil className="w-4 h-4 text-accent" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary text-xs font-medium text-foreground">
+              {nights} <Moon className="w-3 h-3 text-accent" />
+            </span>
+            {reservation.adults && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary text-xs font-medium text-foreground">
+                {reservation.adults} <Users className="w-3 h-3 text-accent" />
+              </span>
+            )}
+            {typeof reservation.children === 'number' && reservation.children > 0 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary text-xs font-medium text-foreground">
+                {reservation.children} <Baby className="w-3 h-3 text-accent" />
+              </span>
+            )}
+          </div>
         </div>
       </div>
     </section>

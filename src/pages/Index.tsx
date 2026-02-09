@@ -23,8 +23,10 @@ const Index = () => {
       <Header />
       <HeroSection />
       <ReservationSummary />
-      <RoomDetails />
-      <TransportCard />
+      <div className="pt-2 space-y-2">
+        <RoomDetails />
+        <TransportCard />
+      </div>
       <StayInfo />
       <QuickActions />
       <Footer />
