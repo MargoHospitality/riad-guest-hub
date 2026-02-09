@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ReservationSummary from "@/components/ReservationSummary";
 import RoomDetails from "@/components/RoomDetails";
-import TransportCard from "@/components/TransportCard";
 import StayInfo from "@/components/StayInfo";
 import QuickActions from "@/components/QuickActions";
 import WhatsAppButton from "@/components/WhatsAppButton";
@@ -23,9 +22,8 @@ const Index = () => {
       <Header />
       <HeroSection />
       <ReservationSummary />
-      <div className="pt-2 space-y-2">
+      <div className="pt-2">
         <RoomDetails />
-        <TransportCard />
       </div>
       <StayInfo />
       <QuickActions />
