@@ -2,6 +2,7 @@ import { ArrowRight, CalendarDays } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
+import TransportCard from "@/components/TransportCard";
 
 const ReservationSummary = () => {
   const navigate = useNavigate();
@@ -69,6 +70,9 @@ const ReservationSummary = () => {
             <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
           </div>
         </button>
+
+        {/* Transport */}
+        <TransportCard />
       </div>
     </section>
   );
