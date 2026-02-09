@@ -124,6 +124,7 @@ export interface PageInfo {
   title: string;
   route: string;
   icon: string;
+  externalUrl?: string;
 }
 
 /**
