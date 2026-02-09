@@ -11,18 +11,23 @@ import {
   Wifi, 
   MapPin, 
   ChevronRight,
-  FileText
+  FileText,
+  UserCheck,
+  Sparkles
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
   phone: Globe,
   user: PersonStanding,
+  "user-check": UserCheck,
   utensils: UtensilsCrossed,
   heart: Heart,
   car: Car,
   wifi: Wifi,
   "map-pin": MapPin,
+  "file-text": FileText,
+  sparkles: Sparkles,
 };
 
 const StayInfo = () => {
