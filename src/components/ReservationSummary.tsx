@@ -1,4 +1,4 @@
-import { ArrowRight, CalendarDays } from "lucide-react";
+import { ArrowRight, CalendarDays, BedDouble, Users, Baby, Hash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
@@ -59,6 +59,34 @@ const ReservationSummary = () => {
             </div>
           </div>
         </div>
+
+        {/* Room & Reservation details */}
+        {validation?.reservation && (
+          <div className="px-4 py-3 border-t border-border flex items-center gap-3 flex-wrap">
+            <div className="flex items-center gap-1.5 bg-primary/8 text-primary rounded-full px-3 py-1">
+              <BedDouble className="w-3.5 h-3.5" />
+              <span className="text-xs font-medium">{validation.reservation.room_name || 'Chambre'}</span>
+            </div>
+            <div className="flex items-center gap-1.5 bg-muted text-muted-foreground rounded-full px-3 py-1">
+              <Hash className="w-3 h-3" />
+              <span className="text-xs font-medium">{validation.reservation.reservation_id}</span>
+            </div>
+            <div className="flex items-center gap-3 ml-auto">
+              {(validation.reservation.adults ?? 0) > 0 && (
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Users className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">{validation.reservation.adults}</span>
+                </div>
+              )}
+              {(validation.reservation.children ?? 0) > 0 && (
+                <div className="flex items-center gap-1 text-muted-foreground">
+                  <Baby className="w-3.5 h-3.5" />
+                  <span className="text-xs font-medium">{validation.reservation.children}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Check-in button */}
         <button 
