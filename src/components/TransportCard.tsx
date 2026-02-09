@@ -114,24 +114,6 @@ const TransportCard = () => {
               <p className="text-sm text-orange-700 mt-0.5">{t('transport.pending.subtitle')}</p>
             </div>
           </div>
-          
-          {/* Transport details */}
-          <div className="bg-white/80 rounded-lg p-4 space-y-2">
-            <p className="font-medium text-foreground">
-              {t(`transport.types.${request.transport_type}`)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {formatDateTime(request.transport_date, request.transport_time)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {request.pax} {t('transport.people', { count: request.pax })} · {request.computed_price} MAD
-            </p>
-            {request.guest_comment && (
-              <p className="text-sm text-muted-foreground italic">
-                "{request.guest_comment}"
-              </p>
-            )}
-          </div>
 
           <Button
             onClick={handleTransportRequest}
@@ -147,6 +129,12 @@ const TransportCard = () => {
 
   // Status: confirmed
   if (status === 'confirmed' && request) {
+    const handleViewDetails = () => {
+      if (request.public_token) {
+        window.location.href = `https://flow.margo-hospitality.com/confirmation/${request.public_token}`;
+      }
+    };
+
     return (
       <section className="px-4 pb-4">
         <div className="border-2 border-green-400 bg-green-50/50 rounded-xl p-5 flex flex-col gap-3">
@@ -159,30 +147,9 @@ const TransportCard = () => {
               <p className="text-sm text-green-700 mt-0.5">{t('transport.confirmed.subtitle')}</p>
             </div>
           </div>
-          
-          {/* Transport details */}
-          <div className="bg-white/80 rounded-lg p-4 space-y-2">
-            <p className="font-medium text-foreground">
-              {t(`transport.types.${request.transport_type}`)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {formatDateTime(request.transport_date, request.transport_time)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {request.pax} {t('transport.people', { count: request.pax })} · {request.computed_price} MAD
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {t(`transport.paymentModes.${request.payment_mode}`)}
-            </p>
-            {request.guest_comment && (
-              <p className="text-sm text-muted-foreground italic mt-3">
-                "{request.guest_comment}"
-              </p>
-            )}
-          </div>
 
           <Button
-            onClick={handleTransportRequest}
+            onClick={handleViewDetails}
             variant="outline"
             className="w-full h-12 text-base font-semibold border-green-400 text-green-700 hover:bg-green-50"
           >

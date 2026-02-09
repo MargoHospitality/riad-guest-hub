@@ -243,6 +243,7 @@ export interface TransportStatus {
     computed_price: number;
     payment_mode: string;
     guest_comment?: string | null;
+    public_token?: string | null;
   } | null;
 }
 
