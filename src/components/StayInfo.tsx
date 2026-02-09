@@ -77,10 +77,10 @@ const StayInfo = () => {
   };
 
   return (
-    <section className="px-4 pt-5 pb-2">
-      <div className="flex items-center gap-2.5 mb-2.5">
+    <section className="px-4 pt-5 pb-3">
+      <div className="flex items-center gap-2.5 mb-3">
         <div className="w-0.5 h-4 rounded-full bg-accent" />
-        <h2 className="text-[15px] font-bold text-foreground font-serif tracking-tight">
+        <h2 className="text-base font-bold text-foreground font-serif tracking-tight">
           {t('sections.prepareStay')}
         </h2>
       </div>
