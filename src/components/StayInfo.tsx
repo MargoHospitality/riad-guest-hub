@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
-// Icon mapping
 const iconMap: Record<string, LucideIcon> = {
   phone: Globe,
   user: PersonStanding,
@@ -31,32 +30,50 @@ const StayInfo = () => {
   const { data: pages, isLoading } = useQuery({
     queryKey: ["availablePages"],
     queryFn: () => fetchAvailablePages(),
-    staleTime: 1000 * 60 * 60, // 1 hour
+    staleTime: 1000 * 60 * 60,
   });
 
-  // Don't render section if no pages configured
-  if (!pages || pages.length === 0) {
-    return null;
-  }
+  if (!pages || pages.length === 0) return null;
 
   return (
-    <section className="px-4 pb-6">
-      <h2 className="text-xl font-bold text-foreground mb-4 font-serif">
+    <section className="px-4 pt-4 pb-2">
+      <h2 className="text-lg font-bold text-foreground mb-3 font-serif">
         {t('sections.prepareStay')}
       </h2>
-      <div className="flex flex-col">
-        {pages.map((page) => {
+      <div className="bg-card rounded-2xl shadow-sm overflow-hidden">
+        {pages.map((page, index) => {
           const Icon = iconMap[page.icon] || FileText;
-          
+          const isLast = index === pages.length - 1;
+
+          if (page.externalUrl) {
+            return (
+              <a
+                key={page.code}
+                href={page.externalUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`flex items-center gap-3 px-4 py-3.5 hover:bg-secondary/50 transition-colors ${
+                  !isLast ? 'border-b border-border' : ''
+                }`}
+              >
+                <Icon className="w-4.5 h-4.5 text-accent shrink-0" />
+                <span className="flex-1 text-sm text-foreground">{page.title}</span>
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              </a>
+            );
+          }
+
           return (
             <Link
               key={page.code}
               to={page.route}
-              className="flex items-center gap-4 py-3.5 border-b border-border last:border-b-0 hover:bg-secondary/50 transition-colors -mx-1 px-1 rounded"
+              className={`flex items-center gap-3 px-4 py-3.5 hover:bg-secondary/50 transition-colors ${
+                !isLast ? 'border-b border-border' : ''
+              }`}
             >
-              <Icon className="w-5 h-5 text-accent shrink-0" />
-              <span className="flex-1 text-left text-foreground">{page.title}</span>
-              <ChevronRight className="w-4 h-4 text-accent" />
+              <Icon className="w-4.5 h-4.5 text-accent shrink-0" />
+              <span className="flex-1 text-sm text-foreground">{page.title}</span>
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
             </Link>
           );
         })}
