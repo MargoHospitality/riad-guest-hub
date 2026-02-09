@@ -36,7 +36,7 @@ const ReservationSummary = () => {
         {/* Booking ID */}
         {validation?.reservation && (
           <div className="px-4 pt-3 pb-1">
-            <span className="inline-flex items-center text-[11px] font-medium text-muted-foreground bg-secondary/80 rounded-full px-2.5 py-0.5">
+            <span className="inline-flex items-center text-[11px] font-medium text-muted-foreground rounded-full px-2.5 py-0.5" style={{ backgroundColor: '#f3f3f3' }}>
               #{validation.reservation.reservation_id}
             </span>
           </div>
