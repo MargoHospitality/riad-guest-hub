@@ -31,7 +31,7 @@ const ReservationSummary = () => {
     : { day: 14, month: 'févr.', weekday: 'sam.' };
 
   return (
-    <section className="px-4 mt-4 relative z-10">
+    <section className="px-4 -mt-6 relative z-10">
       <div className="bg-card rounded-2xl shadow-md overflow-hidden">
         {/* Dates row */}
         <div className="flex items-center px-4 py-4">
