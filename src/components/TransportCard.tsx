@@ -104,7 +104,7 @@ const TransportCard = () => {
   if (status === 'pending' && request) {
     return (
       <section className="px-4 pb-4">
-        <div className="border-2 border-orange-400 bg-orange-50/50 rounded-xl p-5 flex flex-col gap-3">
+        <div className="border-2 border-orange-400 bg-orange-50/50 rounded-xl p-5">
           <div className="flex items-start gap-4">
             <div className="p-2.5 rounded-full bg-orange-400/10 shrink-0">
               <Car className="w-6 h-6 text-orange-600" />
@@ -114,14 +114,6 @@ const TransportCard = () => {
               <p className="text-sm text-orange-700 mt-0.5">{t('transport.pending.subtitle')}</p>
             </div>
           </div>
-
-          <Button
-            onClick={handleTransportRequest}
-            variant="outline"
-            className="w-full h-12 text-base font-semibold border-orange-400 text-orange-700 hover:bg-orange-50"
-          >
-            {t('transport.pending.modifyButton')}
-          </Button>
         </div>
       </section>
     );
