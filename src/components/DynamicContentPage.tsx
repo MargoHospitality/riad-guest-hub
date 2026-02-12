@@ -4,7 +4,6 @@ import { fetchPageContent } from "@/lib/api";
 import Header from "./Header";
 import HeroSection from "./HeroSection";
 import Footer from "./Footer";
-import WhatsAppButton from "./WhatsAppButton";
 import { Loader2 } from "lucide-react";
 
 interface DynamicContentPageProps {
@@ -79,7 +78,7 @@ const DynamicContentPage = ({
 
       <div className="pb-6" />
       <Footer />
-      <WhatsAppButton />
+      
     </div>
   );
 };
