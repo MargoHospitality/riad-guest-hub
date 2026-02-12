@@ -7,10 +7,14 @@ import TransportCard from "@/components/TransportCard";
 const ReservationSummary = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const { validation } = useApp();
+  const { validation, token } = useApp();
 
   const handleCheckin = () => {
-    navigate("/checkin/step1");
+    if (token) {
+      navigate(`/checkin/gate?token=${token}`);
+    } else {
+      navigate("/checkin/gate");
+    }
   };
 
   const formatDate = (dateStr: string) => {
