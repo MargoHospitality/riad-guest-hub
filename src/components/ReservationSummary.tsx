@@ -100,10 +100,10 @@ const ReservationSummary = () => {
         {/* Check-in button */}
         <button 
           onClick={handleCheckin}
-          className="w-full flex items-center justify-between px-4 py-3.5 bg-accent border-t border-border group hover:bg-accent/90 transition-colors"
+          className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/10 border-t border-accent/20 group hover:bg-accent/15 transition-colors"
         >
-          <span className="text-sm font-semibold text-accent-foreground">{t('reservation.onlineCheckIn')}</span>
-          <div className="w-7 h-7 rounded-full bg-accent-foreground/20 flex items-center justify-center group-hover:bg-accent-foreground/30 transition-colors">
+          <span className="text-sm font-semibold text-accent">{t('reservation.onlineCheckIn')}</span>
+          <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center group-hover:bg-accent/90 transition-colors">
             <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
           </div>
         </button>
