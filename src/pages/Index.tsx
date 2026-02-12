@@ -2,6 +2,7 @@ import { useApp } from "@/contexts/AppContext";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ReservationSummary from "@/components/ReservationSummary";
+import CheckinCTA from "@/components/CheckinCTA";
 
 import StayInfo from "@/components/StayInfo";
 import QuickActions from "@/components/QuickActions";
@@ -23,6 +24,7 @@ const Index = () => {
       <Header />
       <HeroSection />
       <ReservationSummary />
+      <CheckinCTA />
       <StayInfo />
       <QuickActions />
       <ContactSection />
