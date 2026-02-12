@@ -37,55 +37,67 @@ const ReservationSummary = () => {
   return (
     <section className="px-4 -mt-6 relative z-10">
       <div className="bg-card rounded-2xl shadow-md overflow-hidden">
-        {/* Header: Guest name + reservation ID + dates */}
-        <div className="px-4 pt-4 pb-3">
+        {/* Guest header */}
+        <div className="px-4 pt-4 pb-4">
           {validation?.reservation && (
-            <div className="mb-3">
-              <p className="text-[15px] font-semibold text-foreground font-serif">
-                {validation.reservation.guest_name}
-              </p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <p className="text-base font-semibold text-foreground font-serif">
+                  {validation.reservation.guest_name}
+                </p>
+                <div className="flex items-center gap-2 mt-1">
+                  {validation.reservation.room_name && (
+                    <span className="text-[11px] text-muted-foreground">{validation.reservation.room_name}</span>
+                  )}
+                  <span className="text-[11px] text-muted-foreground">·</span>
+                  {(validation.reservation.adults ?? 0) > 0 && (
+                    <span className="text-[11px] text-muted-foreground flex items-center gap-0.5">
+                      <Users className="w-3 h-3" /> {validation.reservation.adults}
+                    </span>
+                  )}
+                  {(validation.reservation.children ?? 0) > 0 && (
+                    <span className="text-[11px] text-muted-foreground flex items-center gap-0.5">
+                      <Baby className="w-3 h-3" /> {validation.reservation.children}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <span className="text-[10px] font-medium text-muted-foreground bg-muted/60 rounded-full px-2 py-0.5">
                 #{validation.reservation.reservation_id}
-              </p>
+              </span>
             </div>
           )}
 
-          {/* Dates — compact inline */}
-          <div className="flex items-center gap-2">
-            <div className="flex-1 bg-primary/5 rounded-xl px-3 py-2.5 text-center">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t('reservation.checkIn')}</p>
-              <p className="text-[15px] font-bold text-foreground mt-0.5">{checkInDate.day} {checkInDate.month}</p>
-              <p className="text-[10px] text-muted-foreground capitalize">{checkInDate.weekday}</p>
+          {/* Dates — timeline style */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">{t('reservation.checkIn')}</p>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-bold text-foreground leading-none">{checkInDate.day}</span>
+                <div>
+                  <p className="text-xs font-medium text-foreground leading-tight">{checkInDate.month}</p>
+                  <p className="text-[10px] text-muted-foreground capitalize leading-tight">{checkInDate.weekday}</p>
+                </div>
+              </div>
             </div>
-            <ArrowRight className="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
-            <div className="flex-1 bg-accent/5 rounded-xl px-3 py-2.5 text-center">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t('reservation.checkOut')}</p>
-              <p className="text-[15px] font-bold text-foreground mt-0.5">{checkOutDate.day} {checkOutDate.month}</p>
-              <p className="text-[10px] text-muted-foreground capitalize">{checkOutDate.weekday}</p>
+
+            <div className="flex flex-col items-center gap-0.5 px-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <div className="w-px h-4 bg-border" />
+              <div className="w-1.5 h-1.5 rounded-full bg-accent" />
+            </div>
+
+            <div className="flex-1 text-right">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">{t('reservation.checkOut')}</p>
+              <div className="flex items-baseline gap-1.5 justify-end">
+                <div>
+                  <p className="text-xs font-medium text-foreground leading-tight">{checkOutDate.month}</p>
+                  <p className="text-[10px] text-muted-foreground capitalize leading-tight">{checkOutDate.weekday}</p>
+                </div>
+                <span className="text-2xl font-bold text-foreground leading-none">{checkOutDate.day}</span>
+              </div>
             </div>
           </div>
-
-          {/* Room & guests — inline badges */}
-          {validation?.reservation && (
-            <div className="flex items-center gap-2 mt-3">
-              <div className="inline-flex items-center gap-1.5 bg-muted/50 rounded-full px-2.5 py-1">
-                <BedDouble className="w-3 h-3 text-primary" />
-                <span className="text-[11px] font-medium text-foreground">{validation.reservation.room_name || 'Chambre'}</span>
-              </div>
-              {(validation.reservation.adults ?? 0) > 0 && (
-                <div className="inline-flex items-center gap-1 bg-muted/50 rounded-full px-2.5 py-1">
-                  <Users className="w-3 h-3 text-muted-foreground" />
-                  <span className="text-[11px] font-medium text-foreground">{validation.reservation.adults}</span>
-                </div>
-              )}
-              {(validation.reservation.children ?? 0) > 0 && (
-                <div className="inline-flex items-center gap-1 bg-muted/50 rounded-full px-2.5 py-1">
-                  <Baby className="w-3 h-3 text-muted-foreground" />
-                  <span className="text-[11px] font-medium text-foreground">{validation.reservation.children}</span>
-                </div>
-              )}
-            </div>
-          )}
         </div>
 
         {/* Check-in button */}
