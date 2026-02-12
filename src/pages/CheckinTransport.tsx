@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeft, User, Plane, Check, Clock } from "lucide-react";
+import { Plane, Check, Clock, ArrowRight, ArrowLeft } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import logo from "@/assets/logo.png";
+import Header from "@/components/Header";
+import HeroSection from "@/components/HeroSection";
+import Footer from "@/components/Footer";
+import CheckinProgressBar from "@/components/checkin/CheckinProgressBar";
 
 type TransportStatus = "confirmed" | "pending" | "none" | "manual";
 
@@ -29,7 +31,7 @@ const CheckinTransport = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "demo";
   const resume = searchParams.get("resume");
-  
+
   const [status, setStatus] = useState<TransportStatus>("none");
   const [details, setDetails] = useState<TransportDetails | null>(null);
   const [showManualForm, setShowManualForm] = useState(false);
@@ -47,14 +49,10 @@ const CheckinTransport = () => {
   const arrivalMethod = form.watch("arrivalMethod");
 
   useEffect(() => {
-    // Simulate API check for transport status
     const checkTransport = async () => {
       setIsLoading(true);
-      
-      // Mock API response - in production this would be a real API call
       await new Promise((resolve) => setTimeout(resolve, 500));
-      
-      // Check if returning from Margo Flow
+
       if (resume === "checkin" && searchParams.get("transport") === "pending") {
         setStatus("pending");
         setDetails({
@@ -65,13 +63,10 @@ const CheckinTransport = () => {
           flight: "AF1234",
         });
       } else {
-        // Default to "none" for demo - showing Scenario KB
         setStatus("none");
       }
-      
       setIsLoading(false);
     };
-
     checkTransport();
   }, [resume, searchParams]);
 
@@ -86,7 +81,6 @@ const CheckinTransport = () => {
 
   const handleManualSubmit = async (data: ManualTransportForm) => {
     console.log("Submitting manual transport:", data);
-    // In production: POST to API
     navigate(`/checkin/guest-details?token=${token}`);
   };
 
@@ -102,229 +96,191 @@ const CheckinTransport = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Chargement...</div>
+      <div className="min-h-screen bg-background max-w-md mx-auto">
+        <Header />
+        <HeroSection />
+        <div className="px-4 -mt-6 relative z-10">
+          <div className="bg-card rounded-2xl shadow-md p-6">
+            <div className="animate-pulse space-y-3">
+              <div className="h-5 bg-muted rounded w-3/4" />
+              <div className="h-24 bg-muted rounded" />
+            </div>
+          </div>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto flex flex-col">
-      {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 bg-card border-b border-border">
-        <button
-          onClick={() => navigate("/")}
-          className="w-10 h-10 flex items-center justify-center rounded-lg border border-border bg-background hover:bg-muted transition-colors"
-        >
-          <ArrowLeft className="w-5 h-5 text-foreground" />
-        </button>
-        <img src={logo} alt="Riad Massiba" className="h-12" />
-        <button className="w-10 h-10 flex items-center justify-center rounded-lg border border-border bg-background hover:bg-muted transition-colors">
-          <User className="w-5 h-5 text-foreground" />
-        </button>
-      </header>
+      <Header />
+      <HeroSection />
 
-      {/* Page Title */}
-      <div className="px-4 pt-6 pb-4">
-        <h1 className="text-xl text-muted-foreground font-normal">
-          Modalités d'arrivée
-        </h1>
-      </div>
+      <main className="flex-1 px-4 -mt-6 relative z-10 pb-4">
+        {/* Main card */}
+        <div className="bg-card rounded-2xl shadow-md overflow-hidden">
+          {/* Progress */}
+          <CheckinProgressBar currentStep={1} />
 
-      {/* Content Area */}
-      <div className="flex-1 px-4 pb-24">
-        {/* Scenario KA: Transport Confirmed */}
-        {(status === "confirmed" || status === "pending") && !showManualForm && (
-          <div className="bg-[hsl(76_27%_95%)] border-2 border-primary rounded-xl p-5">
-            <div className="flex items-start gap-4">
-              <div className="p-2 rounded-full bg-primary/20">
-                {status === "pending" ? (
-                  <Clock className="w-5 h-5 text-primary" />
-                ) : (
-                  <Check className="w-5 h-5 text-primary" />
-                )}
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-foreground text-lg">
-                  {status === "pending" ? "Transport en cours de traitement" : "Transport confirmé"}
-                </p>
-                {details && (
-                  <div className="mt-3 space-y-2 text-sm text-muted-foreground">
-                    <p><span className="font-medium text-foreground">Type:</span> {details.type}</p>
-                    <p><span className="font-medium text-foreground">Date:</span> {details.date}</p>
-                    <p><span className="font-medium text-foreground">Heure:</span> {details.time}</p>
-                    <p><span className="font-medium text-foreground">Passagers:</span> {details.passengers}</p>
-                    {details.flight && (
-                      <p><span className="font-medium text-foreground">Vol:</span> {details.flight}</p>
+          {/* Title */}
+          <div className="px-4 pt-4 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-0.5 h-4 rounded-full bg-accent" />
+              <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                Modalités d'arrivée
+              </h1>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="px-4 pb-4">
+            {/* Scenario KA: Transport Confirmed/Pending */}
+            {(status === "confirmed" || status === "pending") && !showManualForm && (
+              <div className="bg-primary/5 rounded-xl p-4 border border-primary/20">
+                <div className="flex items-start gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    {status === "pending" ? (
+                      <Clock className="w-4.5 h-4.5 text-primary" />
+                    ) : (
+                      <Check className="w-4.5 h-4.5 text-primary" />
                     )}
                   </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Scenario KB: No Transport - Propose Margo Flow */}
-        {status === "none" && !showManualForm && (
-          <>
-            {/* Section Header */}
-            <div className="bg-muted rounded-lg px-4 py-3 flex items-center gap-3 mb-4">
-              <Plane className="w-5 h-5 text-accent" />
-              <span className="font-semibold text-foreground">Transport</span>
-            </div>
-
-            {/* Transport Request Card */}
-            <div className="bg-card border border-border rounded-xl p-5">
-              <div className="flex items-start gap-4 mb-4">
-                <div className="p-2.5 rounded-full bg-accent/10 shrink-0">
-                  <Plane className="w-6 h-6 text-accent" />
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground text-base">
-                    Souhaitez-vous réserver un transfert aéroport avec Margo Hospitality?
-                  </p>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Service de transport privé confortable et fiable depuis l'aéroport Marrakech-Menara
-                  </p>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-foreground">
+                      {status === "pending" ? "Transport en cours de traitement" : "Transport confirmé"}
+                    </p>
+                    {details && (
+                      <div className="mt-2 space-y-1.5 text-xs text-muted-foreground">
+                        <p><span className="font-medium text-foreground">Type:</span> {details.type}</p>
+                        <p><span className="font-medium text-foreground">Date:</span> {details.date}</p>
+                        <p><span className="font-medium text-foreground">Heure:</span> {details.time}</p>
+                        <p><span className="font-medium text-foreground">Passagers:</span> {details.passengers}</p>
+                        {details.flight && (
+                          <p><span className="font-medium text-foreground">Vol:</span> {details.flight}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-              <Button
-                onClick={handleMargoFlowRedirect}
-                className="w-full h-12 text-base font-semibold"
-              >
-                Demander un transport
-              </Button>
-            </div>
+            )}
 
-            {/* Divider */}
-            <div className="flex items-center gap-4 my-6">
-              <div className="flex-1 h-px bg-border" />
-              <span className="text-sm text-muted-foreground">ou</span>
-              <div className="flex-1 h-px bg-border" />
-            </div>
-
-            {/* No Transport Link */}
-            <button
-              onClick={handleNoTransport}
-              className="w-full text-center text-sm text-accent hover:underline transition-all"
-            >
-              Je n'ai pas besoin de transport →
-            </button>
-          </>
-        )}
-
-        {/* Scenario KC: Manual Transport Form */}
-        {showManualForm && (
-          <form onSubmit={form.handleSubmit(handleManualSubmit)} className="space-y-4">
-            {/* Section Header */}
-            <div className="bg-muted rounded-lg px-4 py-3 flex items-center gap-3">
-              <Plane className="w-5 h-5 text-accent" />
-              <span className="font-semibold text-foreground">Modalités d'arrivée</span>
-            </div>
-
-            {/* Arrival Method */}
-            <div className="bg-card border border-border rounded-xl p-5">
-              <Label className="text-sm font-medium text-foreground mb-3 block">
-                Comment arrivez-vous au Riad Massiba?
-              </Label>
-              <RadioGroup
-                value={arrivalMethod}
-                onValueChange={(value) => form.setValue("arrivalMethod", value)}
-                className="space-y-3"
-              >
-                <div className="flex items-center space-x-3">
-                  <RadioGroupItem value="other_provider" id="other_provider" />
-                  <Label htmlFor="other_provider" className="text-sm text-foreground cursor-pointer">
-                    Autre fournisseur de transport
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <RadioGroupItem value="rental_car" id="rental_car" />
-                  <Label htmlFor="rental_car" className="text-sm text-foreground cursor-pointer">
-                    Voiture de location
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <RadioGroupItem value="taxi" id="taxi" />
-                  <Label htmlFor="taxi" className="text-sm text-foreground cursor-pointer">
-                    Taxi
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <RadioGroupItem value="other" id="other" />
-                  <Label htmlFor="other" className="text-sm text-foreground cursor-pointer">
-                    Autre
-                  </Label>
-                </div>
-              </RadioGroup>
-            </div>
-
-            {/* Details */}
-            <div className="bg-card border border-border rounded-xl p-5">
-              <Label className="text-sm font-medium text-foreground mb-2 block">
-                Précisions (optionnel)
-              </Label>
-              <Input
-                {...form.register("details")}
-                placeholder="Ex: Nom du service, numéro de vol..."
-                className="border-0 bg-transparent p-0 h-auto text-foreground placeholder:text-muted-foreground focus-visible:ring-0"
-              />
-            </div>
-
-            {/* Arrival Time */}
-            <div className="bg-card border border-border rounded-xl p-5">
-              <Label className="text-sm font-medium text-foreground mb-2 block">
-                Heure d'arrivée
-              </Label>
-              <div className="flex items-center justify-between">
-                <Input
-                  type="time"
-                  {...form.register("arrivalTime")}
-                  className="border-0 bg-transparent p-0 h-auto text-foreground focus-visible:ring-0 w-auto"
-                  placeholder="--:--"
-                />
-                {arrivalTime && (
+            {/* Scenario KB: No Transport - Propose Margo Flow */}
+            {status === "none" && !showManualForm && (
+              <>
+                <div className="bg-accent/5 rounded-xl p-4 border border-accent/15">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                      <Plane className="w-4.5 h-4.5 text-accent" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-foreground">
+                        Réserver un transfert aéroport ?
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+                        Service de transport privé depuis l'aéroport Marrakech-Menara
+                      </p>
+                    </div>
+                  </div>
                   <button
-                    type="button"
-                    onClick={() => form.setValue("arrivalTime", "")}
-                    className="text-muted-foreground hover:text-foreground"
+                    onClick={handleMargoFlowRedirect}
+                    className="w-full flex items-center justify-between px-4 py-3 bg-accent rounded-xl group hover:bg-accent/90 transition-colors"
                   >
-                    ×
+                    <span className="text-sm font-semibold text-accent-foreground">Demander un transport</span>
+                    <div className="w-6 h-6 rounded-full bg-accent-foreground/20 flex items-center justify-center">
+                      <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
+                    </div>
                   </button>
-                )}
-              </div>
-            </div>
-          </form>
-        )}
-      </div>
+                </div>
 
-      {/* Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          {/* Progress Indicator */}
-          <div className="flex items-center gap-2">
-            {[1, 2, 3, 4, 5].map((step) => (
-              <div
-                key={step}
-                className={`w-2 h-2 rounded-full ${
-                  step === 1
-                    ? "bg-primary w-6"
-                    : "bg-border"
-                }`}
-              />
-            ))}
+                <div className="flex items-center gap-4 my-4">
+                  <div className="flex-1 h-px bg-border" />
+                  <span className="text-xs text-muted-foreground">ou</span>
+                  <div className="flex-1 h-px bg-border" />
+                </div>
+
+                <button
+                  onClick={handleNoTransport}
+                  className="w-full text-center text-xs font-medium text-accent hover:underline transition-all"
+                >
+                  Je n'ai pas besoin de transport →
+                </button>
+              </>
+            )}
+
+            {/* Scenario KC: Manual Transport Form */}
+            {showManualForm && (
+              <form onSubmit={form.handleSubmit(handleManualSubmit)} className="space-y-4">
+                <div>
+                  <Label className="text-xs text-muted-foreground mb-2 block">
+                    Comment arrivez-vous au Riad ?
+                  </Label>
+                  <RadioGroup
+                    value={arrivalMethod}
+                    onValueChange={(value) => form.setValue("arrivalMethod", value)}
+                    className="space-y-2.5"
+                  >
+                    {[
+                      { value: "other_provider", label: "Autre fournisseur de transport" },
+                      { value: "rental_car", label: "Voiture de location" },
+                      { value: "taxi", label: "Taxi" },
+                      { value: "other", label: "Autre" },
+                    ].map((opt) => (
+                      <div key={opt.value} className="flex items-center space-x-3">
+                        <RadioGroupItem value={opt.value} id={opt.value} />
+                        <Label htmlFor={opt.value} className="text-sm text-foreground cursor-pointer">
+                          {opt.label}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+
+                <div>
+                  <Label className="text-xs text-muted-foreground mb-1 block">
+                    Précisions (optionnel)
+                  </Label>
+                  <Input
+                    {...form.register("details")}
+                    placeholder="Ex: Nom du service, numéro de vol..."
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs text-muted-foreground mb-1 block">
+                    Heure d'arrivée estimée
+                  </Label>
+                  <Input
+                    type="time"
+                    {...form.register("arrivalTime")}
+                    className="mt-1"
+                  />
+                </div>
+              </form>
+            )}
           </div>
 
-          {/* Continue Button */}
-          <Button
-            onClick={showManualForm ? form.handleSubmit(handleManualSubmit) : handleContinue}
-            disabled={!canContinue()}
-            className="px-8 h-12 text-base font-semibold"
-          >
-            Continuer
-          </Button>
+          {/* Navigation buttons */}
+          <div className="border-t border-border">
+            {canContinue() && (
+              <button
+                type="button"
+                onClick={showManualForm ? form.handleSubmit(handleManualSubmit) : handleContinue}
+                className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 group hover:bg-primary/10 transition-colors"
+              >
+                <span className="text-sm font-semibold text-primary">Continuer</span>
+                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
+                  <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+                </div>
+              </button>
+            )}
+          </div>
         </div>
-      </div>
+      </main>
+
+      <Footer />
     </div>
   );
 };
