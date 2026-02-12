@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
-import CheckinProgressBar from "@/components/checkin/CheckinProgressBar";
+
 
 type TransportStatus = "confirmed" | "pending" | "none" | "manual";
 
@@ -120,8 +120,6 @@ const CheckinTransport = () => {
       <main className="flex-1 px-4 -mt-6 relative z-10 pb-4">
         {/* Main card */}
         <div className="bg-card rounded-2xl shadow-md overflow-hidden">
-          {/* Progress */}
-          <CheckinProgressBar currentStep={1} />
 
           {/* Title */}
           <div className="px-4 pt-4 pb-3">
