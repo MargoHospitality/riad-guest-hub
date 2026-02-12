@@ -100,27 +100,16 @@ const CheckinGate = () => {
         {/* État 1: Confirmed */}
         {status === 'confirmed' && request && (
           <div className="border-2 border-green-400 bg-green-50/50 rounded-xl p-6 mb-6">
-            <div className="flex items-start gap-4 mb-4">
+            <div className="flex items-start gap-4 mb-6">
               <div className="p-2.5 rounded-full bg-green-400/10 shrink-0">
                 <CheckCircle2 className="w-6 h-6 text-green-600" />
               </div>
               <div className="flex-1">
                 <h2 className="font-semibold text-lg text-foreground">Your Transfer is Confirmed</h2>
                 <p className="text-sm text-green-700 mt-1">
-                  We'll pick you up at
+                  We'll pick you up as scheduled.
                 </p>
               </div>
-            </div>
-            
-            <div className="space-y-2 mb-4 text-sm text-foreground">
-              <p className="flex items-center gap-2">
-                <span>📅 <strong>Date:</strong></span>
-                <span>{new Date(request.transport_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-              </p>
-              <p className="flex items-center gap-2">
-                <span>⏰ <strong>Time:</strong></span>
-                <span>{request.transport_time}</span>
-              </p>
             </div>
             
             <Button
