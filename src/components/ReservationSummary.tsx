@@ -9,6 +9,17 @@ const ReservationSummary = () => {
   const { t, i18n } = useTranslation();
   const { validation, token } = useApp();
 
+  // Mock data for preview when no token
+  const reservation = validation?.reservation || {
+    guest_name: "Jean Dupont",
+    reservation_id: "RES-2847",
+    room_name: "Suite Jasmin",
+    adults: 2,
+    children: 1,
+    check_in_date: "",
+    check_out_date: "",
+  };
+
   const handleCheckin = () => {
     if (token) {
       navigate(`/checkin/gate?token=${token}`);
@@ -26,51 +37,49 @@ const ReservationSummary = () => {
     return { day, month, weekday };
   };
 
-  const checkInDate = validation?.reservation?.check_in_date 
-    ? formatDate(validation.reservation.check_in_date)
+  const checkInDate = reservation.check_in_date 
+    ? formatDate(reservation.check_in_date)
     : { day: 11, month: 'févr.', weekday: 'mer.' };
     
-  const checkOutDate = validation?.reservation?.check_out_date
-    ? formatDate(validation.reservation.check_out_date)
+  const checkOutDate = reservation.check_out_date
+    ? formatDate(reservation.check_out_date)
     : { day: 14, month: 'févr.', weekday: 'sam.' };
 
   return (
     <section className="px-4 -mt-6 relative z-10">
       <div className="bg-card rounded-2xl shadow-md overflow-hidden">
         {/* Guest header */}
-        {validation?.reservation && (
-          <div className="px-4 pt-4 pb-3 flex items-start justify-between">
-            <div>
-              <p className="text-base font-semibold text-foreground font-serif">
-                {validation.reservation.guest_name}
-              </p>
-              <div className="flex items-center gap-1.5 mt-1 text-[11px] text-muted-foreground">
-                {validation.reservation.room_name && (
-                  <span className="flex items-center gap-1">
-                    <BedDouble className="w-3 h-3" />
-                    {validation.reservation.room_name}
-                  </span>
-                )}
-                {(validation.reservation.adults ?? 0) > 0 && (
-                  <>
-                    <span>·</span>
-                    <span className="flex items-center gap-0.5">
-                      <Users className="w-3 h-3" /> {validation.reservation.adults}
-                    </span>
-                  </>
-                )}
-                {(validation.reservation.children ?? 0) > 0 && (
+        <div className="px-4 pt-4 pb-3 flex items-start justify-between">
+          <div>
+            <p className="text-base font-semibold text-foreground font-serif">
+              {reservation.guest_name}
+            </p>
+            <div className="flex items-center gap-1.5 mt-1 text-[11px] text-muted-foreground">
+              {reservation.room_name && (
+                <span className="flex items-center gap-1">
+                  <BedDouble className="w-3 h-3" />
+                  {reservation.room_name}
+                </span>
+              )}
+              {(reservation.adults ?? 0) > 0 && (
+                <>
+                  <span>·</span>
                   <span className="flex items-center gap-0.5">
-                    <Baby className="w-3 h-3" /> {validation.reservation.children}
+                    <Users className="w-3 h-3" /> {reservation.adults}
                   </span>
-                )}
-              </div>
+                </>
+              )}
+              {(reservation.children ?? 0) > 0 && (
+                <span className="flex items-center gap-0.5">
+                  <Baby className="w-3 h-3" /> {reservation.children}
+                </span>
+              )}
             </div>
-            <span className="text-[10px] font-medium text-muted-foreground bg-muted/60 rounded-full px-2 py-0.5 mt-0.5">
-              #{validation.reservation.reservation_id}
-            </span>
           </div>
-        )}
+          <span className="text-[10px] font-medium text-muted-foreground bg-muted/60 rounded-full px-2 py-0.5 mt-0.5">
+            #{reservation.reservation_id}
+          </span>
+        </div>
 
         {/* Dates row */}
         <div className="mx-4 mb-4 rounded-xl bg-muted/30 p-3 flex items-stretch gap-0">
