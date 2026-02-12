@@ -1,11 +1,9 @@
-import { ArrowRight, CalendarDays, BedDouble, Users, Baby, Hash } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { CalendarDays, BedDouble, Users, Baby } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
 import TransportCard from "@/components/TransportCard";
 
 const ReservationSummary = () => {
-  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const { validation, token } = useApp();
 
@@ -20,13 +18,6 @@ const ReservationSummary = () => {
     check_out_date: "",
   };
 
-  const handleCheckin = () => {
-    if (token) {
-      navigate(`/checkin/gate?token=${token}`);
-    } else {
-      navigate("/checkin/gate");
-    }
-  };
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -111,19 +102,6 @@ const ReservationSummary = () => {
           </div>
         </div>
 
-        {/* Check-in button */}
-        <button 
-          onClick={handleCheckin}
-          className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors"
-        >
-          <span className="text-sm font-semibold text-primary">{t('reservation.onlineCheckIn')}</span>
-          <div className="relative">
-            <div className="absolute inset-0 rounded-full bg-primary/30 animate-ping" />
-            <div className="relative w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
-              <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
-            </div>
-          </div>
-        </button>
 
         {/* Transport */}
         <TransportCard />
