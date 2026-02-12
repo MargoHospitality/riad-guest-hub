@@ -107,17 +107,20 @@ const CheckinGate = () => {
               <div className="flex-1">
                 <h2 className="font-semibold text-lg text-foreground">Your Transfer is Confirmed</h2>
                 <p className="text-sm text-green-700 mt-1">
-                  We'll pick you up at {request.pickup_location}
+                  We'll pick you up at
                 </p>
               </div>
             </div>
             
             <div className="space-y-2 mb-4 text-sm text-foreground">
-              <p><strong>📅 Date:</strong> {request.pickup_date}</p>
-              <p><strong>⏰ Time:</strong> {request.pickup_time}</p>
-              {request.flight_number && (
-                <p><strong>✈️ Flight:</strong> {request.flight_number}</p>
-              )}
+              <p className="flex items-center gap-2">
+                <span>📅 <strong>Date:</strong></span>
+                <span>{new Date(request.transport_date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <span>⏰ <strong>Time:</strong></span>
+                <span>{request.transport_time}</span>
+              </p>
             </div>
             
             <Button
