@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useApp } from '@/contexts/AppContext';
 import { checkTransportStatus } from '@/lib/api';
 import { Button } from '@/components/ui/button';
-import { Car, CheckCircle2, Clock } from 'lucide-react';
+import { Car, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
 import Footer from '@/components/Footer';
 
 const CheckinGate = () => {
@@ -14,7 +14,6 @@ const CheckinGate = () => {
   const token = searchParams.get('token');
   const { validation } = useApp();
   
-  // Fetch transport status
   const { data: transportStatus, isLoading } = useQuery({
     queryKey: ['transportStatus', validation?.reservation?.reservation_id],
     queryFn: () => checkTransportStatus(validation!.reservation!.reservation_id),
@@ -24,14 +23,11 @@ const CheckinGate = () => {
   
   const handleRequestTransport = () => {
     if (!validation?.reservation) return;
-    
     const { cloudbeds_property_id, reservation_id, check_in_date } = validation.reservation;
-    
     if (!cloudbeds_property_id) {
       console.error('No Cloudbeds property ID available');
       return;
     }
-    
     const params = new URLSearchParams({
       riad: cloudbeds_property_id,
       reservation: reservation_id,
@@ -39,27 +35,19 @@ const CheckinGate = () => {
       returnTo: 'checkin',
       token: token!,
     });
-    
     window.location.href = `https://margo-flow.vercel.app/?${params.toString()}`;
   };
   
   const handleContinue = () => {
     const status = transportStatus?.status || 'none';
-    
-    // If transport via Margo Flow (confirmed or pending):
-    // Skip manual transport step → go direct to guest-details
     if (status === 'confirmed' || status === 'pending') {
       navigate(`/checkin/guest-details?token=${token}`);
       return;
     }
-    
-    // Should not happen (handled by "I don't need" button)
     navigate(`/checkin/transport?token=${token}`);
   };
   
   const handleNoTransport = () => {
-    // User doesn't want transport
-    // → Navigate to manual transport step
     navigate(`/checkin/transport?token=${token}`);
   };
   
@@ -76,10 +64,13 @@ const CheckinGate = () => {
     return (
       <div className="min-h-screen bg-background max-w-md mx-auto">
         <Header />
-        <div className="p-8 text-center">
-          <div className="animate-pulse">
-            <div className="h-8 bg-accent/10 rounded w-3/4 mx-auto mb-6"></div>
-            <div className="h-32 bg-accent/10 rounded"></div>
+        <HeroSection />
+        <div className="px-4 -mt-6 relative z-10">
+          <div className="bg-card rounded-2xl shadow-md p-6">
+            <div className="animate-pulse">
+              <div className="h-5 bg-muted rounded w-3/4 mb-4"></div>
+              <div className="h-24 bg-muted rounded"></div>
+            </div>
           </div>
         </div>
         <Footer />
@@ -93,106 +84,130 @@ const CheckinGate = () => {
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto flex flex-col">
       <Header />
+      <HeroSection />
       
-      <main className="flex-1 p-4">
-        <h1 className="text-2xl font-bold mb-6">Online Check-in</h1>
-        
-        {/* État 1: Confirmed */}
-        {status === 'confirmed' && request && (
-          <div className="border-2 border-green-400 bg-green-50/50 rounded-xl p-6 mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="p-2.5 rounded-full bg-green-400/10 shrink-0">
-                <CheckCircle2 className="w-6 h-6 text-green-600" />
-              </div>
-              <div className="flex-1">
-                <h2 className="font-semibold text-lg text-foreground">Your Transfer is Confirmed</h2>
-                <p className="text-sm text-green-700 mt-1">
-                  We'll pick you up as scheduled.
-                </p>
-              </div>
+      <main className="flex-1 px-4 -mt-6 relative z-10 pb-4">
+        {/* Main card — mirrors ReservationSummary style */}
+        <div className="bg-card rounded-2xl shadow-md overflow-hidden">
+          {/* Title bar */}
+          <div className="px-4 pt-4 pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-0.5 h-4 rounded-full bg-accent" />
+              <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                Online Check-in
+              </h1>
             </div>
-            
-            <Button
-              variant="outline"
-              onClick={handleViewDetails}
-              className="w-full mb-3 border-green-400 text-green-700 hover:bg-green-50"
-            >
-              View Details
-            </Button>
-            
-            <Button
-              onClick={handleContinue}
-              className="w-full h-12 text-base font-semibold"
-            >
-              Continue to Check-in →
-            </Button>
           </div>
-        )}
-        
-        {/* État 2: Pending */}
-        {status === 'pending' && (
-          <div className="border-2 border-orange-400 bg-orange-50/50 rounded-xl p-6 mb-6">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="p-2.5 rounded-full bg-orange-400/10 shrink-0">
-                <Clock className="w-6 h-6 text-orange-600" />
+
+          {/* État 1: Confirmed */}
+          {status === 'confirmed' && request && (
+            <div className="px-4 pb-4">
+              <div className="flex items-start gap-3 py-3 border-t border-border">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">Your Transfer is Confirmed</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    We'll pick you up as scheduled.
+                  </p>
+                </div>
               </div>
-              <div className="flex-1">
-                <h2 className="font-semibold text-lg text-foreground">Transfer Pending Confirmation</h2>
-                <p className="text-sm text-orange-700 mt-1">
-                  Your transfer request has been received and will be confirmed by the property shortly.
-                </p>
+              
+              <button
+                onClick={handleViewDetails}
+                className="w-full text-center text-xs font-medium text-primary underline-offset-2 hover:underline py-2"
+              >
+                View Details
+              </button>
+              
+              <button
+                onClick={handleContinue}
+                className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
+              >
+                <span className="text-sm font-semibold text-primary">Continue to Check-in</span>
+                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
+                  <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+                </div>
+              </button>
+            </div>
+          )}
+          
+          {/* État 2: Pending */}
+          {status === 'pending' && (
+            <div className="px-4 pb-4">
+              <div className="flex items-start gap-3 py-3 border-t border-border">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                  <Clock className="w-5 h-5 text-accent" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">Transfer Pending Confirmation</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Your transfer request has been received and will be confirmed shortly.
+                  </p>
+                </div>
+              </div>
+              
+              <button
+                onClick={handleContinue}
+                className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
+              >
+                <span className="text-sm font-semibold text-primary">Continue to Check-in</span>
+                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
+                  <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+                </div>
+              </button>
+            </div>
+          )}
+          
+          {/* État 3: None */}
+          {status === 'none' && (
+            <div className="border-t border-border">
+              <div className="flex items-start gap-3 px-4 py-3">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                  <Car className="w-5 h-5 text-accent" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">Need a Transfer?</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    We can arrange airport pickup or train station transfer for you.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="px-4 pb-4 space-y-2">
+                <button
+                  onClick={handleRequestTransport}
+                  className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors"
+                >
+                  <span className="text-sm font-semibold text-accent">Request Transfer via Margo Flow</span>
+                  <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center group-hover:bg-accent/90 transition-colors">
+                    <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
+                  </div>
+                </button>
+                
+                <div className="relative my-2">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-card px-2 text-muted-foreground">or</span>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleNoTransport}
+                  className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border group hover:bg-muted/50 transition-colors"
+                >
+                  <span className="text-sm font-semibold text-foreground">I don't need a transfer</span>
+                  <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
+                    <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+                  </div>
+                </button>
               </div>
             </div>
-            
-            <Button
-              onClick={handleContinue}
-              className="w-full h-12 text-base font-semibold"
-            >
-              Continue to Check-in →
-            </Button>
-          </div>
-        )}
-        
-        {/* État 3: None */}
-        {status === 'none' && (
-          <div className="border-2 border-accent bg-transparent rounded-xl p-6 mb-6">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="p-2.5 rounded-full bg-accent/10 shrink-0">
-                <Car className="w-6 h-6 text-accent" />
-              </div>
-              <div className="flex-1">
-                <h2 className="font-semibold text-lg text-foreground">Need a Transfer?</h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  We can arrange airport pickup or train station transfer for you.
-                </p>
-              </div>
-            </div>
-            
-            <Button
-              onClick={handleRequestTransport}
-              className="w-full h-12 text-base font-semibold mb-3"
-            >
-              Request Transfer via Margo Flow
-            </Button>
-            
-            <div className="relative my-4">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="bg-background px-2 text-muted-foreground">or</span>
-              </div>
-            </div>
-            
-            <Button
-              onClick={handleNoTransport}
-              variant="outline"
-              className="w-full h-12 text-base font-semibold"
-            >
-              I don't need a transfer →
-            </Button>
-          </div>
-        )}
+          )}
+        </div>
       </main>
       
       <Footer />
