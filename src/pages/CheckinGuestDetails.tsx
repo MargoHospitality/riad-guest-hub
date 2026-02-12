@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { User, Plus, CheckCircle, ArrowRight } from "lucide-react";
+import { User, Users, Plus, CheckCircle, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -339,11 +339,18 @@ const CheckinGuestDetails = () => {
           )}
         </div>
         
-        {/* Hint */}
+        {/* Guest count badge */}
         {reservationInfo?.totalAdults && (
-          <p className="text-xs text-muted-foreground text-center mt-4">
-            {reservationInfo.totalAdults} adults expected for this reservation
-          </p>
+          <div className="mt-4 flex justify-center">
+            <div className="inline-flex items-center gap-2 bg-card rounded-full px-4 py-2 shadow-sm border border-border">
+              <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center">
+                <Users className="w-3.5 h-3.5 text-accent" />
+              </div>
+              <span className="text-xs font-medium text-foreground">
+                {reservationInfo.totalAdults} adults expected
+              </span>
+            </div>
+          </div>
         )}
       </main>
       
