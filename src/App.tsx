@@ -12,6 +12,7 @@ import RestaurationPage from "./pages/RestaurationPage";
 import WellnessPage from "./pages/WellnessPage";
 import ParkingPage from "./pages/ParkingPage";
 import WifiPage from "./pages/WifiPage";
+import CheckinGate from "./pages/CheckinGate";
 import CheckinTransport from "./pages/CheckinTransport";
 import CheckinGuestDetails from "./pages/CheckinGuestDetails";
 import CheckinRestauration from "./pages/CheckinRestauration";
@@ -37,6 +38,8 @@ const App = () => (
             <Route path="/wellness" element={<WellnessPage />} />
             <Route path="/parking" element={<ParkingPage />} />
             <Route path="/wifi" element={<WifiPage />} />
+            <Route path="/checkin/gate" element={<CheckinGate />} />
+            <Route path="/checkin/transport" element={<CheckinTransport />} />
             <Route path="/checkin/step1" element={<CheckinTransport />} />
             <Route path="/checkin/guest-details" element={<CheckinGuestDetails />} />
             <Route path="/checkin/step3" element={<CheckinRestauration />} />

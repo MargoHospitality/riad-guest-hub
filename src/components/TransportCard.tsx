@@ -23,7 +23,9 @@ const TransportCard = () => {
     const params = new URLSearchParams({
       riad: cloudbeds_property_id,
       reservation: reservation_id,
-      checkin: check_in_date
+      checkin: check_in_date,
+      returnTo: 'homepage',
+      token: token
     });
     window.location.href = `https://margo-flow.vercel.app/?${params.toString()}`;
   };
