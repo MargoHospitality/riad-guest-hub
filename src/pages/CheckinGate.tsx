@@ -48,7 +48,7 @@ const CheckinGate = () => {
   };
   
   const handleNoTransport = () => {
-    navigate(`/checkin/guest-details?token=${token}`);
+    navigate(`/checkin/transport?token=${token}`);
   };
   
   const handleViewDetails = () => {
