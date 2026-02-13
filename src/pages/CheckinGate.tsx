@@ -1,18 +1,39 @@
+import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { useForm } from 'react-hook-form';
 import { useApp } from '@/contexts/AppContext';
 import { checkTransportStatus } from '@/lib/api';
+import { useSaveCheckinResponse } from '@/hooks/useCheckinResponse';
 import { Button } from '@/components/ui/button';
-import { Car, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Car, CheckCircle2, Clock, ArrowRight, MapPin } from 'lucide-react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import ContactSection from '@/components/ContactSection';
+
+interface ManualTransportForm {
+  arrivalMethod: string;
+  arrivalTime: string;
+  details?: string;
+}
 
 const CheckinGate = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const { validation } = useApp();
+  const [showManualForm, setShowManualForm] = useState(false);
+  const saveResponse = useSaveCheckinResponse();
+  
+  const form = useForm<ManualTransportForm>({
+    defaultValues: {
+      arrivalMethod: '',
+      arrivalTime: '',
+      details: '',
+    },
+  });
   
   const { data: transportStatus, isLoading } = useQuery({
     queryKey: ['transportStatus', validation?.reservation?.reservation_id],
@@ -48,7 +69,25 @@ const CheckinGate = () => {
   };
   
   const handleNoTransport = () => {
-    navigate(`/checkin/transport?token=${token}`);
+    setShowManualForm(true);
+  };
+  
+  const handleManualSubmit = async (data: ManualTransportForm) => {
+    if (!token) return;
+    
+    try {
+      await saveResponse.mutateAsync({
+        token,
+        transport_status: 'manual',
+        transport_method: data.arrivalMethod,
+        transport_details: data.details || null,
+        arrival_time: data.arrivalTime,
+      });
+      
+      navigate(`/checkin/guest-details?token=${token}`);
+    } catch (error) {
+      console.error('Failed to save transport details:', error);
+    }
   };
   
   const handleViewDetails = () => {
@@ -160,18 +199,108 @@ const CheckinGate = () => {
             </div>
           )}
           
-          {/* État 3: None - Simple Continue button */}
-          {status === 'none' && (
-            <div className="px-4 pb-4">
-              <button
-                onClick={handleContinue}
-                className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors border-t border-border"
-              >
-                <span className="text-sm font-semibold text-primary">Continue to Check-in</span>
-                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
-                  <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+          {/* État 3: None - Transport options */}
+          {status === 'none' && !showManualForm && (
+            <div className="border-t border-border">
+              <div className="flex items-start gap-3 px-4 py-3">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                  <Car className="w-5 h-5 text-accent" />
                 </div>
-              </button>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">Need a Transfer?</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    We can arrange airport pickup or train station transfer for you.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="px-4 pb-4 space-y-2">
+                <button
+                  onClick={handleRequestTransport}
+                  className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors"
+                >
+                  <span className="text-sm font-semibold text-accent">Request Transfer via Margo Flow</span>
+                  <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center group-hover:bg-accent/90 transition-colors">
+                    <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
+                  </div>
+                </button>
+                
+                <div className="relative my-2">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-border"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-card px-2 text-muted-foreground">or</span>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={handleNoTransport}
+                  className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border group hover:bg-muted/50 transition-colors"
+                >
+                  <span className="text-sm font-semibold text-foreground">I don't need a transfer</span>
+                  <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
+                    <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+          
+          {/* État 4: Manual transport form */}
+          {status === 'none' && showManualForm && (
+            <div className="border-t border-border px-4 pb-4">
+              <form onSubmit={form.handleSubmit(handleManualSubmit)} className="space-y-3 pt-3">
+                <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
+                  <Car className="w-4 h-4 text-primary shrink-0" />
+                  <Select
+                    value={form.watch('arrivalMethod')}
+                    onValueChange={(value) => form.setValue('arrivalMethod', value)}
+                  >
+                    <SelectTrigger className="bg-card border-border h-9 text-sm">
+                      <SelectValue placeholder="Mode de transport" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="other_provider">Autre fournisseur</SelectItem>
+                      <SelectItem value="rental_car">Voiture de location</SelectItem>
+                      <SelectItem value="taxi">Taxi</SelectItem>
+                      <SelectItem value="other">Autre</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
+                  <Clock className="w-4 h-4 text-accent shrink-0" />
+                  <Input
+                    type="time"
+                    {...form.register('arrivalTime', { required: true })}
+                    placeholder="Heure d'arrivée"
+                    className="bg-card border-border h-9 text-sm"
+                  />
+                </div>
+                
+                <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
+                  <MapPin className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <Input
+                    {...form.register('details')}
+                    placeholder="Précisions (optionnel)"
+                    className="bg-card border-border h-9 text-sm"
+                  />
+                </div>
+                
+                <button
+                  type="submit"
+                  disabled={!form.watch('arrivalMethod') || !form.watch('arrivalTime') || saveResponse.isPending}
+                  className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                >
+                  <span className="text-sm font-semibold text-primary">
+                    {saveResponse.isPending ? 'Saving...' : 'Continue'}
+                  </span>
+                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
+                    <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+                  </div>
+                </button>
+              </form>
             </div>
           )}
         </div>
