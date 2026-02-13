@@ -1,21 +1,20 @@
+import margoLogo from "@/assets/margo-hospitality-white.png";
+
 const Footer = () => {
   return (
-    <footer className="mt-auto pt-8 pb-6 px-4">
+    <footer className="mt-auto mx-4 mb-4 rounded-2xl bg-foreground/90 px-5 py-5">
       <div className="flex flex-col items-center gap-3">
-        <div className="w-12 h-px bg-border" />
-        <span className="text-[11px] text-muted-foreground/60 tracking-widest uppercase font-light">
-          Created with Love{" "}
-          <span className="text-accent/50">♥</span>
-          {" "}by{" "}
-          <a
-            href="https://www.margo-hospitality.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground/80 hover:text-accent transition-colors"
-          >
-            Margo Hospitality
-          </a>
-        </span>
+        <a
+          href="https://www.margo-hospitality.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src={margoLogo} alt="Margo Hospitality" className="h-6 opacity-80 hover:opacity-100 transition-opacity" />
+        </a>
+        <div className="w-8 h-px bg-white/15" />
+        <p className="text-[11px] text-white/40 tracking-wide font-light">
+          Created with Love <span className="text-white/60">♥</span>
+        </p>
       </div>
     </footer>
   );
