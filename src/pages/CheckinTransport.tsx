@@ -215,26 +215,18 @@ const CheckinTransport = () => {
 
             {/* Scenario KC: Manual Transport Form */}
             {showManualForm && (
-              <div className="space-y-3">
-                {/* Arrival method select */}
-                <div className="bg-muted/30 rounded-xl p-3">
-                  <div className="flex items-center gap-2.5 mb-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                      <Car className="w-4 h-4 text-primary" />
-                    </div>
-                    <Label className="text-xs font-medium text-foreground">
-                      Mode de transport
-                    </Label>
-                  </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
+                  <Car className="w-4 h-4 text-primary shrink-0" />
                   <Select
                     value={arrivalMethod}
                     onValueChange={(value) => form.setValue("arrivalMethod", value)}
                   >
-                    <SelectTrigger className="bg-card border-border">
-                      <SelectValue placeholder="Sélectionnez..." />
+                    <SelectTrigger className="bg-card border-border h-9 text-sm">
+                      <SelectValue placeholder="Mode de transport" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="other_provider">Autre fournisseur de transport</SelectItem>
+                      <SelectItem value="other_provider">Autre fournisseur</SelectItem>
                       <SelectItem value="rental_car">Voiture de location</SelectItem>
                       <SelectItem value="taxi">Taxi</SelectItem>
                       <SelectItem value="other">Autre</SelectItem>
@@ -242,37 +234,22 @@ const CheckinTransport = () => {
                   </Select>
                 </div>
 
-                {/* Arrival time */}
-                <div className="bg-muted/30 rounded-xl p-3">
-                  <div className="flex items-center gap-2.5 mb-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
-                      <Clock className="w-4 h-4 text-accent" />
-                    </div>
-                    <Label className="text-xs font-medium text-foreground">
-                      Heure d'arrivée estimée
-                    </Label>
-                  </div>
+                <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
+                  <Clock className="w-4 h-4 text-accent shrink-0" />
                   <Input
                     type="time"
                     {...form.register("arrivalTime")}
-                    className="bg-card border-border"
+                    placeholder="Heure d'arrivée"
+                    className="bg-card border-border h-9 text-sm"
                   />
                 </div>
 
-                {/* Details */}
-                <div className="bg-muted/30 rounded-xl p-3">
-                  <div className="flex items-center gap-2.5 mb-2.5">
-                    <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
-                      <MapPin className="w-4 h-4 text-muted-foreground" />
-                    </div>
-                    <Label className="text-xs font-medium text-foreground">
-                      Précisions <span className="text-muted-foreground font-normal">(optionnel)</span>
-                    </Label>
-                  </div>
+                <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
+                  <MapPin className="w-4 h-4 text-muted-foreground shrink-0" />
                   <Input
                     {...form.register("details")}
-                    placeholder="Ex: Numéro de vol, nom du service..."
-                    className="bg-card border-border"
+                    placeholder="Précisions (optionnel)"
+                    className="bg-card border-border h-9 text-sm placeholder:text-sm"
                   />
                 </div>
               </div>
