@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Car, CheckCircle2, Clock, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import Footer from '@/components/Footer';
+import ContactSection from '@/components/ContactSection';
 
 const CheckinGate = () => {
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const CheckinGate = () => {
             </div>
           </div>
         </div>
-        <Footer />
+        <ContactSection />
       </div>
     );
   }
@@ -210,7 +210,7 @@ const CheckinGate = () => {
         </div>
       </main>
       
-      <Footer />
+      <ContactSection />
     </div>
   );
 };

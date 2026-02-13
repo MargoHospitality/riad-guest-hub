@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import Footer from "@/components/Footer";
+import ContactSection from "@/components/ContactSection";
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
@@ -181,7 +181,7 @@ const CheckinGuestDetails = () => {
             </div>
           </div>
         </div>
-        <Footer />
+        <ContactSection />
       </div>
     );
   }
@@ -354,7 +354,7 @@ const CheckinGuestDetails = () => {
         )}
       </main>
       
-      <Footer />
+      <ContactSection />
     </div>
   );
 };
