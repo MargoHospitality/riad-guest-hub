@@ -160,51 +160,18 @@ const CheckinGate = () => {
             </div>
           )}
           
-          {/* État 3: None */}
+          {/* État 3: None - Simple Continue button */}
           {status === 'none' && (
-            <div className="border-t border-border">
-              <div className="flex items-start gap-3 px-4 py-3">
-                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
-                  <Car className="w-5 h-5 text-accent" />
+            <div className="px-4 pb-4">
+              <button
+                onClick={handleContinue}
+                className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors border-t border-border"
+              >
+                <span className="text-sm font-semibold text-primary">Continue to Check-in</span>
+                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
+                  <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
                 </div>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">Need a Transfer?</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    We can arrange airport pickup or train station transfer for you.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="px-4 pb-4 space-y-2">
-                <button
-                  onClick={handleRequestTransport}
-                  className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors"
-                >
-                  <span className="text-sm font-semibold text-accent">Request Transfer via Margo Flow</span>
-                  <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center group-hover:bg-accent/90 transition-colors">
-                    <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
-                  </div>
-                </button>
-                
-                <div className="relative my-2">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border"></div>
-                  </div>
-                  <div className="relative flex justify-center text-xs">
-                    <span className="bg-card px-2 text-muted-foreground">or</span>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={handleNoTransport}
-                  className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border group hover:bg-muted/50 transition-colors"
-                >
-                  <span className="text-sm font-semibold text-foreground">I don't need a transfer</span>
-                  <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
-                    <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
-                  </div>
-                </button>
-              </div>
+              </button>
             </div>
           )}
         </div>
