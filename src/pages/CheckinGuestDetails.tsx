@@ -65,15 +65,32 @@ const CheckinGuestDetails = () => {
         
         if (result.success) {
           setReservationInfo(result.data);
-          const parsed = parseGuestName(result.data.guestName || '');
-          setGuests([{
-            firstName: parsed.firstName,
-            lastName: parsed.lastName,
-            email: result.data.guestEmail || '',
-            phone: result.data.guestPhone || '',
-            isPrimary: true,
-            isSaved: false,
-          }]);
+          
+          // Pre-fill guests from guestList (if available)
+          const guestList = result.data.guestList || [];
+          
+          if (guestList.length > 0) {
+            // Use guestList from Cloudbeds
+            setGuests(guestList.map((guest: any, index: number) => ({
+              firstName: guest.firstName || '',
+              lastName: guest.lastName || '',
+              email: '', // Never pre-fill email (force user to enter real email)
+              phone: guest.phone || '',
+              isPrimary: index === 0,
+              isSaved: false,
+            })));
+          } else {
+            // Fallback: use guestName from booking lead
+            const parsed = parseGuestName(result.data.guestName || '');
+            setGuests([{
+              firstName: parsed.firstName,
+              lastName: parsed.lastName,
+              email: '', // Never pre-fill email
+              phone: result.data.guestPhone || '',
+              isPrimary: true,
+              isSaved: false,
+            }]);
+          }
         }
       } catch (error) {
         console.error('Failed to load reservation info:', error);
@@ -241,7 +258,7 @@ const CheckinGuestDetails = () => {
             </div>
             
             <div className="px-4 pb-4 space-y-4">
-              {/* First & Last Name (non-primary only) */}
+              {/* First & Last Name (always shown for non-primary, disabled if pre-filled) */}
               {!currentGuest?.isPrimary && (
                 <>
                   <div>
@@ -249,7 +266,8 @@ const CheckinGuestDetails = () => {
                     <Input
                       id="firstName"
                       {...register("firstName", { required: "First name is required" })}
-                      className="mt-1"
+                      disabled={!!currentGuest?.firstName}
+                      className="mt-1 disabled:opacity-70 disabled:cursor-not-allowed"
                     />
                     {errors.firstName && (
                       <p className="text-xs text-destructive mt-1">{errors.firstName.message}</p>
@@ -260,7 +278,8 @@ const CheckinGuestDetails = () => {
                     <Input
                       id="lastName"
                       {...register("lastName", { required: "Last name is required" })}
-                      className="mt-1"
+                      disabled={!!currentGuest?.lastName}
+                      className="mt-1 disabled:opacity-70 disabled:cursor-not-allowed"
                     />
                     {errors.lastName && (
                       <p className="text-xs text-destructive mt-1">{errors.lastName.message}</p>
