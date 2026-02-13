@@ -16,17 +16,26 @@ interface SaveCheckinResponseParams {
   guests?: Array<{
     firstName: string;
     lastName: string;
+    email?: string;
+    phone?: string;
     nationality?: string;
     passportNumber?: string;
   }>;
-  restauration_preferences?: string;
-  bedding_preferences?: string;
-  bedding_details?: string;
-  other_requests?: string;
+  restaurant?: {
+    mealChoice: string;
+    dietaryRestrictions?: string;
+  };
+  restauration_preferences?: string; // Legacy field
+  bedding?: string;
+  bedding_preferences?: string; // Legacy field
+  bedding_details?: string; // Legacy field
+  other?: string;
+  other_requests?: string; // Legacy field
 }
 
 interface CompleteCheckinParams {
   token: string;
+  other?: string;
 }
 
 /**

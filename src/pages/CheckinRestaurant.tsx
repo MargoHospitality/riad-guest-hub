@@ -1,40 +1,45 @@
 /**
- * Check-in Bedding - Bed configuration preferences
+ * Check-in Restaurant - Meal selection for arrival day
  * Created: 2026-02-13
  * 
  * Features:
- * - Twin beds / Double bed selection
+ * - Lunch / Dinner selection
+ * - Dynamic pricing display (from checkin_config)
  * - French labels
  */
 
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Bed, ArrowRight } from "lucide-react";
+import { UtensilsCrossed, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ContactSection from "@/components/ContactSection";
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
+import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
 
-const CheckinBedding = () => {
+const CheckinRestaurant = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
   
-  const [beddingChoice, setBeddingChoice] = useState<string>("");
+  const [mealChoice, setMealChoice] = useState<string>("");
+  const [dietaryRestrictions, setDietaryRestrictions] = useState("");
   
+  const { data: config } = useCheckinConfig();
   const saveResponse = useSaveCheckinResponse();
   
   const handleContinue = async () => {
     if (!token) return;
     
-    if (!beddingChoice) {
+    if (!mealChoice) {
       toast({
         title: "Sélection requise",
-        description: "Merci de sélectionner une configuration de lit",
+        description: "Merci de sélectionner une option",
         variant: "destructive",
       });
       return;
@@ -43,19 +48,28 @@ const CheckinBedding = () => {
     try {
       await saveResponse.mutateAsync({
         token,
-        bedding: beddingChoice,
+        restaurant: {
+          mealChoice,
+          dietaryRestrictions: dietaryRestrictions || undefined,
+        },
       });
       
-      // Navigate to next step (other requests)
-      navigate(`/checkin/other?token=${token}`);
+      // Navigate to next step (bedding)
+      navigate(`/checkin/bedding?token=${token}`);
     } catch (error) {
       console.error('Failed to save:', error);
       toast({
         title: "Erreur",
-        description: "Impossible de sauvegarder votre choix",
+        description: "Impossible de sauvegarder vos choix",
         variant: "destructive",
       });
     }
+  };
+  
+  const formatPrice = (price: number | null | undefined) => {
+    if (!price) return null;
+    const currency = config?.currency || 'MAD';
+    return `${price} ${currency}`;
   };
   
   return (
@@ -70,45 +84,69 @@ const CheckinBedding = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Configuration de la literie
+                Restauration le jour de l'arrivée
               </h1>
             </div>
           </div>
           
           <div className="border-t border-border px-4 py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Quelle configuration de lit préférez-vous ?
+              Souhaitez-vous prendre un repas le jour de votre arrivée ?
             </p>
             
-            <RadioGroup value={beddingChoice} onValueChange={setBeddingChoice} className="space-y-3">
+            <RadioGroup value={mealChoice} onValueChange={setMealChoice} className="space-y-3">
               <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="twin" id="twin" />
-                <Label htmlFor="twin" className="flex-1 cursor-pointer">
-                  <div className="font-medium text-sm">Lits jumeaux</div>
-                  <div className="text-xs text-muted-foreground">2 lits séparés</div>
+                <RadioGroupItem value="lunch" id="lunch" />
+                <Label htmlFor="lunch" className="flex-1 cursor-pointer">
+                  <span className="font-medium text-sm">Déjeuner</span>
+                  {config?.lunch_price && (
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      ({formatPrice(config.lunch_price)})
+                    </span>
+                  )}
                 </Label>
               </div>
               
               <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="double" id="double" />
-                <Label htmlFor="double" className="flex-1 cursor-pointer">
-                  <div className="font-medium text-sm">Lit double</div>
-                  <div className="text-xs text-muted-foreground">1 grand lit</div>
+                <RadioGroupItem value="dinner" id="dinner" />
+                <Label htmlFor="dinner" className="flex-1 cursor-pointer">
+                  <span className="font-medium text-sm">Dîner</span>
+                  {config?.dinner_price && (
+                    <span className="ml-2 text-xs text-muted-foreground">
+                      ({formatPrice(config.dinner_price)})
+                    </span>
+                  )}
                 </Label>
               </div>
               
               <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="no_preference" id="no_preference" />
-                <Label htmlFor="no_preference" className="flex-1 cursor-pointer font-medium text-sm">
-                  Pas de préférence
+                <RadioGroupItem value="none" id="none" />
+                <Label htmlFor="none" className="flex-1 cursor-pointer font-medium text-sm">
+                  Non merci
                 </Label>
               </div>
             </RadioGroup>
+            
+            {(mealChoice === 'lunch' || mealChoice === 'dinner') && (
+              <div className="mt-4">
+                <Label htmlFor="dietary" className="text-xs text-muted-foreground">
+                  Régime alimentaire ou allergies (optionnel)
+                </Label>
+                <Textarea
+                  id="dietary"
+                  value={dietaryRestrictions}
+                  onChange={(e) => setDietaryRestrictions(e.target.value)}
+                  placeholder="Ex: Végétarien, sans gluten, allergie aux fruits de mer..."
+                  className="mt-2 text-sm"
+                  rows={3}
+                />
+              </div>
+            )}
           </div>
           
           <button
             onClick={handleContinue}
-            disabled={!beddingChoice || saveResponse.isPending}
+            disabled={!mealChoice || saveResponse.isPending}
             className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors disabled:opacity-50"
           >
             <span className="text-sm font-semibold text-primary">
@@ -126,4 +164,4 @@ const CheckinBedding = () => {
   );
 };
 
-export default CheckinBedding;
+export default CheckinRestaurant;

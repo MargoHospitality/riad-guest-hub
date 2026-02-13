@@ -161,7 +161,7 @@ const CheckinGuestDetails = () => {
   };
   
   const handleContinue = () => {
-    navigate(`/checkin/step3?token=${token}`);
+    navigate(`/checkin/restaurant?token=${token}`);
   };
   
   const handleSelectGuest = (index: number) => {

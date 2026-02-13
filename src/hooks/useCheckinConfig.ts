@@ -16,6 +16,9 @@ interface CheckinConfig {
   first_guest_mandatory: boolean;
   additional_guests_optional: boolean;
   max_additional_guests: number;
+  lunch_price?: number;
+  dinner_price?: number;
+  currency?: string;
 }
 
 const GEA_API_URL = 'https://gea.margo-hospitality.com/api/v1';
@@ -80,17 +83,17 @@ export function buildStepSequence(
   
   // Restauration
   if (config.step_restauration_enabled) {
-    steps.push('/checkin/step3');
+    steps.push('/checkin/restaurant');
   }
   
   // Bedding
   if (config.step_bedding_enabled) {
-    steps.push('/checkin/step4');
+    steps.push('/checkin/bedding');
   }
   
   // Other requests
   if (config.step_other_requests_enabled) {
-    steps.push('/checkin/step5');
+    steps.push('/checkin/other');
   }
   
   return steps;

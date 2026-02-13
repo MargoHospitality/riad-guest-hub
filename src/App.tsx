@@ -15,9 +15,9 @@ import WifiPage from "./pages/WifiPage";
 import CheckinGate from "./pages/CheckinGate";
 import CheckinTransport from "./pages/CheckinTransport";
 import CheckinGuestDetails from "./pages/CheckinGuestDetails";
-import CheckinRestauration from "./pages/CheckinRestauration";
+import CheckinRestaurant from "./pages/CheckinRestaurant";
 import CheckinBedding from "./pages/CheckinBedding";
-import CheckinOtherRequests from "./pages/CheckinOtherRequests";
+import CheckinOther from "./pages/CheckinOther";
 import DynamicContentPage from "./components/DynamicContentPage";
 import NotFound from "./pages/NotFound";
 
@@ -42,9 +42,13 @@ const App = () => (
             <Route path="/checkin/transport" element={<CheckinTransport />} />
             <Route path="/checkin/step1" element={<CheckinTransport />} />
             <Route path="/checkin/guest-details" element={<CheckinGuestDetails />} />
-            <Route path="/checkin/step3" element={<CheckinRestauration />} />
+            <Route path="/checkin/restaurant" element={<CheckinRestaurant />} />
+            <Route path="/checkin/bedding" element={<CheckinBedding />} />
+            <Route path="/checkin/other" element={<CheckinOther />} />
+            {/* Legacy routes (kept for backward compatibility) */}
+            <Route path="/checkin/step3" element={<CheckinRestaurant />} />
             <Route path="/checkin/step4" element={<CheckinBedding />} />
-            <Route path="/checkin/step5" element={<CheckinOtherRequests />} />
+            <Route path="/checkin/step5" element={<CheckinOther />} />
             {/* Dynamic custom pages from GEA (e.g. /page/how-to-use) */}
             <Route path="/page/:pageCode" element={<DynamicContentPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
