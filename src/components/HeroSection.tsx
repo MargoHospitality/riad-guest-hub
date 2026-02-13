@@ -7,7 +7,7 @@ const HeroSection = () => {
   const { branding } = useApp();
   
   const heroImage = branding?.background_image_url || patioImgFallback;
-  const propertyName = branding?.property_name || "Riad Massiba";
+  const propertyName = branding?.property_name || "Property";
 
   return (
     <div className="relative w-full h-64 overflow-hidden">
