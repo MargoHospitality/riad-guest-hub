@@ -5,7 +5,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import Footer from "@/components/Footer";
+import ContactSection from "@/components/ContactSection";
 import CheckinProgressBar from "@/components/checkin/CheckinProgressBar";
 
 interface BeddingPreferenceForm {
@@ -111,7 +111,7 @@ const CheckinBedding = () => {
         </div>
       </main>
 
-      <Footer />
+      <ContactSection />
     </div>
   );
 };

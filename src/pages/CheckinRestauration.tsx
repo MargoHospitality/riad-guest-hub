@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import Footer from "@/components/Footer";
+import ContactSection from "@/components/ContactSection";
 import CheckinProgressBar from "@/components/checkin/CheckinProgressBar";
 
 interface MealPreferencesForm {
@@ -196,7 +196,7 @@ const CheckinRestauration = () => {
         </div>
       </main>
 
-      <Footer />
+      <ContactSection />
     </div>
   );
 };
