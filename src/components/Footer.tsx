@@ -1,20 +1,20 @@
 const Footer = () => {
   return (
-    <footer className="mt-auto py-6 px-4">
-      <div className="flex items-center justify-center gap-2">
-        <div className="flex-1 h-px bg-border/60" />
-        <span className="text-[10px] text-muted-foreground/50 tracking-wider whitespace-nowrap">
-          Made with <span className="text-accent">♥</span> by{" "}
+    <footer className="mt-auto bg-primary/10 rounded-t-2xl">
+      <div className="flex items-center justify-center px-4 py-4">
+        <span className="text-primary/60 text-[11px] tracking-wide font-light">
+          Created with Love{" "}
+          <span className="text-accent/60">♥</span>
+          {" "}by{" "}
           <a
             href="https://www.margo-hospitality.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground/40 font-medium hover:text-accent transition-colors"
+            className="text-primary font-medium hover:text-accent transition-colors"
           >
             Margo Hospitality
           </a>
         </span>
-        <div className="flex-1 h-px bg-border/60" />
       </div>
     </footer>
   );
