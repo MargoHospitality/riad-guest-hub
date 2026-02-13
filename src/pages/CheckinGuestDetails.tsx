@@ -18,8 +18,8 @@ import { useToast } from "@/hooks/use-toast";
 interface GuestForm {
   firstName: string;
   lastName: string;
-  nationality: string;
-  passportNumber: string;
+  email: string;
+  phone: string;
 }
 
 interface Guest extends GuestForm {
@@ -69,8 +69,8 @@ const CheckinGuestDetails = () => {
           setGuests([{
             firstName: parsed.firstName,
             lastName: parsed.lastName,
-            nationality: '',
-            passportNumber: '',
+            email: result.data.guestEmail || '',
+            phone: result.data.guestPhone || '',
             isPrimary: true,
             isSaved: false,
           }]);
@@ -97,8 +97,8 @@ const CheckinGuestDetails = () => {
       reset({
         firstName: currentGuest.firstName,
         lastName: currentGuest.lastName,
-        nationality: currentGuest.nationality,
-        passportNumber: currentGuest.passportNumber,
+        email: currentGuest.email,
+        phone: currentGuest.phone,
       });
     }
   }, [currentGuestIndex, currentGuest, reset]);
@@ -120,8 +120,8 @@ const CheckinGuestDetails = () => {
         guests: updatedGuests.map(g => ({
           firstName: g.firstName,
           lastName: g.lastName,
-          nationality: g.nationality || undefined,
-          passportNumber: g.passportNumber || undefined,
+          email: g.email || undefined,
+          phone: g.phone || undefined,
         })),
       });
       
@@ -152,8 +152,8 @@ const CheckinGuestDetails = () => {
     setGuests([...guests, {
       firstName: '',
       lastName: '',
-      nationality: '',
-      passportNumber: '',
+      email: '',
+      phone: '',
       isPrimary: false,
       isSaved: false,
     }]);
@@ -269,29 +269,40 @@ const CheckinGuestDetails = () => {
                 </>
               )}
               
-              {/* Nationality */}
+              {/* Email */}
               <div>
-                <Label htmlFor="nationality" className="text-xs text-muted-foreground">Nationality</Label>
+                <Label htmlFor="email" className="text-xs text-muted-foreground">Email *</Label>
                 <Input
-                  id="nationality"
-                  {...register("nationality")}
-                  placeholder="e.g., FR, US, MA"
-                  maxLength={2}
-                  className="mt-1 uppercase"
-                />
-                <p className="text-[11px] text-muted-foreground mt-1">
-                  2-letter country code (e.g., FR for France)
-                </p>
-              </div>
-              
-              {/* Passport */}
-              <div>
-                <Label htmlFor="passportNumber" className="text-xs text-muted-foreground">Passport Number (optional)</Label>
-                <Input
-                  id="passportNumber"
-                  {...register("passportNumber")}
+                  id="email"
+                  type="email"
+                  {...register("email", { 
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: "Invalid email address"
+                    }
+                  })}
+                  placeholder="your@email.com"
                   className="mt-1"
                 />
+                {errors.email && (
+                  <p className="text-xs text-destructive mt-1">{errors.email.message}</p>
+                )}
+              </div>
+              
+              {/* Phone */}
+              <div>
+                <Label htmlFor="phone" className="text-xs text-muted-foreground">Phone *</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  {...register("phone", { required: "Phone is required" })}
+                  placeholder="+212 6XX XX XX XX"
+                  className="mt-1"
+                />
+                {errors.phone && (
+                  <p className="text-xs text-destructive mt-1">{errors.phone.message}</p>
+                )}
               </div>
               
               {/* Save button */}
