@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchPageContent } from "@/lib/api";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import HeroSection from "./HeroSection";
 import Footer from "./Footer";
-import { Loader2, ChevronRight } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 interface DynamicContentPageProps {
   pageSlug?: string;
@@ -18,7 +18,7 @@ const DynamicContentPage = ({
   fallbackTitle = "Page",
   fallbackContent 
 }: DynamicContentPageProps) => {
-  // Get pageCode from URL params if not provided as prop
+  const navigate = useNavigate();
   const { pageCode } = useParams<{ pageCode: string }>();
   const pageSlug = pageSlugProp || pageCode || "";
   const { data: pageData, isLoading, error } = useQuery({
@@ -50,15 +50,14 @@ const DynamicContentPage = ({
             </div>
           ) : pageData ? (
             <div className="p-4">
-              {/* Breadcrumb */}
-              <div className="flex items-center gap-1 text-[11px] text-muted-foreground mb-3">
-                <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
-                <ChevronRight className="w-3 h-3" />
-                <span className="text-foreground font-medium">{pageData.title}</span>
-              </div>
-
-              {/* Page Title */}
+              {/* Back button + Title */}
               <div className="flex items-center gap-2.5 mb-4">
+                <button
+                  onClick={() => navigate("/")}
+                  className="w-7 h-7 rounded-lg bg-muted/50 flex items-center justify-center shrink-0 hover:bg-muted transition-colors"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 text-muted-foreground" />
+                </button>
                 <div className="w-0.5 h-4 rounded-full bg-accent" />
                 <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
                   {pageData.title}
