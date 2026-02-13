@@ -33,7 +33,11 @@ const CheckinGate = () => {
       arrivalTime: '',
       details: '',
     },
+    mode: 'onChange',
   });
+  
+  const arrivalMethod = form.watch('arrivalMethod');
+  const arrivalTime = form.watch('arrivalTime');
   
   const { data: transportStatus, isLoading } = useQuery({
     queryKey: ['transportStatus', validation?.reservation?.reservation_id],
@@ -254,8 +258,8 @@ const CheckinGate = () => {
                 <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
                   <Car className="w-4 h-4 text-primary shrink-0" />
                   <Select
-                    value={form.watch('arrivalMethod')}
-                    onValueChange={(value) => form.setValue('arrivalMethod', value)}
+                    value={arrivalMethod}
+                    onValueChange={(value) => form.setValue('arrivalMethod', value, { shouldValidate: true })}
                   >
                     <SelectTrigger className="bg-card border-border h-9 text-sm">
                       <SelectValue placeholder="Mode de transport" />
@@ -290,7 +294,7 @@ const CheckinGate = () => {
                 
                 <button
                   type="submit"
-                  disabled={!form.watch('arrivalMethod') || !form.watch('arrivalTime') || saveResponse.isPending}
+                  disabled={!arrivalMethod || !arrivalTime || saveResponse.isPending}
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                 >
                   <span className="text-sm font-semibold text-primary">
