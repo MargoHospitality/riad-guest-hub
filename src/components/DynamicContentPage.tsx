@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { fetchPageContent } from "@/lib/api";
+import { Link } from "react-router-dom";
 import Header from "./Header";
 import HeroSection from "./HeroSection";
 import Footer from "./Footer";
-import { Loader2 } from "lucide-react";
+import { Loader2, ChevronRight } from "lucide-react";
 
 interface DynamicContentPageProps {
   pageSlug?: string;
@@ -49,6 +50,13 @@ const DynamicContentPage = ({
             </div>
           ) : pageData ? (
             <div className="p-4">
+              {/* Breadcrumb */}
+              <div className="flex items-center gap-1 text-[11px] text-muted-foreground mb-3">
+                <Link to="/" className="hover:text-foreground transition-colors">Accueil</Link>
+                <ChevronRight className="w-3 h-3" />
+                <span className="text-foreground font-medium">{pageData.title}</span>
+              </div>
+
               {/* Page Title */}
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="w-0.5 h-4 rounded-full bg-accent" />
