@@ -157,11 +157,12 @@ const CheckinGuestDetails = () => {
   };
   
   const handleAddGuest = () => {
-    const maxGuests = config?.max_additional_guests || 10;
-    if (guests.length >= maxGuests + 1) {
+    // Use totalAdults from reservation as the hard limit
+    const maxGuests = reservationInfo?.totalAdults || config?.max_additional_guests || 10;
+    if (guests.length >= maxGuests) {
       toast({
         title: "Maximum guests reached",
-        description: `You can add up to ${maxGuests} additional guests`,
+        description: `Maximum ${maxGuests} guests for this reservation`,
       });
       return;
     }
