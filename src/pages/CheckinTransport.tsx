@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Plane, Check, Clock, ArrowRight, ArrowLeft } from "lucide-react";
+import { Plane, Check, Clock, ArrowRight, Car, MapPin } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
@@ -209,72 +215,84 @@ const CheckinTransport = () => {
 
             {/* Scenario KC: Manual Transport Form */}
             {showManualForm && (
-              <form onSubmit={form.handleSubmit(handleManualSubmit)} className="space-y-4">
-                <div>
-                  <Label className="text-xs text-muted-foreground mb-2 block">
-                    Comment arrivez-vous au Riad ?
-                  </Label>
-                  <RadioGroup
+              <div className="space-y-3">
+                {/* Arrival method select */}
+                <div className="bg-muted/30 rounded-xl p-3">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                      <Car className="w-4 h-4 text-primary" />
+                    </div>
+                    <Label className="text-xs font-medium text-foreground">
+                      Mode de transport
+                    </Label>
+                  </div>
+                  <Select
                     value={arrivalMethod}
                     onValueChange={(value) => form.setValue("arrivalMethod", value)}
-                    className="space-y-2.5"
                   >
-                    {[
-                      { value: "other_provider", label: "Autre fournisseur de transport" },
-                      { value: "rental_car", label: "Voiture de location" },
-                      { value: "taxi", label: "Taxi" },
-                      { value: "other", label: "Autre" },
-                    ].map((opt) => (
-                      <div key={opt.value} className="flex items-center space-x-3">
-                        <RadioGroupItem value={opt.value} id={opt.value} />
-                        <Label htmlFor={opt.value} className="text-sm text-foreground cursor-pointer">
-                          {opt.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
+                    <SelectTrigger className="bg-card border-border">
+                      <SelectValue placeholder="Sélectionnez..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="other_provider">Autre fournisseur de transport</SelectItem>
+                      <SelectItem value="rental_car">Voiture de location</SelectItem>
+                      <SelectItem value="taxi">Taxi</SelectItem>
+                      <SelectItem value="other">Autre</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
-                <div>
-                  <Label className="text-xs text-muted-foreground mb-1 block">
-                    Précisions (optionnel)
-                  </Label>
-                  <Input
-                    {...form.register("details")}
-                    placeholder="Ex: Nom du service, numéro de vol..."
-                    className="mt-1"
-                  />
-                </div>
-
-                <div>
-                  <Label className="text-xs text-muted-foreground mb-1 block">
-                    Heure d'arrivée estimée
-                  </Label>
+                {/* Arrival time */}
+                <div className="bg-muted/30 rounded-xl p-3">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
+                      <Clock className="w-4 h-4 text-accent" />
+                    </div>
+                    <Label className="text-xs font-medium text-foreground">
+                      Heure d'arrivée estimée
+                    </Label>
+                  </div>
                   <Input
                     type="time"
                     {...form.register("arrivalTime")}
-                    className="mt-1"
+                    className="bg-card border-border"
                   />
                 </div>
-              </form>
+
+                {/* Details */}
+                <div className="bg-muted/30 rounded-xl p-3">
+                  <div className="flex items-center gap-2.5 mb-2.5">
+                    <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                      <MapPin className="w-4 h-4 text-muted-foreground" />
+                    </div>
+                    <Label className="text-xs font-medium text-foreground">
+                      Précisions <span className="text-muted-foreground font-normal">(optionnel)</span>
+                    </Label>
+                  </div>
+                  <Input
+                    {...form.register("details")}
+                    placeholder="Ex: Numéro de vol, nom du service..."
+                    className="bg-card border-border"
+                  />
+                </div>
+              </div>
             )}
           </div>
 
-          {/* Navigation buttons */}
-          <div className="border-t border-border">
-            {canContinue() && (
-              <button
-                type="button"
-                onClick={showManualForm ? form.handleSubmit(handleManualSubmit) : handleContinue}
-                className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 group hover:bg-primary/10 transition-colors"
-              >
-                <span className="text-sm font-semibold text-primary">Continuer</span>
-                <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
-                  <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
-                </div>
-              </button>
-            )}
-          </div>
+          {/* Validation button */}
+          {(canContinue() || showManualForm) && (
+            <button
+              type="button"
+              onClick={showManualForm ? form.handleSubmit(handleManualSubmit) : handleContinue}
+              disabled={!canContinue()}
+              className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <span className="text-sm font-semibold text-primary">Continuer</span>
+              <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
+                <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+              </div>
+            </button>
+          )}
         </div>
       </main>
 
