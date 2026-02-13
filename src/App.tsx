@@ -17,6 +17,7 @@ import CheckinGuestDetails from "./pages/CheckinGuestDetails";
 import CheckinRestaurant from "./pages/CheckinRestaurant";
 import CheckinBedding from "./pages/CheckinBedding";
 import CheckinOther from "./pages/CheckinOther";
+import CheckinSuccess from "./pages/CheckinSuccess";
 import DynamicContentPage from "./components/DynamicContentPage";
 import NotFound from "./pages/NotFound";
 
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/checkin/restaurant" element={<CheckinRestaurant />} />
             <Route path="/checkin/bedding" element={<CheckinBedding />} />
             <Route path="/checkin/other" element={<CheckinOther />} />
+            <Route path="/checkin/success" element={<CheckinSuccess />} />
             {/* Legacy routes (kept for backward compatibility) */}
             <Route path="/checkin/step3" element={<CheckinRestaurant />} />
             <Route path="/checkin/step4" element={<CheckinBedding />} />

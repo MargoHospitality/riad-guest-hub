@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useApp } from '@/contexts/AppContext';
 import { checkTransportStatus } from '@/lib/api';
-import { useSaveCheckinResponse } from '@/hooks/useCheckinResponse';
+import { useSaveCheckinResponse, useCheckinResponse } from '@/hooks/useCheckinResponse';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -26,6 +26,14 @@ const CheckinGate = () => {
   const { validation } = useApp();
   const [showManualForm, setShowManualForm] = useState(false);
   const saveResponse = useSaveCheckinResponse();
+  const { data: checkinData } = useCheckinResponse(token);
+  
+  // Redirect to home if check-in already completed
+  useEffect(() => {
+    if (checkinData?.out_completed_at || checkinData?.completed_at) {
+      navigate(`/?token=${token}`);
+    }
+  }, [checkinData, navigate, token]);
   
   const form = useForm<ManualTransportForm>({
     defaultValues: {

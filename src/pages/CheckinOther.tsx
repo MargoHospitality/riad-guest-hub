@@ -38,13 +38,8 @@ const CheckinOther = () => {
         other: otherRequests || undefined,
       });
       
-      toast({
-        title: "Enregistrement terminé !",
-        description: "Vos informations ont été transmises avec succès",
-      });
-      
-      // Navigate to success/home
-      navigate(`/?token=${token}`);
+      // Navigate to success page
+      navigate(`/checkin/success?token=${token}`);
     } catch (error) {
       console.error('Failed to complete check-in:', error);
       toast({

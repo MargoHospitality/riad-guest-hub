@@ -1,20 +1,57 @@
-import { ArrowRight, ClipboardCheck } from "lucide-react";
+import { ArrowRight, ClipboardCheck, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
+import { useCheckinResponse } from "@/hooks/useCheckinResponse";
 
 const CheckinCTA = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useApp();
+  const { data: checkinData } = useCheckinResponse(token);
+
+  // Check if check-in is completed
+  const isCompleted = checkinData?.out_completed_at || checkinData?.completed_at;
+  const completedDate = isCompleted ? new Date(isCompleted) : null;
 
   const handleCheckin = () => {
+    if (isCompleted) {
+      // Already completed, do nothing or show message
+      return;
+    }
+    
     if (token) {
       navigate(`/checkin/gate?token=${token}`);
     } else {
       navigate("/checkin/gate");
     }
   };
+
+  // If completed, show completed status
+  if (isCompleted && completedDate) {
+    return (
+      <section className="px-4 pt-4">
+        <div className="w-full bg-green-50 border-2 border-green-200 rounded-2xl shadow-sm px-5 py-4 flex items-center gap-4">
+          <div className="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+            <CheckCircle className="w-5 h-5 text-green-600" />
+          </div>
+          <div className="flex-1 text-left">
+            <p className="text-sm font-bold text-green-800">
+              Enregistrement réalisé
+            </p>
+            <p className="text-[11px] text-green-600 mt-0.5">
+              {completedDate.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                hour: '2-digit',
+                minute: '2-digit'
+              })}
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="px-4 pt-4">
