@@ -42,12 +42,34 @@ interface CompleteCheckinParams {
  * Save check-in response (partial updates)
  */
 async function saveCheckinResponse(params: SaveCheckinResponseParams): Promise<any> {
+  // Transform frontend format to API format
+  const apiParams: any = { ...params };
+  
+  // Map restaurant object to restauration_preferences text
+  if (params.restaurant) {
+    const { mealChoice, dietaryRestrictions } = params.restaurant;
+    apiParams.restauration_preferences = `${mealChoice}${dietaryRestrictions ? ` - ${dietaryRestrictions}` : ''}`;
+    delete apiParams.restaurant;
+  }
+  
+  // Map bedding to bedding_preferences
+  if (params.bedding) {
+    apiParams.bedding_preferences = params.bedding;
+    delete apiParams.bedding;
+  }
+  
+  // Map other to other_requests
+  if (params.other) {
+    apiParams.other_requests = params.other;
+    delete apiParams.other;
+  }
+  
   const response = await fetch(`${GEA_API_URL}/checkin/response`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(params),
+    body: JSON.stringify(apiParams),
   });
   
   if (!response.ok) {
