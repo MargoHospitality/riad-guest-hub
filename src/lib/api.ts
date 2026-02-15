@@ -121,7 +121,9 @@ export async function fetchFeaturedItems(propertyId: string = PROPERTY_ID, lang:
 
 export interface PageInfo {
   code: string;
-  title: string;
+  title: string; // Default (FR)
+  title_fr: string;
+  title_en: string;
   route: string;
   icon: string;
   externalUrl?: string;
