@@ -10,6 +10,7 @@
 
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { UtensilsCrossed, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -23,6 +24,7 @@ import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinRestaurant = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -40,8 +42,8 @@ const CheckinRestaurant = () => {
     
     if (!mealChoice) {
       toast({
-        title: "Sélection requise",
-        description: "Merci de sélectionner une option",
+        title: t('checkin.restaurant.selectionRequired'),
+        description: t('checkin.restaurant.pleaseSelect'),
         variant: "destructive",
       });
       return;
@@ -49,8 +51,8 @@ const CheckinRestaurant = () => {
     
     if ((mealChoice === 'lunch' || mealChoice === 'dinner') && !menuType) {
       toast({
-        title: "Choix du menu requis",
-        description: "Merci de sélectionner le type de menu",
+        title: t('checkin.restaurant.menuRequired'),
+        description: t('checkin.restaurant.pleaseSelectMenu'),
         variant: "destructive",
       });
       return;
@@ -71,8 +73,8 @@ const CheckinRestaurant = () => {
     } catch (error) {
       console.error('Failed to save:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de sauvegarder vos choix",
+        title: t('checkin.restaurant.error'),
+        description: t('checkin.restaurant.failedToSave'),
         variant: "destructive",
       });
     }
@@ -81,7 +83,7 @@ const CheckinRestaurant = () => {
   const formatPrice = (price: number | null | undefined) => {
     if (!price) return null;
     const currency = config?.currency || 'MAD';
-    return `${price} ${currency}`;
+    return `${price} ${currency} ${t('checkin.restaurant.perPerson')}`;
   };
   
   return (
@@ -96,31 +98,31 @@ const CheckinRestaurant = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Restauration le jour de l'arrivée
+                {t('checkin.restaurant.title')}
               </h1>
             </div>
           </div>
           
           <div className="border-t border-border px-4 py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Souhaitez-vous organiser un repas le jour de votre arrivée ?
+              {t('checkin.restaurant.question')}
             </p>
             
             <div className="space-y-4">
               <div>
-                <Label className="text-xs text-muted-foreground mb-2 block">Type de repas *</Label>
+                <Label className="text-xs text-muted-foreground mb-2 block">{t('checkin.restaurant.mealType')} *</Label>
                 <Select value={mealChoice} onValueChange={setMealChoice}>
                   <SelectTrigger className="bg-card border-border">
-                    <SelectValue placeholder="Sélectionner..." />
+                    <SelectValue placeholder={t('checkin.restaurant.selectPlaceholder')} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="lunch">
-                      Déjeuner {config?.lunch_price ? `(${formatPrice(config.lunch_price)} par personne)` : ''}
+                      {t('checkin.restaurant.lunch')} {config?.lunch_price ? `(${formatPrice(config.lunch_price)})` : ''}
                     </SelectItem>
                     <SelectItem value="dinner">
-                      Dîner {config?.dinner_price ? `(${formatPrice(config.dinner_price)} par personne)` : ''}
+                      {t('checkin.restaurant.dinner')} {config?.dinner_price ? `(${formatPrice(config.dinner_price)})` : ''}
                     </SelectItem>
-                    <SelectItem value="none">Non merci</SelectItem>
+                    <SelectItem value="none">{t('checkin.restaurant.noThanks')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -128,27 +130,27 @@ const CheckinRestaurant = () => {
               {(mealChoice === 'lunch' || mealChoice === 'dinner') && (
                 <>
                   <div>
-                    <Label className="text-xs text-muted-foreground mb-2 block">Choix du menu *</Label>
+                    <Label className="text-xs text-muted-foreground mb-2 block">{t('checkin.restaurant.menuChoice')} *</Label>
                     <Select value={menuType} onValueChange={setMenuType}>
                       <SelectTrigger className="bg-card border-border">
-                        <SelectValue placeholder="Sélectionner..." />
+                        <SelectValue placeholder={t('checkin.restaurant.selectPlaceholder')} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="traditional">Menu traditionnel marocain</SelectItem>
-                        <SelectItem value="vegetarian">Menu végétarien</SelectItem>
+                        <SelectItem value="traditional">{t('checkin.restaurant.traditionalMenu')}</SelectItem>
+                        <SelectItem value="vegetarian">{t('checkin.restaurant.vegetarianMenu')}</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   
                   <div>
                     <Label htmlFor="dietary" className="text-xs text-muted-foreground mb-2 block">
-                      Indiquez ici vos préférences ou restrictions alimentaires éventuelles.
+                      {t('checkin.restaurant.dietaryRestrictions')}
                     </Label>
                     <Textarea
                       id="dietary"
                       value={dietaryRestrictions}
                       onChange={(e) => setDietaryRestrictions(e.target.value)}
-                      placeholder="Ex: Sans gluten, allergie aux fruits de mer, préférence épices..."
+                      placeholder={t('checkin.restaurant.dietaryPlaceholder')}
                       className="text-sm"
                       rows={3}
                     />
@@ -164,7 +166,7 @@ const CheckinRestaurant = () => {
             className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors disabled:opacity-50"
           >
             <span className="text-sm font-semibold text-primary">
-              {saveResponse.isPending ? 'Enregistrement...' : 'Continuer'}
+              {saveResponse.isPending ? t('checkin.restaurant.saving') : t('checkin.restaurant.continue')}
             </span>
             <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
               <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
