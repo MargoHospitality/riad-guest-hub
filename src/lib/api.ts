@@ -130,8 +130,8 @@ export interface PageInfo {
 /**
  * Fetch available pages for the property
  */
-export async function fetchAvailablePages(propertyId: string = PROPERTY_ID): Promise<PageInfo[]> {
-  const response = await fetch(`${GEA_API_URL}/pages/${propertyId}`);
+export async function fetchAvailablePages(propertyId: string = PROPERTY_ID, lang: string = 'fr'): Promise<PageInfo[]> {
+  const response = await fetch(`${GEA_API_URL}/pages/${propertyId}?lang=${lang}`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch pages: ${response.statusText}`);

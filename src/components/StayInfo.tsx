@@ -32,10 +32,10 @@ const iconMap: Record<string, LucideIcon> = {
 };
 
 const StayInfo = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: pages, isLoading } = useQuery({
-    queryKey: ["availablePages"],
-    queryFn: () => fetchAvailablePages(),
+    queryKey: ["availablePages", i18n.language],
+    queryFn: () => fetchAvailablePages(undefined, i18n.language),
     staleTime: 1000 * 60 * 60,
   });
 
