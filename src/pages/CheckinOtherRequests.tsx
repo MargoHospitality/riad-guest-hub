@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import FooterBar from "@/components/FooterBar";
+
 import CheckinProgressBar from "@/components/checkin/CheckinProgressBar";
 import logo from "@/assets/logo.png";
 
@@ -109,7 +109,6 @@ const CheckinOtherRequests = () => {
           </div>
         </main>
 
-        <FooterBar />
       </div>
     );
   }
@@ -216,7 +215,7 @@ const CheckinOtherRequests = () => {
         </div>
       </main>
 
-      <FooterBar />
+      
     </div>
   );
 };
