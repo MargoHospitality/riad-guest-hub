@@ -22,7 +22,7 @@ const TransportCard = () => {
 
   const handleTransportRequest = () => {
     if (!token || !validation?.reservation) return;
-    const { cloudbeds_property_id, reservation_id, check_in_date } = validation.reservation;
+    const { cloudbeds_property_id, reservation_id, check_in_date, adults } = validation.reservation;
     if (!cloudbeds_property_id) return;
     const params = new URLSearchParams({
       riad: cloudbeds_property_id,
@@ -31,6 +31,7 @@ const TransportCard = () => {
       returnTo: 'homepage',
       token: token,
       lang: i18n.language,
+      pax: (adults || 2).toString(),
     });
     window.location.href = `https://flow.margo-hospitality.com/?${params.toString()}`;
   };
