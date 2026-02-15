@@ -9,6 +9,7 @@
 
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Bed, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -20,6 +21,7 @@ import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinBedding = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -35,8 +37,8 @@ const CheckinBedding = () => {
     
     if (!beddingChoice) {
       toast({
-        title: "Sélection requise",
-        description: "Merci de sélectionner une configuration de lit",
+        title: t('checkin.bedding.selectionRequired'),
+        description: t('checkin.bedding.pleaseSelectConfiguration'),
         variant: "destructive",
       });
       return;
@@ -44,8 +46,8 @@ const CheckinBedding = () => {
     
     if (beddingChoice === 'other' && !otherBedding.trim()) {
       toast({
-        title: "Précision requise",
-        description: "Merci de préciser votre configuration",
+        title: t('checkin.bedding.specificationRequired'),
+        description: t('checkin.bedding.pleaseSpecify'),
         variant: "destructive",
       });
       return;
@@ -62,8 +64,8 @@ const CheckinBedding = () => {
     } catch (error) {
       console.error('Failed to save:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de sauvegarder votre choix",
+        title: t('checkin.bedding.error'),
+        description: t('checkin.bedding.failedToSave'),
         variant: "destructive",
       });
     }
@@ -81,23 +83,23 @@ const CheckinBedding = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Configuration de la literie
+                {t('checkin.bedding.title')}
               </h1>
             </div>
           </div>
           
           <div className="border-t border-border px-4 py-4 space-y-4">
             <div>
-              <Label className="text-xs text-muted-foreground mb-2 block">Configuration souhaitée *</Label>
+              <Label className="text-xs text-muted-foreground mb-2 block">{t('checkin.bedding.configurationWanted')} *</Label>
               <Select value={beddingChoice} onValueChange={setBeddingChoice}>
                 <SelectTrigger className="bg-card border-border">
-                  <SelectValue placeholder="Sélectionner..." />
+                  <SelectValue placeholder={t('checkin.bedding.selectPlaceholder')} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="twin">Lits jumeaux (2 lits séparés)</SelectItem>
-                  <SelectItem value="double">Lit double (1 grand lit)</SelectItem>
-                  <SelectItem value="no_preference">Pas de préférence</SelectItem>
-                  <SelectItem value="other">Autre (préciser ci-dessous)</SelectItem>
+                  <SelectItem value="twin">{t('checkin.bedding.twin')}</SelectItem>
+                  <SelectItem value="double">{t('checkin.bedding.double')}</SelectItem>
+                  <SelectItem value="no_preference">{t('checkin.bedding.noPreference')}</SelectItem>
+                  <SelectItem value="other">{t('checkin.bedding.other')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -105,13 +107,13 @@ const CheckinBedding = () => {
             {beddingChoice === 'other' && (
               <div>
                 <Label htmlFor="otherBedding" className="text-xs text-muted-foreground mb-2 block">
-                  Précisez votre configuration *
+                  {t('checkin.bedding.specifyConfiguration')} *
                 </Label>
                 <Input
                   id="otherBedding"
                   value={otherBedding}
                   onChange={(e) => setOtherBedding(e.target.value)}
-                  placeholder="Ex: 1 lit double + 1 lit simple"
+                  placeholder={t('checkin.bedding.configurationPlaceholder')}
                   className="bg-card border-border"
                 />
               </div>
@@ -124,7 +126,7 @@ const CheckinBedding = () => {
             className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors disabled:opacity-50"
           >
             <span className="text-sm font-semibold text-primary">
-              {saveResponse.isPending ? 'Enregistrement...' : 'Continuer'}
+              {saveResponse.isPending ? t('checkin.bedding.saving') : t('checkin.bedding.continue')}
             </span>
             <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
               <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
