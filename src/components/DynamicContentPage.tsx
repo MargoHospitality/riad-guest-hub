@@ -4,7 +4,7 @@ import { fetchPageContent } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import HeroSection from "./HeroSection";
-import ContactSection from "./ContactSection";
+import FooterBar from "./FooterBar";
 import { Loader2, ArrowLeft } from "lucide-react";
 
 interface DynamicContentPageProps {
@@ -83,7 +83,7 @@ const DynamicContentPage = ({
         </div>
       </main>
 
-      <ContactSection />
+      <FooterBar />
       
     </div>
   );

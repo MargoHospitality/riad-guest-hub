@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Car, CheckCircle2, Clock, ArrowRight, MapPin } from 'lucide-react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import ContactSection from '@/components/ContactSection';
+import FooterBar from '@/components/FooterBar';
 
 interface ManualTransportForm {
   arrivalMethod: string;
@@ -126,7 +126,7 @@ const CheckinGate = () => {
             </div>
           </div>
         </div>
-        <ContactSection />
+        <FooterBar />
       </div>
     );
   }
@@ -321,7 +321,7 @@ const CheckinGate = () => {
         </div>
       </main>
       
-      <ContactSection />
+      <FooterBar />
     </div>
   );
 };

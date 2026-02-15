@@ -16,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import ContactSection from "@/components/ContactSection";
+import FooterBar from "@/components/FooterBar";
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useToast } from "@/hooks/use-toast";
 
@@ -135,7 +135,7 @@ const CheckinBedding = () => {
         </div>
       </main>
       
-      <ContactSection />
+      <FooterBar />
     </div>
   );
 };
