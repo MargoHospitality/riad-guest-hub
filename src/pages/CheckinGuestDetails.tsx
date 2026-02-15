@@ -55,6 +55,7 @@ const CheckinGuestDetails = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<GuestForm>();
   
@@ -354,12 +355,12 @@ const CheckinGuestDetails = () => {
                     value={phoneNumber}
                     onChange={(value) => {
                       setPhoneNumber(value);
-                      form.setValue('phone', `${countryCode}${value}`, { shouldValidate: true });
+                      setValue('phone', `${countryCode}${value}`, { shouldValidate: true });
                     }}
                     countryCode={countryCode}
                     onCountryCodeChange={(code) => {
                       setCountryCode(code);
-                      form.setValue('phone', `${code}${phoneNumber}`, { shouldValidate: true });
+                      setValue('phone', `${code}${phoneNumber}`, { shouldValidate: true });
                     }}
                   />
                 </div>

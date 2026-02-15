@@ -63,7 +63,6 @@ const CheckinRestaurant = () => {
         token,
         restaurant: {
           mealChoice,
-          menuType: menuType || undefined,
           dietaryRestrictions: dietaryRestrictions || undefined,
         },
       });
