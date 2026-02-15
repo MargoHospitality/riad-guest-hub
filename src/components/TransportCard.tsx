@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { useApp } from "@/contexts/AppContext";
 import { checkTransportStatus } from "@/lib/api";
+import { useCheckinResponse } from "@/hooks/useCheckinResponse";
 
 const TransportCard = () => {
   const { t } = useTranslation();
@@ -15,6 +16,9 @@ const TransportCard = () => {
     staleTime: 1000 * 60,
     refetchInterval: 1000 * 60 * 5,
   });
+
+  // Check if check-in is completed with manual/no transport
+  const { data: checkinData } = useCheckinResponse(token);
 
   const handleTransportRequest = () => {
     if (!token || !validation?.reservation) return;
@@ -37,6 +41,14 @@ const TransportCard = () => {
         <div className="flex-1 h-4 bg-muted rounded w-1/2" />
       </div>
     );
+  }
+
+  // If check-in completed with manual/no transport → hide transport offer
+  const checkinCompleted = checkinData?.out_completed_at || checkinData?.completed_at;
+  const checkinTransportStatus = checkinData?.out_transport_status || checkinData?.transport_status;
+  
+  if (checkinCompleted && (checkinTransportStatus === 'manual' || checkinTransportStatus === 'none')) {
+    return null; // Don't show transport offer if guest declined
   }
 
   const status = transportStatus?.status || 'none';
