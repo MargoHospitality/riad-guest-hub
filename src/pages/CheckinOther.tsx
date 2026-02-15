@@ -10,6 +10,7 @@
 
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MessageSquare, CheckCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +21,7 @@ import { useCompleteCheckin } from "@/hooks/useCheckinResponse";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinOther = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");

@@ -5,6 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { CheckCircle, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
@@ -12,6 +13,7 @@ import HeroSection from "@/components/HeroSection";
 import ContactSection from "@/components/ContactSection";
 
 const CheckinSuccess = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
@@ -50,11 +52,11 @@ const CheckinSuccess = () => {
             </div>
             
             <h1 className="text-2xl font-bold text-foreground text-center mb-3">
-              Enregistrement réalisé !
+              {t('checkin.success.title')}
             </h1>
             
             <p className="text-muted-foreground text-center mb-8 max-w-sm">
-              Merci d'avoir complété votre enregistrement. Toutes vos informations ont été transmises à notre équipe.
+              {t('checkin.success.thankYou')}
             </p>
             
             <div className="w-full max-w-xs space-y-3">
@@ -64,11 +66,11 @@ const CheckinSuccess = () => {
                 size="lg"
               >
                 <Home className="w-4 h-4 mr-2" />
-                Retour à l'accueil
+                {t('checkin.success.backHome')}
               </Button>
               
               <p className="text-xs text-center text-muted-foreground">
-                Redirection automatique dans {countdown}s
+                {t('checkin.success.autoRedirect', { seconds: countdown })}
               </p>
             </div>
           </div>
