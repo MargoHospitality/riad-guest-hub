@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { 
   fetchBranding, 
   validateToken, 
@@ -22,7 +23,10 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [token] = useState<string | null>(getTokenFromUrl());
+  const [searchParams] = useSearchParams();
+  
+  // Read token from URL on every render (reactive to URL changes)
+  const token = useMemo(() => searchParams.get('token'), [searchParams]);
 
   // Validate token if present (includes branding in response)
   const {
