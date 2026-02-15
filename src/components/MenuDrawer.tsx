@@ -19,19 +19,19 @@ interface MenuDrawerProps {
   onClose: () => void;
 }
 
-const menuItems = [
-  { icon: Home, label: "Accueil", path: "/" },
-  { icon: Globe, label: "Comment utiliser la Guest App", path: "/guide" },
-  { icon: PersonStanding, label: "Check-In/Check-Out", path: "/checkin-info" },
-  { icon: UtensilsCrossed, label: "Restauration", path: "/restauration" },
-  { icon: Leaf, label: "Bien-être & confort", path: "/wellness" },
-  { icon: Car, label: "Parking", path: "/parking" },
-  { icon: Wifi, label: "Se connecter au Wi-Fi", path: "/wifi" },
-  { icon: MapPin, label: "Carte/Itinéraire", externalUrl: "https://maps.app.goo.gl/iACvR7utyjxYs4bv8" },
-];
-
 const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
   const { t } = useTranslation();
+  
+  const menuItems = [
+    { icon: Home, labelKey: "menu.home", path: "/" },
+    { icon: Globe, labelKey: "menu.howToUse", path: "/guide" },
+    { icon: PersonStanding, labelKey: "menu.checkinCheckout", path: "/checkin-info" },
+    { icon: UtensilsCrossed, labelKey: "menu.restaurant", path: "/restauration" },
+    { icon: Leaf, labelKey: "menu.wellness", path: "/wellness" },
+    { icon: Car, labelKey: "menu.parking", path: "/parking" },
+    { icon: Wifi, labelKey: "menu.wifi", path: "/wifi" },
+    { icon: MapPin, labelKey: "menu.map", externalUrl: "https://maps.app.goo.gl/iACvR7utyjxYs4bv8" },
+  ];
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -104,7 +104,7 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
                       active ? "font-semibold" : "font-medium"
                     }`}
                   >
-                    {item.label}
+                    {t(item.labelKey)}
                   </span>
                   <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
                 </>

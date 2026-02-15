@@ -166,7 +166,15 @@
     "featured": "Featured"
   },
   "menu": {
-    "title": "Menu"
+    "title": "Menu",
+    "home": "Home",
+    "howToUse": "How to use the Guest App",
+    "checkinCheckout": "Check-In/Check-Out",
+    "restaurant": "Restaurant",
+    "wellness": "Wellness & Comfort",
+    "parking": "Parking",
+    "wifi": "Connect to Wi-Fi",
+    "map": "Map/Directions"
   },
   "footer": {
     "memberOf": "{{propertyName}} is an honorable member of Margo Hospitality"
