@@ -1,14 +1,16 @@
-import { ArrowRight, ClipboardCheck, CheckCircle } from "lucide-react";
+import { ArrowRight, ClipboardCheck, CheckCircle, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
-import { useCheckinResponse } from "@/hooks/useCheckinResponse";
+import { useCheckinResponse, useCancelCheckin } from "@/hooks/useCheckinResponse";
+import { toast } from "sonner";
 
 const CheckinCTA = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { token } = useApp();
   const { data: checkinData } = useCheckinResponse(token);
+  const cancelCheckin = useCancelCheckin();
 
   // Check if check-in is completed
   const isCompleted = checkinData?.out_completed_at || checkinData?.completed_at;
@@ -24,6 +26,28 @@ const CheckinCTA = () => {
       navigate(`/checkin/gate?token=${token}`);
     } else {
       navigate("/checkin/gate");
+    }
+  };
+
+  const handleCancelCheckin = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!token) return;
+    
+    const confirmed = window.confirm(
+      "Êtes-vous sûr de vouloir annuler votre enregistrement ? Vous pourrez le refaire ensuite."
+    );
+    
+    if (!confirmed) return;
+    
+    try {
+      await cancelCheckin.mutateAsync({ token });
+      toast.success("Enregistrement annulé");
+      // Navigate back to checkin gate
+      navigate(`/checkin/gate?token=${token}`);
+    } catch (error) {
+      toast.error("Erreur lors de l'annulation");
+      console.error('Cancel error:', error);
     }
   };
 
@@ -48,6 +72,14 @@ const CheckinCTA = () => {
               })}
             </p>
           </div>
+          <button
+            onClick={handleCancelCheckin}
+            disabled={cancelCheckin.isPending}
+            className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 active:scale-95 flex items-center justify-center transition-all disabled:opacity-50"
+            aria-label="Annuler l'enregistrement"
+          >
+            <X className="w-4 h-4 text-red-600" />
+          </button>
         </div>
       </section>
     );

@@ -172,3 +172,37 @@ export function useCompleteCheckin() {
     },
   });
 }
+
+/**
+ * Cancel check-in
+ */
+async function cancelCheckin(params: { token: string }): Promise<{ success: boolean }> {
+  const response = await fetch(`${GEA_API_URL}/checkin/cancel`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token: params.token }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to cancel check-in');
+  }
+
+  return response.json();
+}
+
+/**
+ * Hook to cancel check-in
+ */
+export function useCancelCheckin() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: cancelCheckin,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['checkinResponse', variables.token] });
+    },
+  });
+}
