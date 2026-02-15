@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import ContactSection from "@/components/ContactSection";
+import FooterBar from "@/components/FooterBar";
 
 
 type TransportStatus = "confirmed" | "pending" | "none" | "manual";
@@ -113,7 +113,7 @@ const CheckinTransport = () => {
             </div>
           </div>
         </div>
-        <ContactSection />
+        <FooterBar />
       </div>
     );
   }
@@ -273,7 +273,7 @@ const CheckinTransport = () => {
         </div>
       </main>
 
-      <ContactSection />
+      <FooterBar />
     </div>
   );
 };

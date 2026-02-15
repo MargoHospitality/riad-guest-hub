@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import PhoneInputComplete from "@/components/checkin/PhoneInputComplete";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import ContactSection from "@/components/ContactSection";
+import FooterBar from "@/components/FooterBar";
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
@@ -236,7 +236,7 @@ const CheckinGuestDetails = () => {
             </div>
           </div>
         </div>
-        <ContactSection />
+        <FooterBar />
       </div>
     );
   }
@@ -429,7 +429,7 @@ const CheckinGuestDetails = () => {
         )}
       </main>
       
-      <ContactSection />
+      <FooterBar />
     </div>
   );
 };
