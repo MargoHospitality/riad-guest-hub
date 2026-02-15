@@ -115,10 +115,10 @@ const CheckinRestaurant = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="lunch">
-                      Déjeuner {config?.lunch_price ? `(${formatPrice(config.lunch_price)} / personne)` : ''}
+                      Déjeuner {config?.lunch_price ? `(${formatPrice(config.lunch_price)} par personne)` : ''}
                     </SelectItem>
                     <SelectItem value="dinner">
-                      Dîner {config?.dinner_price ? `(${formatPrice(config.dinner_price)} / personne)` : ''}
+                      Dîner {config?.dinner_price ? `(${formatPrice(config.dinner_price)} par personne)` : ''}
                     </SelectItem>
                     <SelectItem value="none">Non merci</SelectItem>
                   </SelectContent>

@@ -146,7 +146,7 @@ const CheckinGate = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Modalités d'arrivée
+                Enregistrement en ligne
               </h1>
             </div>
           </div>
@@ -159,9 +159,9 @@ const CheckinGate = () => {
                   <CheckCircle2 className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">Your Transfer is Confirmed</p>
+                  <p className="text-sm font-semibold text-foreground">Votre transport est confirmé</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    We'll pick you up as scheduled.
+                    Nous viendrons vous chercher comme prévu.
                   </p>
                 </div>
               </div>
@@ -170,14 +170,14 @@ const CheckinGate = () => {
                 onClick={handleViewDetails}
                 className="w-full text-center text-xs font-medium text-primary underline-offset-2 hover:underline py-2"
               >
-                View Details
+                Voir les détails
               </button>
               
               <button
                 onClick={handleContinue}
                 className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
               >
-                <span className="text-sm font-semibold text-primary">Continue to Check-in</span>
+                <span className="text-sm font-semibold text-primary">Continuer l'enregistrement</span>
                 <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                   <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
                 </div>
@@ -193,9 +193,9 @@ const CheckinGate = () => {
                   <Clock className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">Transfer Pending Confirmation</p>
+                  <p className="text-sm font-semibold text-foreground">Transport en attente de confirmation</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Your transfer request has been received and will be confirmed shortly.
+                    Votre demande a été reçue et sera confirmée sous peu.
                   </p>
                 </div>
               </div>
@@ -204,7 +204,7 @@ const CheckinGate = () => {
                 onClick={handleContinue}
                 className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
               >
-                <span className="text-sm font-semibold text-primary">Continue to Check-in</span>
+                <span className="text-sm font-semibold text-primary">Continuer l'enregistrement</span>
                 <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                   <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
                 </div>
@@ -220,9 +220,9 @@ const CheckinGate = () => {
                   <Car className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">Need a Transfer?</p>
+                  <p className="text-sm font-semibold text-foreground">Avez-vous besoin d'un transport ?</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    We can arrange airport pickup or train station transfer for you.
+                    Afin de faciliter votre arrivée, confiez-nous l'organisation de votre transport.
                   </p>
                 </div>
               </div>
@@ -232,7 +232,7 @@ const CheckinGate = () => {
                   onClick={handleRequestTransport}
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors"
                 >
-                  <span className="text-sm font-semibold text-accent">Request Transfer via Margo Flow</span>
+                  <span className="text-sm font-semibold text-accent">Votre transport avec Margo Flow</span>
                   <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center group-hover:bg-accent/90 transition-colors">
                     <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
                   </div>
@@ -243,7 +243,7 @@ const CheckinGate = () => {
                     <div className="w-full border-t border-border"></div>
                   </div>
                   <div className="relative flex justify-center text-xs">
-                    <span className="bg-card px-2 text-muted-foreground">or</span>
+                    <span className="bg-card px-2 text-muted-foreground">ou</span>
                   </div>
                 </div>
                 
@@ -251,7 +251,7 @@ const CheckinGate = () => {
                   onClick={handleNoTransport}
                   className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border group hover:bg-muted/50 transition-colors"
                 >
-                  <span className="text-sm font-semibold text-foreground">I don't need a transfer</span>
+                  <span className="text-sm font-semibold text-foreground">Je n'ai pas besoin de transport</span>
                   <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
                     <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
                   </div>
