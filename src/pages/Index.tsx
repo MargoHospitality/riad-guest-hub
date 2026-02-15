@@ -13,6 +13,7 @@ import ContactSection from "@/components/ContactSection";
 
 import Footer from "@/components/Footer";
 import LoadingScreen from "@/components/LoadingScreen";
+import ReservationLookup from "@/components/ReservationLookup";
 
 const Index = () => {
   const { token, isLoadingValidation } = useApp();
@@ -42,6 +43,12 @@ const Index = () => {
     return <LoadingScreen />;
   }
   
+  // No token → show reservation lookup form
+  if (!token) {
+    return <ReservationLookup />;
+  }
+  
+  // Token present → show guest app
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto">
       <Header />

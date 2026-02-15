@@ -5,7 +5,17 @@
   "reservation": {
     "checkIn": "Enregistrement",
     "checkOut": "Départ",
-    "onlineCheckIn": "Enregistrement en ligne"
+    "onlineCheckIn": "Enregistrement en ligne",
+    "welcome": "Bienvenue",
+    "subtitle": "Entrez votre numéro de réservation pour accéder à votre Guest App",
+    "label": "Numéro de réservation",
+    "placeholder": "Entrez votre numéro de réservation",
+    "continue": "Continuer",
+    "loading": "Chargement...",
+    "enterReservationId": "Veuillez entrer votre numéro de réservation",
+    "notFound": "Réservation introuvable. Vérifiez votre numéro de réservation.",
+    "error": "Une erreur s'est produite. Veuillez réessayer.",
+    "help": "Besoin d'aide ? Contactez directement la propriété."
   },
   "roomDetails": {
     "bookingId": "ID de réservation : {{id}}"

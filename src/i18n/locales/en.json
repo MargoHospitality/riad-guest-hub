@@ -5,7 +5,17 @@
   "reservation": {
     "checkIn": "Check-in",
     "checkOut": "Check-out",
-    "onlineCheckIn": "Online check-in"
+    "onlineCheckIn": "Online check-in",
+    "welcome": "Welcome",
+    "subtitle": "Enter your reservation ID to access your Guest App",
+    "label": "Reservation ID",
+    "placeholder": "Enter your reservation ID",
+    "continue": "Continue",
+    "loading": "Loading...",
+    "enterReservationId": "Please enter your reservation ID",
+    "notFound": "Reservation not found. Please check your reservation ID.",
+    "error": "An error occurred. Please try again.",
+    "help": "Need help? Contact the property directly."
   },
   "roomDetails": {
     "bookingId": "Booking ID: {{id}}"
