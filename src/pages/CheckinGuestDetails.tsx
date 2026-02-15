@@ -6,10 +6,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { User, Users, Plus, CheckCircle, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PhoneInputComplete from "@/components/checkin/PhoneInputComplete";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ContactSection from "@/components/ContactSection";
@@ -46,7 +45,8 @@ const CheckinGuestDetails = () => {
   const [currentGuestIndex, setCurrentGuestIndex] = useState(0);
   const [reservationInfo, setReservationInfo] = useState<any>(null);
   const [isLoadingInfo, setIsLoadingInfo] = useState(true);
-  const [phoneValue, setPhoneValue] = useState<string | undefined>();
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("+212");
   
   const { data: config } = useCheckinConfig();
   const saveResponse = useSaveCheckinResponse();
@@ -114,8 +114,24 @@ const CheckinGuestDetails = () => {
   
   useEffect(() => {
     if (currentGuest) {
+      // Parse phone to extract country code and number
       const phone = currentGuest.phone || '';
-      setPhoneValue(phone.startsWith('+') ? phone : undefined);
+      let extractedCode = '+212';
+      let extractedNumber = '';
+      
+      if (phone.startsWith('+')) {
+        // Try to match common country codes
+        const codeMatch = phone.match(/^(\+\d{1,4})/);
+        if (codeMatch) {
+          extractedCode = codeMatch[1];
+          extractedNumber = phone.substring(codeMatch[1].length);
+        }
+      } else {
+        extractedNumber = phone;
+      }
+      
+      setCountryCode(extractedCode);
+      setPhoneNumber(extractedNumber);
       
       reset({
         firstName: currentGuest.firstName,
@@ -320,13 +336,16 @@ const CheckinGuestDetails = () => {
               <div>
                 <Label htmlFor="phone" className="text-xs text-muted-foreground">Téléphone *</Label>
                 <div className="mt-1">
-                  <PhoneInput
-                    international
-                    defaultCountry="MA"
-                    value={phoneValue}
+                  <PhoneInputComplete
+                    value={phoneNumber}
                     onChange={(value) => {
-                      setPhoneValue(value);
-                      form.setValue('phone', value || '', { shouldValidate: true });
+                      setPhoneNumber(value);
+                      form.setValue('phone', `${countryCode}${value}`, { shouldValidate: true });
+                    }}
+                    countryCode={countryCode}
+                    onCountryCodeChange={(code) => {
+                      setCountryCode(code);
+                      form.setValue('phone', `${code}${phoneNumber}`, { shouldValidate: true });
                     }}
                   />
                 </div>
