@@ -12,6 +12,8 @@ const ReservationSummary = () => {
     guest_name: "Jean Dupont",
     reservation_id: "RES-2847",
     room_name: "Suite Jasmin",
+    room_count: 1,
+    room_names: ["Suite Jasmin"],
     adults: 2,
     children: 1,
     check_in_date: "",
@@ -46,17 +48,28 @@ const ReservationSummary = () => {
               {reservation.guest_name}
             </p>
             <div className="flex items-center gap-1.5 mt-1 text-[11px] text-muted-foreground">
-              {reservation.room_name && (
+              {/* Display room info: single room name OR room count for multi-room */}
+              {reservation.room_name ? (
                 <span className="flex items-center gap-1">
                   <BedDouble className="w-3 h-3" />
                   {reservation.room_name}
                 </span>
-              )}
+              ) : (reservation.room_count ?? 0) > 1 ? (
+                <span className="flex items-center gap-1">
+                  <BedDouble className="w-3 h-3" />
+                  {i18n.language === 'en' 
+                    ? `${reservation.room_count} rooms` 
+                    : `${reservation.room_count} chambres`}
+                </span>
+              ) : null}
               {(reservation.adults ?? 0) > 0 && (
                 <>
                   <span>·</span>
                   <span className="flex items-center gap-0.5">
                     <Users className="w-3 h-3" /> {reservation.adults}
+                    {i18n.language === 'en' 
+                      ? ` adult${reservation.adults > 1 ? 's' : ''}` 
+                      : ` adulte${reservation.adults > 1 ? 's' : ''}`}
                   </span>
                 </>
               )}
