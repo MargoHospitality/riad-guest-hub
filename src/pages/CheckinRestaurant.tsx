@@ -13,6 +13,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { UtensilsCrossed, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -28,6 +29,7 @@ const CheckinRestaurant = () => {
   const { toast } = useToast();
   
   const [mealChoice, setMealChoice] = useState<string>("");
+  const [menuType, setMenuType] = useState<string>("");
   const [dietaryRestrictions, setDietaryRestrictions] = useState("");
   
   const { data: config } = useCheckinConfig();
@@ -45,11 +47,21 @@ const CheckinRestaurant = () => {
       return;
     }
     
+    if ((mealChoice === 'lunch' || mealChoice === 'dinner') && !menuType) {
+      toast({
+        title: "Choix du menu requis",
+        description: "Merci de sélectionner le type de menu",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       await saveResponse.mutateAsync({
         token,
         restaurant: {
           mealChoice,
+          menuType: menuType || undefined,
           dietaryRestrictions: dietaryRestrictions || undefined,
         },
       });
@@ -91,57 +103,59 @@ const CheckinRestaurant = () => {
           
           <div className="border-t border-border px-4 py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Souhaitez-vous prendre un repas le jour de votre arrivée ?
+              Souhaitez-vous organiser un repas le jour de votre arrivée ?
             </p>
             
-            <RadioGroup value={mealChoice} onValueChange={setMealChoice} className="space-y-3">
-              <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="lunch" id="lunch" />
-                <Label htmlFor="lunch" className="flex-1 cursor-pointer">
-                  <span className="font-medium text-sm">Déjeuner</span>
-                  {config?.lunch_price && (
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      ({formatPrice(config.lunch_price)})
-                    </span>
-                  )}
-                </Label>
+            <div className="space-y-4">
+              <div>
+                <Label className="text-xs text-muted-foreground mb-2 block">Type de repas *</Label>
+                <Select value={mealChoice} onValueChange={setMealChoice}>
+                  <SelectTrigger className="bg-card border-border">
+                    <SelectValue placeholder="Sélectionner..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="lunch">
+                      Déjeuner {config?.lunch_price ? `(${formatPrice(config.lunch_price)} / personne)` : ''}
+                    </SelectItem>
+                    <SelectItem value="dinner">
+                      Dîner {config?.dinner_price ? `(${formatPrice(config.dinner_price)} / personne)` : ''}
+                    </SelectItem>
+                    <SelectItem value="none">Non merci</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               
-              <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="dinner" id="dinner" />
-                <Label htmlFor="dinner" className="flex-1 cursor-pointer">
-                  <span className="font-medium text-sm">Dîner</span>
-                  {config?.dinner_price && (
-                    <span className="ml-2 text-xs text-muted-foreground">
-                      ({formatPrice(config.dinner_price)})
-                    </span>
-                  )}
-                </Label>
-              </div>
-              
-              <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="none" id="none" />
-                <Label htmlFor="none" className="flex-1 cursor-pointer font-medium text-sm">
-                  Non merci
-                </Label>
-              </div>
-            </RadioGroup>
-            
-            {(mealChoice === 'lunch' || mealChoice === 'dinner') && (
-              <div className="mt-4">
-                <Label htmlFor="dietary" className="text-xs text-muted-foreground">
-                  Régime alimentaire ou allergies (optionnel)
-                </Label>
-                <Textarea
-                  id="dietary"
-                  value={dietaryRestrictions}
-                  onChange={(e) => setDietaryRestrictions(e.target.value)}
-                  placeholder="Ex: Végétarien, sans gluten, allergie aux fruits de mer..."
-                  className="mt-2 text-sm"
-                  rows={3}
-                />
-              </div>
-            )}
+              {(mealChoice === 'lunch' || mealChoice === 'dinner') && (
+                <>
+                  <div>
+                    <Label className="text-xs text-muted-foreground mb-2 block">Choix du menu *</Label>
+                    <Select value={menuType} onValueChange={setMenuType}>
+                      <SelectTrigger className="bg-card border-border">
+                        <SelectValue placeholder="Sélectionner..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="traditional">Menu traditionnel marocain</SelectItem>
+                        <SelectItem value="vegetarian">Menu végétarien</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="dietary" className="text-xs text-muted-foreground mb-2 block">
+                      Indiquez ici vos préférences ou restrictions alimentaires éventuelles.
+                    </Label>
+                    <Textarea
+                      id="dietary"
+                      value={dietaryRestrictions}
+                      onChange={(e) => setDietaryRestrictions(e.target.value)}
+                      placeholder="Ex: Sans gluten, allergie aux fruits de mer, préférence épices..."
+                      className="text-sm"
+                      rows={3}
+                    />
+                  </div>
+                </>
+              )}
+            </div>
           </div>
           
           <button

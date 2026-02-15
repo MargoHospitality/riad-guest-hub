@@ -8,6 +8,7 @@ import { User, Users, Plus, CheckCircle, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PhoneInput from "@/components/checkin/PhoneInput";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ContactSection from "@/components/ContactSection";
@@ -44,6 +45,8 @@ const CheckinGuestDetails = () => {
   const [currentGuestIndex, setCurrentGuestIndex] = useState(0);
   const [reservationInfo, setReservationInfo] = useState<any>(null);
   const [isLoadingInfo, setIsLoadingInfo] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [countryCode, setCountryCode] = useState("+212");
   
   const { data: config } = useCheckinConfig();
   const saveResponse = useSaveCheckinResponse();
@@ -111,11 +114,30 @@ const CheckinGuestDetails = () => {
   
   useEffect(() => {
     if (currentGuest) {
+      // Parse phone to extract country code and number
+      const phone = currentGuest.phone || '';
+      let extractedCode = '+212';
+      let extractedNumber = '';
+      
+      if (phone.startsWith('+')) {
+        // Try to match common country codes
+        const codeMatch = phone.match(/^(\+\d{1,3})/);
+        if (codeMatch) {
+          extractedCode = codeMatch[1];
+          extractedNumber = phone.substring(codeMatch[1].length);
+        }
+      } else {
+        extractedNumber = phone;
+      }
+      
+      setCountryCode(extractedCode);
+      setPhoneNumber(extractedNumber);
+      
       reset({
         firstName: currentGuest.firstName,
         lastName: currentGuest.lastName,
         email: currentGuest.email,
-        phone: currentGuest.phone,
+        phone: phone,
       });
     }
   }, [currentGuestIndex, currentGuest, reset]);
@@ -312,13 +334,20 @@ const CheckinGuestDetails = () => {
               
               {/* Phone */}
               <div>
-                <Label htmlFor="phone" className="text-xs text-muted-foreground">Phone *</Label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  {...register("phone", { required: "Phone is required" })}
-                  placeholder="+212 6XX XX XX XX"
-                  className="mt-1"
+                <Label htmlFor="phone" className="text-xs text-muted-foreground">Téléphone *</Label>
+                <PhoneInput
+                  value={phoneNumber}
+                  onChange={(value) => {
+                    // Remove leading 0 if present
+                    const cleanValue = value.startsWith('0') ? value.substring(1) : value;
+                    setPhoneNumber(cleanValue);
+                    form.setValue('phone', `${countryCode}${cleanValue}`, { shouldValidate: true });
+                  }}
+                  countryCode={countryCode}
+                  onCountryCodeChange={(code) => {
+                    setCountryCode(code);
+                    form.setValue('phone', `${code}${phoneNumber}`, { shouldValidate: true });
+                  }}
                 />
                 {errors.phone && (
                   <p className="text-xs text-destructive mt-1">{errors.phone.message}</p>

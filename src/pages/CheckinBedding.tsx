@@ -11,7 +11,8 @@ import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Bed, ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ContactSection from "@/components/ContactSection";
@@ -25,6 +26,7 @@ const CheckinBedding = () => {
   const { toast } = useToast();
   
   const [beddingChoice, setBeddingChoice] = useState<string>("");
+  const [otherBedding, setOtherBedding] = useState<string>("");
   
   const saveResponse = useSaveCheckinResponse();
   
@@ -40,10 +42,19 @@ const CheckinBedding = () => {
       return;
     }
     
+    if (beddingChoice === 'other' && !otherBedding.trim()) {
+      toast({
+        title: "Précision requise",
+        description: "Merci de préciser votre configuration",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       await saveResponse.mutateAsync({
         token,
-        bedding: beddingChoice,
+        bedding: beddingChoice === 'other' ? otherBedding : beddingChoice,
       });
       
       // Navigate to next step (other requests)
@@ -75,35 +86,36 @@ const CheckinBedding = () => {
             </div>
           </div>
           
-          <div className="border-t border-border px-4 py-4">
-            <p className="text-sm text-muted-foreground mb-4">
-              Quelle configuration de lit préférez-vous ?
-            </p>
+          <div className="border-t border-border px-4 py-4 space-y-4">
+            <div>
+              <Label className="text-xs text-muted-foreground mb-2 block">Configuration souhaitée *</Label>
+              <Select value={beddingChoice} onValueChange={setBeddingChoice}>
+                <SelectTrigger className="bg-card border-border">
+                  <SelectValue placeholder="Sélectionner..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="twin">Lits jumeaux (2 lits séparés)</SelectItem>
+                  <SelectItem value="double">Lit double (1 grand lit)</SelectItem>
+                  <SelectItem value="no_preference">Pas de préférence</SelectItem>
+                  <SelectItem value="other">Autre (préciser ci-dessous)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             
-            <RadioGroup value={beddingChoice} onValueChange={setBeddingChoice} className="space-y-3">
-              <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="twin" id="twin" />
-                <Label htmlFor="twin" className="flex-1 cursor-pointer">
-                  <div className="font-medium text-sm">Lits jumeaux</div>
-                  <div className="text-xs text-muted-foreground">2 lits séparés</div>
+            {beddingChoice === 'other' && (
+              <div>
+                <Label htmlFor="otherBedding" className="text-xs text-muted-foreground mb-2 block">
+                  Précisez votre configuration *
                 </Label>
+                <Input
+                  id="otherBedding"
+                  value={otherBedding}
+                  onChange={(e) => setOtherBedding(e.target.value)}
+                  placeholder="Ex: 1 lit double + 1 lit simple"
+                  className="bg-card border-border"
+                />
               </div>
-              
-              <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="double" id="double" />
-                <Label htmlFor="double" className="flex-1 cursor-pointer">
-                  <div className="font-medium text-sm">Lit double</div>
-                  <div className="text-xs text-muted-foreground">1 grand lit</div>
-                </Label>
-              </div>
-              
-              <div className="flex items-center space-x-3 border rounded-lg p-3 hover:bg-accent/5 transition-colors">
-                <RadioGroupItem value="no_preference" id="no_preference" />
-                <Label htmlFor="no_preference" className="flex-1 cursor-pointer font-medium text-sm">
-                  Pas de préférence
-                </Label>
-              </div>
-            </RadioGroup>
+            )}
           </div>
           
           <button

@@ -7,6 +7,7 @@ import { checkTransportStatus } from '@/lib/api';
 import { useSaveCheckinResponse, useCheckinResponse } from '@/hooks/useCheckinResponse';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Car, CheckCircle2, Clock, ArrowRight, MapPin } from 'lucide-react';
 import Header from '@/components/Header';
@@ -145,7 +146,7 @@ const CheckinGate = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Online Check-in
+                Modalités d'arrivée
               </h1>
             </div>
           </div>
@@ -273,9 +274,9 @@ const CheckinGate = () => {
                       <SelectValue placeholder="Mode de transport" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="other_provider">Autre fournisseur</SelectItem>
-                      <SelectItem value="rental_car">Voiture de location</SelectItem>
-                      <SelectItem value="taxi">Taxi</SelectItem>
+                      <SelectItem value="personal_car">Voiture personnelle</SelectItem>
+                      <SelectItem value="other_taxi">Autre Taxi</SelectItem>
+                      <SelectItem value="tour_operator">Transporteur / Excursion</SelectItem>
                       <SelectItem value="other">Autre</SelectItem>
                     </SelectContent>
                   </Select>
@@ -291,12 +292,13 @@ const CheckinGate = () => {
                   />
                 </div>
                 
-                <div className="flex items-center gap-2.5 rounded-xl bg-muted/30 px-3 py-2.5">
-                  <MapPin className="w-4 h-4 text-muted-foreground shrink-0" />
-                  <Input
+                <div className="space-y-2">
+                  <label className="text-xs text-muted-foreground pl-3">Commentaires</label>
+                  <Textarea
                     {...form.register('details')}
-                    placeholder="Précisions (optionnel)"
-                    className="bg-card border-border h-9 text-sm"
+                    placeholder="Informations complémentaires (optionnel)"
+                    className="bg-card border-border text-sm min-h-[80px]"
+                    rows={3}
                   />
                 </div>
                 
