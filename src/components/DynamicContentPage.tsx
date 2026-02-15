@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { fetchPageContent } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
@@ -19,11 +20,12 @@ const DynamicContentPage = ({
   fallbackContent 
 }: DynamicContentPageProps) => {
   const navigate = useNavigate();
+  const { i18n } = useTranslation();
   const { pageCode } = useParams<{ pageCode: string }>();
   const pageSlug = pageSlugProp || pageCode || "";
   const { data: pageData, isLoading, error } = useQuery({
-    queryKey: ["pageContent", pageSlug],
-    queryFn: () => fetchPageContent(pageSlug),
+    queryKey: ["pageContent", pageSlug, i18n.language],
+    queryFn: () => fetchPageContent(pageSlug, undefined, i18n.language),
     staleTime: 1000 * 60 * 60, // 1 hour
   });
 

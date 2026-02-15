@@ -76,8 +76,8 @@ export async function validateToken(token: string): Promise<ValidationData> {
 /**
  * Fetch page content for the property
  */
-export async function fetchPageContent(pageSlug: string, propertyId: string = PROPERTY_ID) {
-  const response = await fetch(`${GEA_API_URL}/content/${propertyId}/${pageSlug}`);
+export async function fetchPageContent(pageSlug: string, propertyId: string = PROPERTY_ID, lang: string = 'fr') {
+  const response = await fetch(`${GEA_API_URL}/content/${propertyId}/${pageSlug}?lang=${lang}`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch content: ${response.statusText}`);
@@ -103,8 +103,8 @@ export interface FeaturedItem {
 /**
  * Fetch featured items for the property
  */
-export async function fetchFeaturedItems(propertyId: string = PROPERTY_ID): Promise<FeaturedItem[]> {
-  const response = await fetch(`${GEA_API_URL}/featured-items/${propertyId}`);
+export async function fetchFeaturedItems(propertyId: string = PROPERTY_ID, lang: string = 'fr'): Promise<FeaturedItem[]> {
+  const response = await fetch(`${GEA_API_URL}/featured-items/${propertyId}?lang=${lang}`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch featured items: ${response.statusText}`);

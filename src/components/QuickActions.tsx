@@ -6,10 +6,10 @@ import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
 
 const QuickActions = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data: featuredItems, isLoading } = useQuery({
-    queryKey: ["featuredItems"],
-    queryFn: () => fetchFeaturedItems(),
+    queryKey: ["featuredItems", i18n.language],
+    queryFn: () => fetchFeaturedItems(undefined, i18n.language),
     staleTime: 1000 * 60 * 5,
   });
 
