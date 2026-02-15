@@ -37,6 +37,15 @@
     "people_one": "person",
     "people_other": "people"
   },
+  "checkinStatus": {
+    "completed": "Check-in completed",
+    "confirmCancel": "Are you sure you want to cancel your check-in? You can redo it afterwards.",
+    "canceled": "Check-in canceled",
+    "cancelError": "Error during cancellation",
+    "cancelLabel": "Cancel check-in",
+    "startCheckin": "Start check-in",
+    "ctaSubtitle": "Save time on arrival"
+  },
   "checkin": {
     "gate": {
       "title": "Online Check-in",

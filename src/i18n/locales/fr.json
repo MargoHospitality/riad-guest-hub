@@ -37,6 +37,15 @@
     "people_one": "personne",
     "people_other": "personnes"
   },
+  "checkinStatus": {
+    "completed": "Enregistrement réalisé",
+    "confirmCancel": "Êtes-vous sûr de vouloir annuler votre enregistrement ? Vous pourrez le refaire ensuite.",
+    "canceled": "Enregistrement annulé",
+    "cancelError": "Erreur lors de l'annulation",
+    "cancelLabel": "Annuler l'enregistrement",
+    "startCheckin": "Commencer l'enregistrement",
+    "ctaSubtitle": "Gagnez du temps à votre arrivée"
+  },
   "checkin": {
     "gate": {
       "title": "Enregistrement en ligne",

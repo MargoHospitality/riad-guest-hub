@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 const CheckinCTA = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { token, validation } = useApp();
   const { data: checkinData } = useCheckinResponse(token);
   const cancelCheckin = useCancelCheckin();
@@ -43,19 +43,17 @@ const CheckinCTA = () => {
     
     if (!token) return;
     
-    const confirmed = window.confirm(
-      "Êtes-vous sûr de vouloir annuler votre enregistrement ? Vous pourrez le refaire ensuite."
-    );
+    const confirmed = window.confirm(t('checkinStatus.confirmCancel'));
     
     if (!confirmed) return;
     
     try {
       await cancelCheckin.mutateAsync({ token });
-      toast.success("Enregistrement annulé");
+      toast.success(t('checkinStatus.canceled'));
       // Navigate back to checkin gate
       navigate(`/checkin/gate?token=${token}`);
     } catch (error) {
-      toast.error("Erreur lors de l'annulation");
+      toast.error(t('checkinStatus.cancelError'));
       console.error('Cancel error:', error);
     }
   };
@@ -70,10 +68,10 @@ const CheckinCTA = () => {
           </div>
           <div className="flex-1 text-left">
             <p className="text-sm font-bold text-green-800">
-              Enregistrement réalisé
+              {t('checkinStatus.completed')}
             </p>
             <p className="text-[11px] text-green-600 mt-0.5">
-              {completedDate.toLocaleDateString('fr-FR', {
+              {completedDate.toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR', {
                 day: 'numeric',
                 month: 'long',
                 hour: '2-digit',
@@ -86,7 +84,7 @@ const CheckinCTA = () => {
               onClick={handleCancelCheckin}
               disabled={cancelCheckin.isPending}
               className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 active:scale-95 flex items-center justify-center transition-all disabled:opacity-50"
-              aria-label="Annuler l'enregistrement"
+              aria-label={t('checkinStatus.cancelLabel')}
             >
               <X className="w-4 h-4 text-red-600" />
             </button>
@@ -110,7 +108,7 @@ const CheckinCTA = () => {
             {t('reservation.onlineCheckIn')}
           </p>
           <p className="text-[11px] text-primary-foreground/70 mt-0.5">
-            {t('checkin.ctaSubtitle', 'Gagnez du temps à votre arrivée')}
+            {t('checkinStatus.ctaSubtitle')}
           </p>
         </div>
         <div className="relative shrink-0">

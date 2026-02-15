@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useApp } from '@/contexts/AppContext';
 import { checkTransportStatus } from '@/lib/api';
 import { useSaveCheckinResponse, useCheckinResponse } from '@/hooks/useCheckinResponse';
@@ -21,6 +22,7 @@ interface ManualTransportForm {
 }
 
 const CheckinGate = () => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
@@ -68,7 +70,7 @@ const CheckinGate = () => {
       checkin: check_in_date,
       returnTo: 'checkin',
       token: token!,
-      lang: 'fr',
+      lang: i18n.language,
     });
     window.location.href = `https://margo-flow.vercel.app/?${params.toString()}`;
   };
@@ -147,7 +149,7 @@ const CheckinGate = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Enregistrement en ligne
+                {t('checkin.gate.title')}
               </h1>
             </div>
           </div>
@@ -160,9 +162,9 @@ const CheckinGate = () => {
                   <CheckCircle2 className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">Votre transport est confirmé</p>
+                  <p className="text-sm font-semibold text-foreground">{t('checkin.gate.transportConfirmed')}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Nous viendrons vous chercher comme prévu.
+                    {t('checkin.gate.transportConfirmedDescription')}
                   </p>
                 </div>
               </div>
@@ -171,14 +173,14 @@ const CheckinGate = () => {
                 onClick={handleViewDetails}
                 className="w-full text-center text-xs font-medium text-primary underline-offset-2 hover:underline py-2"
               >
-                Voir les détails
+                {t('checkin.gate.viewDetails')}
               </button>
               
               <button
                 onClick={handleContinue}
                 className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
               >
-                <span className="text-sm font-semibold text-primary">Continuer l'enregistrement</span>
+                <span className="text-sm font-semibold text-primary">{t('checkin.gate.continue')}</span>
                 <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                   <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
                 </div>
@@ -194,9 +196,9 @@ const CheckinGate = () => {
                   <Clock className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">Transport en attente de confirmation</p>
+                  <p className="text-sm font-semibold text-foreground">{t('checkin.gate.transportPending')}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Votre demande a été reçue et sera confirmée sous peu.
+                    {t('checkin.gate.transportPendingDescription')}
                   </p>
                 </div>
               </div>
@@ -205,7 +207,7 @@ const CheckinGate = () => {
                 onClick={handleContinue}
                 className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
               >
-                <span className="text-sm font-semibold text-primary">Continuer l'enregistrement</span>
+                <span className="text-sm font-semibold text-primary">{t('checkin.gate.continue')}</span>
                 <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                   <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
                 </div>
@@ -221,9 +223,9 @@ const CheckinGate = () => {
                   <Car className="w-5 h-5 text-accent" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-foreground">Avez-vous besoin d'un transport ?</p>
+                  <p className="text-sm font-semibold text-foreground">{t('checkin.gate.needTransport')}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
-                    Afin de faciliter votre arrivée, confiez-nous l'organisation de votre transport.
+                    {t('checkin.gate.transportDescription')}
                   </p>
                 </div>
               </div>
@@ -233,7 +235,7 @@ const CheckinGate = () => {
                   onClick={handleRequestTransport}
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors"
                 >
-                  <span className="text-sm font-semibold text-accent">Votre transport avec Margo Flow</span>
+                  <span className="text-sm font-semibold text-accent">{t('checkin.gate.requestWithMargoFlow')}</span>
                   <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center group-hover:bg-accent/90 transition-colors">
                     <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
                   </div>
@@ -244,7 +246,7 @@ const CheckinGate = () => {
                     <div className="w-full border-t border-border"></div>
                   </div>
                   <div className="relative flex justify-center text-xs">
-                    <span className="bg-card px-2 text-muted-foreground">ou</span>
+                    <span className="bg-card px-2 text-muted-foreground">{t('checkin.gate.or')}</span>
                   </div>
                 </div>
                 
@@ -252,7 +254,7 @@ const CheckinGate = () => {
                   onClick={handleNoTransport}
                   className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border group hover:bg-muted/50 transition-colors"
                 >
-                  <span className="text-sm font-semibold text-foreground">Je n'ai pas besoin de transport</span>
+                  <span className="text-sm font-semibold text-foreground">{t('checkin.gate.noTransport')}</span>
                   <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
                     <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
                   </div>
@@ -272,13 +274,13 @@ const CheckinGate = () => {
                     onValueChange={(value) => form.setValue('arrivalMethod', value, { shouldValidate: true })}
                   >
                     <SelectTrigger className="bg-card border-border h-9 text-sm">
-                      <SelectValue placeholder="Mode de transport" />
+                      <SelectValue placeholder={t('checkin.gate.transportMode')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="personal_car">Voiture personnelle</SelectItem>
-                      <SelectItem value="other_taxi">Autre Taxi</SelectItem>
-                      <SelectItem value="tour_operator">Transporteur / Excursion</SelectItem>
-                      <SelectItem value="other">Autre</SelectItem>
+                      <SelectItem value="personal_car">{t('checkin.gate.personalCar')}</SelectItem>
+                      <SelectItem value="other_taxi">{t('checkin.gate.otherTaxi')}</SelectItem>
+                      <SelectItem value="tour_operator">{t('checkin.gate.tourOperator')}</SelectItem>
+                      <SelectItem value="other">{t('checkin.gate.other')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -288,16 +290,16 @@ const CheckinGate = () => {
                   <Input
                     type="time"
                     {...form.register('arrivalTime', { required: true })}
-                    placeholder="Heure d'arrivée"
+                    placeholder={t('checkin.gate.arrivalTime')}
                     className="bg-card border-border h-9 text-sm"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-xs text-muted-foreground pl-3">Commentaires</label>
+                  <label className="text-xs text-muted-foreground pl-3">{t('checkin.gate.comments')}</label>
                   <Textarea
                     {...form.register('details')}
-                    placeholder="Informations complémentaires (optionnel)"
+                    placeholder={t('checkin.gate.commentsPlaceholder')}
                     className="bg-card border-border text-sm min-h-[80px]"
                     rows={3}
                   />
@@ -309,7 +311,7 @@ const CheckinGate = () => {
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                 >
                   <span className="text-sm font-semibold text-primary">
-                    {saveResponse.isPending ? 'Enregistrement...' : 'Continuer'}
+                    {saveResponse.isPending ? t('checkin.gate.saving') : t('checkin.gate.continueButton')}
                   </span>
                   <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                     <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />

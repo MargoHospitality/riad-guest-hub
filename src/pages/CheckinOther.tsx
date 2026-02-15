@@ -45,8 +45,8 @@ const CheckinOther = () => {
     } catch (error) {
       console.error('Failed to complete check-in:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de finaliser l'enregistrement",
+        title: t('checkin.other.error'),
+        description: t('checkin.other.failedToComplete'),
         variant: "destructive",
       });
     }
@@ -64,30 +64,30 @@ const CheckinOther = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Demandes supplémentaires
+                {t('checkin.other.title')}
               </h1>
             </div>
           </div>
           
           <div className="border-t border-border px-4 py-4">
             <p className="text-sm text-muted-foreground mb-4">
-              Avez-vous des demandes particulières ou des informations à nous communiquer ?
+              {t('checkin.other.question')}
             </p>
             
             <div>
               <Label htmlFor="other" className="text-xs text-muted-foreground">
-                Vos demandes (optionnel)
+                {t('checkin.other.yourRequests')}
               </Label>
               <Textarea
                 id="other"
                 value={otherRequests}
                 onChange={(e) => setOtherRequests(e.target.value)}
-                placeholder="Ex: Besoin d'un berceau, préférence pour un étage, arrivée tardive..."
+                placeholder={t('checkin.other.requestsPlaceholder')}
                 className="mt-2 text-sm"
                 rows={5}
               />
               <p className="text-xs text-muted-foreground mt-2">
-                Nous ferons notre possible pour répondre à vos demandes
+                {t('checkin.other.willDoOurBest')}
               </p>
             </div>
           </div>
@@ -98,7 +98,7 @@ const CheckinOther = () => {
             className="w-full flex items-center justify-between px-4 py-3.5 bg-green-600/10 border-t border-border group hover:bg-green-600/20 transition-colors disabled:opacity-50"
           >
             <span className="text-sm font-semibold text-green-600">
-              {completeCheckin.isPending ? 'Finalisation...' : 'Terminer l\'enregistrement'}
+              {completeCheckin.isPending ? t('checkin.other.finalizing') : t('checkin.other.completeCheckin')}
             </span>
             <div className="w-7 h-7 rounded-full bg-green-600 flex items-center justify-center group-hover:bg-green-700 transition-colors">
               <CheckCircle className="w-3.5 h-3.5 text-white" />
@@ -106,7 +106,7 @@ const CheckinOther = () => {
           </button>
           
           <p className="text-xs text-center text-muted-foreground px-4 py-3 border-t border-border">
-            En cliquant sur "Terminer", vos informations seront transmises à notre équipe
+            {t('checkin.other.submitInfo')}
           </p>
         </div>
       </main>
