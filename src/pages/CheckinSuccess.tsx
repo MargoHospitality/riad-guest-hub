@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { CheckCircle2, Home, ArrowRight } from "lucide-react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import FooterBar from "@/components/FooterBar";
+
 import { useCheckinResponse } from "@/hooks/useCheckinResponse";
 
 const CheckinSuccess = () => {
@@ -95,7 +95,7 @@ const CheckinSuccess = () => {
         </div>
       </main>
 
-      <FooterBar />
+      
     </div>
   );
 };
