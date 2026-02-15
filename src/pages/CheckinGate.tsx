@@ -59,11 +59,12 @@ const CheckinGate = () => {
   
   const handleRequestTransport = () => {
     if (!validation?.reservation) return;
-    const { cloudbeds_property_id, reservation_id, check_in_date, adults } = validation.reservation;
+    const { cloudbeds_property_id, reservation_id, check_in_date, adults, children } = validation.reservation;
     if (!cloudbeds_property_id) {
       console.error('No Cloudbeds property ID available');
       return;
     }
+    const totalPassengers = (adults || 0) + (children || 0);
     const params = new URLSearchParams({
       riad: cloudbeds_property_id,
       reservation: reservation_id,
@@ -71,7 +72,7 @@ const CheckinGate = () => {
       returnTo: 'checkin',
       token: token!,
       lang: i18n.language,
-      pax: (adults || 2).toString(),
+      pax: (totalPassengers > 0 ? totalPassengers : 2).toString(),
     });
     window.location.href = `https://flow.margo-hospitality.com/?${params.toString()}`;
   };
