@@ -68,6 +68,7 @@ const CheckinGate = () => {
       checkin: check_in_date,
       returnTo: 'checkin',
       token: token!,
+      lang: 'fr',
     });
     window.location.href = `https://margo-flow.vercel.app/?${params.toString()}`;
   };
@@ -308,7 +309,7 @@ const CheckinGate = () => {
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                 >
                   <span className="text-sm font-semibold text-primary">
-                    {saveResponse.isPending ? 'Saving...' : 'Continue'}
+                    {saveResponse.isPending ? 'Enregistrement...' : 'Continuer'}
                   </span>
                   <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                     <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />

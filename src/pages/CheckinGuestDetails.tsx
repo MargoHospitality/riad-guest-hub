@@ -98,8 +98,8 @@ const CheckinGuestDetails = () => {
       } catch (error) {
         console.error('Failed to load reservation info:', error);
         toast({
-          title: "Error",
-          description: "Failed to load reservation information",
+          title: "Erreur",
+          description: "Impossible de charger les informations de réservation",
           variant: "destructive",
         });
       } finally {
@@ -179,14 +179,14 @@ const CheckinGuestDetails = () => {
       });
       
       toast({
-        title: "Saved",
-        description: `Guest ${currentGuestIndex + 1} details saved`,
+        title: "Enregistré",
+        description: `Informations du voyageur ${currentGuestIndex + 1} sauvegardées`,
       });
     } catch (error) {
       console.error('Failed to save:', error);
       toast({
-        title: "Error",
-        description: "Failed to save guest details",
+        title: "Erreur",
+        description: "Impossible d'enregistrer les informations",
         variant: "destructive",
       });
     }
@@ -197,8 +197,8 @@ const CheckinGuestDetails = () => {
     const maxGuests = reservationInfo?.totalAdults || config?.max_additional_guests || 10;
     if (guests.length >= maxGuests) {
       toast({
-        title: "Maximum guests reached",
-        description: `Maximum ${maxGuests} guests for this reservation`,
+        title: "Nombre maximum atteint",
+        description: `Maximum ${maxGuests} voyageurs pour cette réservation`,
       });
       return;
     }
@@ -253,7 +253,7 @@ const CheckinGuestDetails = () => {
             <div className="flex items-center gap-2.5">
               <div className="w-0.5 h-4 rounded-full bg-accent" />
               <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                Guest Details
+                Informations voyageur
               </h1>
             </div>
           </div>
@@ -272,7 +272,7 @@ const CheckinGuestDetails = () => {
                   }`}
                 >
                   <User className="w-3.5 h-3.5" />
-                  Guest {index + 1}
+                  Voyageur {index + 1}
                   {guest.isSaved && <CheckCircle className="w-3.5 h-3.5" />}
                 </button>
               ))}
@@ -285,11 +285,11 @@ const CheckinGuestDetails = () => {
               <p className="text-sm font-semibold text-foreground">
                 {currentGuest?.isPrimary
                   ? `${currentGuest.firstName} ${currentGuest.lastName}`
-                  : `Guest ${currentGuestIndex + 1}`}
+                  : `Voyageur ${currentGuestIndex + 1}`}
               </p>
               {currentGuest?.isPrimary && (
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Please complete your details below
+                  Merci de compléter vos informations ci-dessous
                 </p>
               )}
             </div>
@@ -299,10 +299,10 @@ const CheckinGuestDetails = () => {
               {!currentGuest?.isPrimary && (
                 <>
                   <div>
-                    <Label htmlFor="firstName" className="text-xs text-muted-foreground">First Name *</Label>
+                    <Label htmlFor="firstName" className="text-xs text-muted-foreground">Prénom *</Label>
                     <Input
                       id="firstName"
-                      {...register("firstName", { required: "First name is required" })}
+                      {...register("firstName", { required: "Le prénom est requis" })}
                       disabled={!!currentGuest?.firstName}
                       className="mt-1 disabled:opacity-70 disabled:cursor-not-allowed"
                     />
@@ -311,10 +311,10 @@ const CheckinGuestDetails = () => {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="lastName" className="text-xs text-muted-foreground">Last Name *</Label>
+                    <Label htmlFor="lastName" className="text-xs text-muted-foreground">Nom *</Label>
                     <Input
                       id="lastName"
-                      {...register("lastName", { required: "Last name is required" })}
+                      {...register("lastName", { required: "Le nom est requis" })}
                       disabled={!!currentGuest?.lastName}
                       className="mt-1 disabled:opacity-70 disabled:cursor-not-allowed"
                     />
@@ -332,13 +332,13 @@ const CheckinGuestDetails = () => {
                   id="email"
                   type="email"
                   {...register("email", { 
-                    required: "Email is required",
+                    required: "L'email est requis",
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: "Invalid email address"
+                      message: "Adresse email invalide"
                     }
                   })}
-                  placeholder="your@email.com"
+                  placeholder="votre@email.com"
                   className="mt-1"
                 />
                 {errors.email && (
@@ -375,7 +375,7 @@ const CheckinGuestDetails = () => {
                 className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors disabled:opacity-50"
               >
                 <span className="text-sm font-semibold text-primary">
-                  {saveResponse.isPending ? 'Saving...' : currentGuest?.isSaved ? 'Update' : 'Save'}
+                  {saveResponse.isPending ? 'Enregistrement...' : currentGuest?.isSaved ? 'Modifier' : 'Enregistrer'}
                 </span>
                 <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                   <CheckCircle className="w-3.5 h-3.5 text-primary-foreground" />
@@ -393,7 +393,7 @@ const CheckinGuestDetails = () => {
                 className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-dashed border-border text-sm font-medium text-muted-foreground hover:bg-muted/50 transition-colors"
               >
                 <Plus className="w-4 h-4" />
-                Add Another Guest
+                Ajouter un voyageur
               </button>
             </div>
           )}
@@ -405,7 +405,7 @@ const CheckinGuestDetails = () => {
               onClick={handleContinue}
               className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors"
             >
-              <span className="text-sm font-semibold text-primary">Continue to Next Step</span>
+              <span className="text-sm font-semibold text-primary">Continuer</span>
               <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
                 <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
               </div>
@@ -421,7 +421,7 @@ const CheckinGuestDetails = () => {
                 <Users className="w-3.5 h-3.5 text-accent" />
               </div>
               <span className="text-xs font-medium text-foreground">
-                {reservationInfo.totalAdults} adults expected
+                {reservationInfo.totalAdults} {reservationInfo.totalAdults > 1 ? 'adultes attendus' : 'adulte attendu'}
               </span>
             </div>
           </div>
