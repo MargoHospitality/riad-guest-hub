@@ -1,14 +1,16 @@
-import margoLogo from "@/assets/margo-hospitality-white.png";
+import margoLogo from "@/assets/margo-logo-white.png";
 
 const LoadingScreen = () => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-5 animate-in fade-in duration-700">
-        <img 
-          src={margoLogo} 
-          alt="Margo Hospitality" 
-          className="h-5 object-contain opacity-40"
-        />
+        <div className="w-16 h-16 rounded-full bg-foreground/80 flex items-center justify-center">
+          <img 
+            src={margoLogo} 
+            alt="Margo Hospitality" 
+            className="w-9 h-9 object-contain"
+          />
+        </div>
 
         <div className="w-16 h-[1px] bg-border rounded-full overflow-hidden">
           <div className="h-full bg-muted-foreground/40 rounded-full animate-[loading_1.5s_ease-in-out_infinite]" />
