@@ -6,7 +6,7 @@ import { checkTransportStatus } from "@/lib/api";
 import { useCheckinResponse } from "@/hooks/useCheckinResponse";
 
 const TransportCard = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { token, validation } = useApp();
   
   const { data: transportStatus, isLoading } = useQuery({
@@ -29,9 +29,10 @@ const TransportCard = () => {
       reservation: reservation_id,
       checkin: check_in_date,
       returnTo: 'homepage',
-      token: token
+      token: token,
+      lang: i18n.language,
     });
-    window.location.href = `https://margo-flow.vercel.app/?${params.toString()}`;
+    window.location.href = `https://flow.margo-hospitality.com/?${params.toString()}`;
   };
 
   if (isLoading) {

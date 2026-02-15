@@ -72,7 +72,7 @@ const CheckinGate = () => {
       token: token!,
       lang: i18n.language,
     });
-    window.location.href = `https://margo-flow.vercel.app/?${params.toString()}`;
+    window.location.href = `https://flow.margo-hospitality.com/?${params.toString()}`;
   };
   
   const handleContinue = () => {
