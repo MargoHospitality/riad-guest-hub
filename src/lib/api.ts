@@ -11,6 +11,7 @@ export interface BrandingData {
   background_image_url: string | null;
   google_review_url?: string;
   contact_email?: string;
+  contact_whatsapp?: string;
 }
 
 export interface ValidationData {
