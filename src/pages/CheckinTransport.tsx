@@ -61,11 +61,11 @@ const CheckinTransport = () => {
   
   // Auto-skip if step is disabled
   useEffect(() => {
-    if (config && !isStepEnabled('transport')) {
+    if (config && config.step_transport_enabled === false) {
       console.log('[CheckinTransport] Step disabled, auto-skipping to next');
       goToNextStep('transport');
     }
-  }, [config, isStepEnabled, goToNextStep]);
+  }, [config, goToNextStep]);
 
   useEffect(() => {
     const checkTransport = async () => {

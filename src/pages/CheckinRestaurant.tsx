@@ -41,11 +41,11 @@ const CheckinRestaurant = () => {
   
   // Auto-skip if step is disabled
   useEffect(() => {
-    if (config && !isStepEnabled('restaurant')) {
+    if (config && config.step_restauration_enabled === false) {
       console.log('[CheckinRestaurant] Step disabled, auto-skipping to next');
       goToNextStep('restaurant');
     }
-  }, [config, isStepEnabled, goToNextStep]);
+  }, [config, goToNextStep]);
   
   const handleContinue = async () => {
     if (!token) return;

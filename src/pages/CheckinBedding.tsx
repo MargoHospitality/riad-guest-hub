@@ -38,11 +38,11 @@ const CheckinBedding = () => {
   
   // Auto-skip if step is disabled
   useEffect(() => {
-    if (config && !isStepEnabled('bedding')) {
+    if (config && config.step_bedding_enabled === false) {
       console.log('[CheckinBedding] Step disabled, auto-skipping to next');
       goToNextStep('bedding');
     }
-  }, [config, isStepEnabled, goToNextStep]);
+  }, [config, goToNextStep]);
   
   const handleContinue = async () => {
     if (!token) return;

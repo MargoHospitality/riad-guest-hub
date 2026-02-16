@@ -65,11 +65,11 @@ const CheckinGuestDetails = () => {
   
   // Auto-skip if step is disabled
   useEffect(() => {
-    if (config && !isStepEnabled('guest-details')) {
+    if (config && config.step_guest_details_enabled === false) {
       console.log('[CheckinGuestDetails] Step disabled, auto-skipping to next');
       goToNextStep('guest-details');
     }
-  }, [config, isStepEnabled, goToNextStep]);
+  }, [config, goToNextStep]);
   
   useEffect(() => {
     if (!token) return;

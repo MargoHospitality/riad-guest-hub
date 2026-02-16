@@ -37,11 +37,11 @@ const CheckinOther = () => {
   
   // Auto-skip if step is disabled
   useEffect(() => {
-    if (config && !isStepEnabled('other')) {
+    if (config && config.step_other_requests_enabled === false) {
       console.log('[CheckinOther] Step disabled, auto-skipping to next');
       goToNextStep('other');
     }
-  }, [config, isStepEnabled, goToNextStep]);
+  }, [config, goToNextStep]);
   
   const handleComplete = async () => {
     if (!token) return;
