@@ -25,7 +25,7 @@ const ContactSection = () => {
         </div>
         <div className="flex border-t border-border">
           <a
-            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(t('contact.whatsappMessage', 'Bonjour, je vous contacte depuis l\'application Guest.'))}`}
+            href={`https://wa.me/${whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-2 py-3 hover:bg-secondary/40 transition-colors border-r border-border"
