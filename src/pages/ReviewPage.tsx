@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Star, Mail, ExternalLink, Check, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import FooterBar from '@/components/FooterBar';
+
 import { useToast } from '@/hooks/use-toast';
 
 const API_BASE_URL = import.meta.env.VITE_GEA_API_URL || 'https://gea.margo-hospitality.com/api/v1';
@@ -444,8 +444,6 @@ const ReviewPage = () => {
           </div>
         )}
       </main>
-
-      <FooterBar />
     </div>
   );
 };
