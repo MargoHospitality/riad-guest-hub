@@ -8,7 +8,7 @@
  * - Triggers Cloudbeds sync
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { MessageSquare, CheckCircle } from "lucide-react";
@@ -19,6 +19,7 @@ import HeroSection from "@/components/HeroSection";
 
 import { useCompleteCheckin } from "@/hooks/useCheckinResponse";
 import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
+import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinOther = () => {
@@ -27,11 +28,20 @@ const CheckinOther = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep } = useCheckinNavigation();
+  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
   
   const [otherRequests, setOtherRequests] = useState("");
   
   const completeCheckin = useCompleteCheckin();
+  const { data: config } = useCheckinConfig();
+  
+  // Auto-skip if step is disabled
+  useEffect(() => {
+    if (config && !isStepEnabled('other')) {
+      console.log('[CheckinOther] Step disabled, auto-skipping to next');
+      goToNextStep('other');
+    }
+  }, [config, isStepEnabled, goToNextStep]);
   
   const handleComplete = async () => {
     if (!token) return;

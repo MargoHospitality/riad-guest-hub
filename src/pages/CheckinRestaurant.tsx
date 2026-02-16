@@ -8,7 +8,7 @@
  * - French labels
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { UtensilsCrossed, ArrowRight } from "lucide-react";
@@ -30,7 +30,7 @@ const CheckinRestaurant = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep } = useCheckinNavigation();
+  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
   
   const [mealChoice, setMealChoice] = useState<string>("");
   const [menuType, setMenuType] = useState<string>("");
@@ -38,6 +38,14 @@ const CheckinRestaurant = () => {
   
   const { data: config } = useCheckinConfig();
   const saveResponse = useSaveCheckinResponse();
+  
+  // Auto-skip if step is disabled
+  useEffect(() => {
+    if (config && !isStepEnabled('restaurant')) {
+      console.log('[CheckinRestaurant] Step disabled, auto-skipping to next');
+      goToNextStep('restaurant');
+    }
+  }, [config, isStepEnabled, goToNextStep]);
   
   const handleContinue = async () => {
     if (!token) return;

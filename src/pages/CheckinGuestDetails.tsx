@@ -43,7 +43,7 @@ const CheckinGuestDetails = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep } = useCheckinNavigation();
+  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
   
   const [guests, setGuests] = useState<Guest[]>([]);
   const [currentGuestIndex, setCurrentGuestIndex] = useState(0);
@@ -62,6 +62,14 @@ const CheckinGuestDetails = () => {
     setValue,
     formState: { errors },
   } = useForm<GuestForm>();
+  
+  // Auto-skip if step is disabled
+  useEffect(() => {
+    if (config && !isStepEnabled('guest-details')) {
+      console.log('[CheckinGuestDetails] Step disabled, auto-skipping to next');
+      goToNextStep('guest-details');
+    }
+  }, [config, isStepEnabled, goToNextStep]);
   
   useEffect(() => {
     if (!token) return;

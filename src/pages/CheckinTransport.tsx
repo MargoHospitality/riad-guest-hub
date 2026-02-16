@@ -14,6 +14,7 @@ import {
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
+import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 
 
 
@@ -38,7 +39,7 @@ const CheckinTransport = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "demo";
   const resume = searchParams.get("resume");
-  const { goToNextStep } = useCheckinNavigation();
+  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
 
   const [status, setStatus] = useState<TransportStatus>("none");
   const [details, setDetails] = useState<TransportDetails | null>(null);
@@ -55,6 +56,16 @@ const CheckinTransport = () => {
 
   const arrivalTime = form.watch("arrivalTime");
   const arrivalMethod = form.watch("arrivalMethod");
+  
+  const { data: config } = useCheckinConfig();
+  
+  // Auto-skip if step is disabled
+  useEffect(() => {
+    if (config && !isStepEnabled('transport')) {
+      console.log('[CheckinTransport] Step disabled, auto-skipping to next');
+      goToNextStep('transport');
+    }
+  }, [config, isStepEnabled, goToNextStep]);
 
   useEffect(() => {
     const checkTransport = async () => {

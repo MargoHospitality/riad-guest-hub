@@ -5,7 +5,7 @@
  * Provides navigation helpers that skip disabled steps
  */
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCheckinConfig } from './useCheckinConfig';
 import { useApp } from '@/contexts/AppContext';
 
@@ -28,10 +28,12 @@ const STEP_PATHS: Record<CheckinStep, string> = {
 
 export function useCheckinNavigation() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { data: config } = useCheckinConfig();
   const { validation } = useApp();
   
-  const token = validation?.token;
+  // Get token from validation context or URL params
+  const token = validation?.token || searchParams.get('token');
   const hasTransportFromMargoFlow = false; // TODO: implement transport detection
   
   /**
@@ -135,10 +137,20 @@ export function useCheckinNavigation() {
     };
   };
   
+  /**
+   * Check if a step is enabled in current config
+   */
+  const isStepEnabled = (step: CheckinStep): boolean => {
+    const enabledSteps = getEnabledSteps();
+    return enabledSteps.includes(step);
+  };
+  
   return {
     goToNextStep,
     goToPreviousStep,
     getEnabledSteps,
     getStepProgress,
+    isStepEnabled,
+    token,
   };
 }

@@ -7,7 +7,7 @@
  * - French labels
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Bed, ArrowRight } from "lucide-react";
@@ -19,6 +19,7 @@ import HeroSection from "@/components/HeroSection";
 
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
+import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinBedding = () => {
@@ -27,12 +28,21 @@ const CheckinBedding = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep } = useCheckinNavigation();
+  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
   
   const [beddingChoice, setBeddingChoice] = useState<string>("");
   const [otherBedding, setOtherBedding] = useState<string>("");
   
   const saveResponse = useSaveCheckinResponse();
+  const { data: config } = useCheckinConfig();
+  
+  // Auto-skip if step is disabled
+  useEffect(() => {
+    if (config && !isStepEnabled('bedding')) {
+      console.log('[CheckinBedding] Step disabled, auto-skipping to next');
+      goToNextStep('bedding');
+    }
+  }, [config, isStepEnabled, goToNextStep]);
   
   const handleContinue = async () => {
     if (!token) return;
