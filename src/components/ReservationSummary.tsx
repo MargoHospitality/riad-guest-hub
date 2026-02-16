@@ -12,13 +12,13 @@ const ReservationSummary = () => {
     guest_name: "Jean Dupont",
     reservation_id: "RES-2847",
     room_name: "Suite Jasmin",
-    room_count: 1,
-    room_names: ["Suite Jasmin"],
     adults: 2,
     children: 1,
     check_in_date: "",
     check_out_date: "",
   };
+
+  const roomCount = (reservation as any).room_count as number | undefined;
 
 
   const formatDate = (dateStr: string) => {
@@ -54,12 +54,12 @@ const ReservationSummary = () => {
                   <BedDouble className="w-3 h-3" />
                   {reservation.room_name}
                 </span>
-              ) : (reservation.room_count ?? 0) > 1 ? (
+              ) : (roomCount ?? 0) > 1 ? (
                 <span className="flex items-center gap-1">
                   <BedDouble className="w-3 h-3" />
                   {i18n.language === 'en' 
-                    ? `${reservation.room_count} rooms` 
-                    : `${reservation.room_count} chambres`}
+                    ? `${roomCount} rooms` 
+                    : `${roomCount} chambres`}
                 </span>
               ) : null}
               {(reservation.adults ?? 0) > 0 && (
