@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import margoLogo from "@/assets/margo-hospitality-logo.png";
 
 const GEA_API_URL = 'https://gea.margo-hospitality.com/api/v1';
 
@@ -42,7 +43,6 @@ const ReservationLookup = () => {
         return;
       }
 
-      // Redirect to home with token
       navigate(`/?token=${result.data.token}`);
     } catch (err) {
       console.error("Error fetching token:", err);
@@ -52,37 +52,46 @@ const ReservationLookup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="w-full max-w-md space-y-8">
-        {/* Logo / Header */}
+    <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ backgroundColor: '#f7f9fa' }}>
+      <div className="w-full max-w-sm space-y-10">
+        {/* Logo */}
+        <div className="flex justify-center">
+          <img src={margoLogo} alt="Margo Hospitality" className="h-28 w-auto" />
+        </div>
+
+        {/* Welcome text */}
         <div className="text-center space-y-2">
-          <h1 className="text-3xl font-serif font-bold text-foreground">
-            {t('reservation.welcome') || "Welcome"}
+          <h1 className="text-2xl font-serif font-bold" style={{ color: '#1a9a9a' }}>
+            {t('reservation.welcome') || "Bienvenue"}
           </h1>
-          <p className="text-muted-foreground">
-            {t('reservation.subtitle') || "Enter your reservation ID to access your guest app"}
+          <p className="text-sm" style={{ color: '#6b7b8d' }}>
+            {t('reservation.subtitle') || "Entrez votre numéro de réservation pour accéder à votre espace client"}
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-2">
-            <label htmlFor="reservationId" className="text-sm font-medium text-foreground">
-              {t('reservation.label') || "Reservation ID"}
+            <label htmlFor="reservationId" className="text-sm font-medium" style={{ color: '#2c3e50' }}>
+              {t('reservation.label') || "Numéro de réservation"}
             </label>
             <Input
               id="reservationId"
               type="text"
-              placeholder={t('reservation.placeholder') || "Enter your reservation ID"}
+              placeholder={t('reservation.placeholder') || "Ex: RES-12345"}
               value={reservationId}
               onChange={(e) => setReservationId(e.target.value)}
               disabled={isLoading}
-              className="h-12 text-base"
+              className="h-12 text-base rounded-xl border-2 focus:ring-0"
+              style={{ 
+                borderColor: '#d0dbe5',
+                backgroundColor: '#ffffff',
+              }}
             />
           </div>
 
           {error && (
-            <div className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">
+            <div className="text-sm px-4 py-3 rounded-xl" style={{ color: '#c0392b', backgroundColor: '#fdf0ef' }}>
               {error}
             </div>
           )}
@@ -90,22 +99,26 @@ const ReservationLookup = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full h-12 text-base"
+            className="w-full h-12 text-base font-semibold rounded-xl shadow-lg transition-all hover:shadow-xl"
+            style={{ 
+              backgroundColor: '#1a9a9a',
+              color: '#ffffff',
+            }}
           >
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {t('reservation.loading') || "Loading..."}
+                {t('reservation.loading') || "Chargement..."}
               </>
             ) : (
-              t('reservation.continue') || "Continue"
+              t('reservation.continue') || "Accéder à mon séjour"
             )}
           </Button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-xs text-muted-foreground">
-          {t('reservation.help') || "Need help? Contact the property directly."}
+        <p className="text-center text-xs" style={{ color: '#9aabb8' }}>
+          {t('reservation.help') || "Besoin d'aide ? Contactez directement votre établissement."}
         </p>
       </div>
     </div>
