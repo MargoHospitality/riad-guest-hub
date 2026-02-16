@@ -175,7 +175,7 @@ const ReviewPage = () => {
 
   // Progress bar component (matches CheckinProgressBar style)
   const ReviewProgressBar = () => (
-    <div className="flex items-center gap-2 px-4 py-3">
+    <div className="flex items-center gap-2">
       {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step) => (
         <button
           key={step}
@@ -199,9 +199,13 @@ const ReviewPage = () => {
       <Header />
       <HeroSection />
 
-      {currentStep <= totalSteps && <ReviewProgressBar />}
 
       <main className="flex-1 px-4 relative z-10 pb-4">
+        {currentStep <= totalSteps && (
+          <div className="flex justify-center mb-3">
+            <ReviewProgressBar />
+          </div>
+        )}
         {/* Step 1: Global Rating */}
         {currentStep === 1 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
