@@ -64,7 +64,8 @@ const ReservationSummary = () => {
               ) : null}
               {(reservation.adults ?? 0) > 0 && (
                 <>
-                  <span>·</span>
+                  {/* Only show separator if room info was displayed */}
+                  {(reservation.room_name || (roomCount ?? 0) > 1) && <span>·</span>}
                   <span className="flex items-center gap-0.5">
                     <Users className="w-3 h-3" /> {reservation.adults}
                     {i18n.language === 'en' 
