@@ -53,19 +53,13 @@ const ReservationLookup = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6" style={{ backgroundColor: '#f7f9fa' }}>
-      <div className="w-full max-w-sm space-y-10">
-        {/* Logo */}
-        <div className="flex justify-center">
-          <img src={margoLogo} alt="Margo Hospitality" className="h-28 w-auto" />
-        </div>
-
-        {/* Welcome text */}
-        <div className="text-center space-y-2">
-          <h1 className="text-2xl font-serif font-bold" style={{ color: '#1a9a9a' }}>
-            {t('reservation.welcome') || "Bienvenue"}
-          </h1>
-          <p className="text-sm" style={{ color: '#6b7b8d' }}>
-            {t('reservation.subtitle') || "Entrez votre numéro de réservation pour accéder à votre espace client"}
+      <div className="w-full max-w-sm space-y-8">
+        {/* Logo & Tagline */}
+        <div className="flex flex-col items-center space-y-6">
+          <img src={margoLogo} alt="Margo Hospitality" className="h-24 w-auto" />
+          <div className="w-12 h-px" style={{ backgroundColor: '#1a9a9a' }} />
+          <p className="text-center text-sm tracking-wide font-light" style={{ color: '#7a8fa0', letterSpacing: '0.08em' }}>
+            {t('reservation.subtitle') || "Accédez à votre espace séjour"}
           </p>
         </div>
 
