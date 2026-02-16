@@ -1,10 +1,19 @@
 import { MessageCircle, Mail } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
-const WHATSAPP_NUMBER = "212600000000";
+import { useApp } from "@/contexts/AppContext";
 
 const ContactSection = () => {
   const { t } = useTranslation();
+  const { branding } = useApp();
+  
+  // Format WhatsApp number (remove non-numeric characters except +)
+  const formatWhatsAppNumber = (phone: string | undefined): string => {
+    if (!phone) return "212600000000"; // Fallback
+    return phone.replace(/[^\d]/g, ''); // Remove everything except digits
+  };
+  
+  const whatsappNumber = formatWhatsAppNumber(branding?.contact_whatsapp);
+  const contactEmail = branding?.contact_email || "contact@riad-massiba.com";
 
   return (
     <section className="px-4 pt-4">
@@ -16,7 +25,7 @@ const ContactSection = () => {
         </div>
         <div className="flex border-t border-border">
           <a
-            href={`https://wa.me/${WHATSAPP_NUMBER}?text=Bonjour, je vous contacte depuis l'application Guest.`}
+            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(t('contact.whatsappMessage', 'Bonjour, je vous contacte depuis l\'application Guest.'))}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-2 py-3 hover:bg-secondary/40 transition-colors border-r border-border"
@@ -25,7 +34,7 @@ const ContactSection = () => {
             <span className="text-[13px] font-medium text-foreground">WhatsApp</span>
           </a>
           <a
-            href="mailto:contact@riad-massiba.com"
+            href={`mailto:${contactEmail}`}
             className="flex-1 flex items-center justify-center gap-2 py-3 hover:bg-secondary/40 transition-colors"
           >
             <Mail className="w-4 h-4 text-accent" />
