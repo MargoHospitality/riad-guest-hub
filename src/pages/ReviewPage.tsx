@@ -171,28 +171,46 @@ const ReviewPage = () => {
     );
   }
 
-  // Step indicator
   const totalSteps = 5;
-  const stepLabel = currentStep <= totalSteps ? `${currentStep} / ${totalSteps}` : '';
+
+  // Progress bar component (matches CheckinProgressBar style)
+  const ReviewProgressBar = () => (
+    <div className="flex items-center gap-2 px-4 py-3">
+      {Array.from({ length: totalSteps }, (_, i) => i + 1).map((step) => (
+        <button
+          key={step}
+          type="button"
+          onClick={() => {
+            if (step < currentStep) setCurrentStep(step);
+          }}
+          className={`rounded-full transition-all ${
+            step < currentStep ? 'bg-primary w-2 h-2 hover:opacity-70 cursor-pointer' :
+            step === currentStep ? 'bg-primary w-6 h-2' :
+            'bg-border w-2 h-2 cursor-default'
+          }`}
+          aria-label={`Step ${step}`}
+        />
+      ))}
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-background max-w-md mx-auto flex flex-col">
       <Header />
       <HeroSection />
 
-      <main className="flex-1 px-4 -mt-6 relative z-10 pb-4">
+      {currentStep <= totalSteps && <ReviewProgressBar />}
+
+      <main className="flex-1 px-4 relative z-10 pb-4">
         {/* Step 1: Global Rating */}
         {currentStep === 1 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
             <div className="px-4 pt-4 pb-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-0.5 h-4 rounded-full bg-accent" />
-                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                    {t('review.q1.title')}
-                  </h1>
-                </div>
-                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-0.5 h-4 rounded-full bg-accent" />
+                <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                  {t('review.q1.title')}
+                </h1>
               </div>
               <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q1.subtitle')}</p>
             </div>
@@ -209,14 +227,11 @@ const ReviewPage = () => {
         {currentStep === 2 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
             <div className="px-4 pt-4 pb-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-0.5 h-4 rounded-full bg-accent" />
-                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                    {t('review.q2.title')}
-                  </h1>
-                </div>
-                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-0.5 h-4 rounded-full bg-accent" />
+                <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                  {t('review.q2.title')}
+                </h1>
               </div>
               <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q2.subtitle')}</p>
             </div>
@@ -233,14 +248,11 @@ const ReviewPage = () => {
         {currentStep === 3 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
             <div className="px-4 pt-4 pb-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-0.5 h-4 rounded-full bg-accent" />
-                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                    {t('review.q3.title')}
-                  </h1>
-                </div>
-                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-0.5 h-4 rounded-full bg-accent" />
+                <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                  {t('review.q3.title')}
+                </h1>
               </div>
               <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q3.subtitle')}</p>
             </div>
@@ -257,14 +269,11 @@ const ReviewPage = () => {
         {currentStep === 4 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
             <div className="px-4 pt-4 pb-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-0.5 h-4 rounded-full bg-accent" />
-                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                    {t('review.q4.title')}
-                  </h1>
-                </div>
-                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-0.5 h-4 rounded-full bg-accent" />
+                <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                  {t('review.q4.title')}
+                </h1>
               </div>
               <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q4.subtitle')}</p>
             </div>
@@ -304,14 +313,11 @@ const ReviewPage = () => {
         {currentStep === 5 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
             <div className="px-4 pt-4 pb-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-0.5 h-4 rounded-full bg-accent" />
-                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
-                    {t('review.q5.title')}
-                  </h1>
-                </div>
-                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              <div className="flex items-center gap-2.5">
+                <div className="w-0.5 h-4 rounded-full bg-accent" />
+                <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                  {t('review.q5.title')}
+                </h1>
               </div>
               <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q5.subtitle')}</p>
             </div>
