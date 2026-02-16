@@ -8,6 +8,7 @@ import Header from "./Header";
 import HeroSection from "./HeroSection";
 
 import { Loader2, ArrowLeft } from "lucide-react";
+import margoLogo from "@/assets/margo-hospitality-logo.png";
 
 interface DynamicContentPageProps {
   pageSlug?: string;
@@ -21,7 +22,7 @@ const DynamicContentPage = ({
   fallbackContent 
 }: DynamicContentPageProps) => {
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { validation } = useApp();
   const { pageCode } = useParams<{ pageCode: string }>();
   const pageSlug = pageSlugProp || pageCode || "";
@@ -47,13 +48,13 @@ const DynamicContentPage = ({
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
           ) : error ? (
-            <div className="text-center py-12 px-4">
-              <p className="text-muted-foreground">
-                Cette page n'est pas encore configurée.
+            <div className="flex flex-col items-center py-10 px-6 space-y-5">
+              <img src={margoLogo} alt="Margo Hospitality" className="h-16 w-auto" />
+              <div className="w-10 h-px" style={{ backgroundColor: '#1a9a9a' }} />
+              <p className="text-sm text-center font-light" style={{ color: '#7a8fa0', letterSpacing: '0.05em' }}>
+                {t('dynamicPage.notConfigured', "Cette page n'est pas encore configurée.")}
               </p>
-              {fallbackContent && (
-                <div className="mt-6">{fallbackContent}</div>
-              )}
+              {fallbackContent && <div className="mt-4">{fallbackContent}</div>}
             </div>
           ) : pageData ? (
             <div className="p-4">
@@ -78,13 +79,13 @@ const DynamicContentPage = ({
               />
             </div>
           ) : (
-            <div className="text-center py-12 px-4">
-              <p className="text-muted-foreground">
-                Cette page n'est pas encore configurée.
+            <div className="flex flex-col items-center py-10 px-6 space-y-5">
+              <img src={margoLogo} alt="Margo Hospitality" className="h-16 w-auto" />
+              <div className="w-10 h-px" style={{ backgroundColor: '#1a9a9a' }} />
+              <p className="text-sm text-center font-light" style={{ color: '#7a8fa0', letterSpacing: '0.05em' }}>
+                {t('dynamicPage.notConfigured', "Cette page n'est pas encore configurée.")}
               </p>
-              {fallbackContent && (
-                <div className="mt-6">{fallbackContent}</div>
-              )}
+              {fallbackContent && <div className="mt-4">{fallbackContent}</div>}
             </div>
           )}
         </div>

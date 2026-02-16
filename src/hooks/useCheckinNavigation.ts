@@ -33,7 +33,7 @@ export function useCheckinNavigation() {
   const { validation } = useApp();
   
   // Get token from validation context or URL params
-  const token = validation?.token || searchParams.get('token');
+  const token = searchParams.get('token');
   const hasTransportFromMargoFlow = false; // TODO: implement transport detection
   
   /**
