@@ -9,15 +9,17 @@
 - **Description EN:** "Access your personalized guest portal for check-in, services, and local recommendations."
 
 ### Favicon
-- Fichier: `public/favicon.ico` (256x256 PNG)
-- Logo Margo Hospitality
+- Fichier: `public/margo-logo-blue.png` (utilisé comme favicon)
+- Logo Margo Hospitality en turquoise/bleu
 
 ### Logo
-- Fichier: `public/margo-logo.png` (605x605 PNG)
-- Logo principal Margo Hospitality
+- Fichier: `public/margo-logo-blue.png` (logo principal)
+- Logo principal Margo Hospitality en turquoise
+- Utilisé aussi pour apple-touch-icon
 
 ### Open Graph Image (pour social media previews)
-**TODO:** Créer `public/og-image.png` (1200x630 px)
+**Temporaire:** `public/og-image.png` (copie du logo carré)
+**TODO:** Créer une vraie image OG 1200x630 px
 
 Recommandations :
 - Fond: couleur turquoise Margo (#1a9a9a) ou gradient élégant
@@ -27,17 +29,29 @@ Recommandations :
 - Format: PNG, 1200x630px (ratio 1.91:1 pour Facebook/LinkedIn/Twitter)
 
 **Outils pour créer l'image:**
-1. Canva: template "Facebook Post" ou "LinkedIn Post" (1200x630)
-2. Figma: nouveau frame 1200x630, exporter en PNG
-3. Photoshop/GIMP: nouveau document 1200x630px
+1. **Nano Banana (Gemini Imagen):** Utiliser le prompt AI ci-dessus
+2. **Canva:** template "Facebook Post" ou "LinkedIn Post" (1200x630)
+3. **Figma:** nouveau frame 1200x630, exporter en PNG
+4. **Photoshop/GIMP:** nouveau document 1200x630px
+
+**Composition recommandée:**
+- Fond: blanc cassé (#f7f9fa) ou gradient turquoise subtil
+- Logo Margo bleu centré (400x400px environ)
+- Texte "Margo Guest App" en gros (48pt, #2c3e50)
+- Sous-texte "Your Digital Concierge" (28pt, #7a8fa0)
+- Espacement vertical harmonieux
 
 **Une fois créée:**
 ```bash
 # Copier l'image dans public/
-cp og-image.png ~/projets/riad-guest-hub/public/
+cp new-og-image.png ~/projets/riad-guest-hub/public/og-image.png
 
-# Mettre à jour index.html (déjà fait)
-# Les meta tags pointent vers /og-image.png
+# L'index.html pointe déjà vers /og-image.png
+# Commit et push
+cd ~/projets/riad-guest-hub
+git add public/og-image.png
+git commit -m "Update OG image with proper 1200x630 design"
+git push
 ```
 
 ### URLs de l'app
