@@ -3,7 +3,7 @@ import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import { withToken } from "@/lib/navigation";
-import logoFallback from "@/assets/logo.png";
+import logoFallback from "@/assets/margo-logo-white.png";
 import LanguageSwitcher from "./LanguageSwitcher";
 import MenuDrawer from "./MenuDrawer";
 
@@ -12,7 +12,7 @@ const Header = () => {
   const { branding, token } = useApp();
   
   const logo = branding?.logo_url || logoFallback;
-  const propertyName = branding?.property_name || "Riad Massiba";
+  const propertyName = branding?.property_name || "Guest App";
 
   return (
     <>
