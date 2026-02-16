@@ -18,6 +18,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
+import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinBedding = () => {
@@ -26,6 +27,7 @@ const CheckinBedding = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
+  const { goToNextStep } = useCheckinNavigation();
   
   const [beddingChoice, setBeddingChoice] = useState<string>("");
   const [otherBedding, setOtherBedding] = useState<string>("");
@@ -59,8 +61,8 @@ const CheckinBedding = () => {
         bedding: beddingChoice === 'other' ? otherBedding : beddingChoice,
       });
       
-      // Navigate to next step (other requests)
-      navigate(`/checkin/other?token=${token}`);
+      // Navigate to next step
+      goToNextStep('bedding');
     } catch (error) {
       console.error('Failed to save:', error);
       toast({

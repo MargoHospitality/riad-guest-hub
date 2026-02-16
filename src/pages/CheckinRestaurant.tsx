@@ -21,6 +21,7 @@ import HeroSection from "@/components/HeroSection";
 
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
+import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinRestaurant = () => {
@@ -29,6 +30,7 @@ const CheckinRestaurant = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
+  const { goToNextStep } = useCheckinNavigation();
   
   const [mealChoice, setMealChoice] = useState<string>("");
   const [menuType, setMenuType] = useState<string>("");
@@ -67,8 +69,8 @@ const CheckinRestaurant = () => {
         },
       });
       
-      // Navigate to next step (bedding)
-      navigate(`/checkin/bedding?token=${token}`);
+      // Navigate to next step
+      goToNextStep('restaurant');
     } catch (error) {
       console.error('Failed to save:', error);
       toast({

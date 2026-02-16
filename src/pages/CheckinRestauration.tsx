@@ -15,6 +15,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
 import CheckinProgressBar from "@/components/checkin/CheckinProgressBar";
+import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 
 interface MealPreferencesForm {
   lunch: boolean;
@@ -36,6 +37,7 @@ const CheckinRestauration = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "demo";
+  const { goToNextStep } = useCheckinNavigation();
 
   const { handleSubmit, control, watch } = useForm<MealPreferencesForm>({
     defaultValues: {
@@ -52,7 +54,7 @@ const CheckinRestauration = () => {
 
   const onSubmit = async (data: MealPreferencesForm) => {
     console.log("Submitting meal preferences:", data);
-    navigate(`/checkin/step4?token=${token}`);
+    goToNextStep('restaurant');
   };
 
   return (

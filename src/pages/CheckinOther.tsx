@@ -18,6 +18,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
 import { useCompleteCheckin } from "@/hooks/useCheckinResponse";
+import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinOther = () => {
@@ -26,6 +27,7 @@ const CheckinOther = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
+  const { goToNextStep } = useCheckinNavigation();
   
   const [otherRequests, setOtherRequests] = useState("");
   
@@ -41,7 +43,7 @@ const CheckinOther = () => {
       });
       
       // Navigate to success page
-      navigate(`/checkin/success?token=${token}`);
+      goToNextStep('other');
     } catch (error) {
       console.error('Failed to complete check-in:', error);
       toast({

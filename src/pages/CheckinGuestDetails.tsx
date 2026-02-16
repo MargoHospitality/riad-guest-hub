@@ -15,6 +15,7 @@ import HeroSection from "@/components/HeroSection";
 
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
+import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 import { useToast } from "@/hooks/use-toast";
 
 interface GuestForm {
@@ -42,6 +43,7 @@ const CheckinGuestDetails = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
+  const { goToNextStep } = useCheckinNavigation();
   
   const [guests, setGuests] = useState<Guest[]>([]);
   const [currentGuestIndex, setCurrentGuestIndex] = useState(0);
@@ -218,7 +220,7 @@ const CheckinGuestDetails = () => {
   };
   
   const handleContinue = () => {
-    navigate(`/checkin/restaurant?token=${token}`);
+    goToNextStep('guest-details');
   };
   
   const handleSelectGuest = (index: number) => {

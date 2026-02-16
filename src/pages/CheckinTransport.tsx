@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
+import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 
 
 
@@ -37,6 +38,7 @@ const CheckinTransport = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "demo";
   const resume = searchParams.get("resume");
+  const { goToNextStep } = useCheckinNavigation();
 
   const [status, setStatus] = useState<TransportStatus>("none");
   const [details, setDetails] = useState<TransportDetails | null>(null);
@@ -87,11 +89,11 @@ const CheckinTransport = () => {
 
   const handleManualSubmit = async (data: ManualTransportForm) => {
     console.log("Submitting manual transport:", data);
-    navigate(`/checkin/guest-details?token=${token}`);
+    goToNextStep('transport');
   };
 
   const handleContinue = () => {
-    navigate(`/checkin/guest-details?token=${token}`);
+    goToNextStep('transport');
   };
 
   const canContinue = () => {
