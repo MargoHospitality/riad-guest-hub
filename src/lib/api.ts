@@ -25,6 +25,7 @@ export interface ValidationData {
     check_in_date: string;
     check_out_date: string;
     room_name?: string;
+    room_count?: number;
     adults?: number;
     children?: number;
   };
