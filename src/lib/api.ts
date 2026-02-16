@@ -106,8 +106,9 @@ export interface FeaturedItem {
 /**
  * Fetch featured items for the property
  */
-export async function fetchFeaturedItems(propertyId: string = PROPERTY_ID, lang: string = 'fr'): Promise<FeaturedItem[]> {
-  const response = await fetch(`${GEA_API_URL}/featured-items/${propertyId}?lang=${lang}`);
+export async function fetchFeaturedItems(propertyId?: string, lang: string = 'fr'): Promise<FeaturedItem[]> {
+  const id = propertyId || PROPERTY_ID;
+  const response = await fetch(`${GEA_API_URL}/featured-items/${id}?lang=${lang}`);
   
   if (!response.ok) {
     throw new Error(`Failed to fetch featured items: ${response.statusText}`);

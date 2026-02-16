@@ -2,14 +2,19 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { fetchFeaturedItems } from "@/lib/api";
+import { useApp } from "@/contexts/AppContext";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
 
 const QuickActions = () => {
   const { t, i18n } = useTranslation();
+  const { validation } = useApp();
+  const propertyId = validation?.reservation?.property_id;
+  
   const { data: featuredItems, isLoading } = useQuery({
-    queryKey: ["featuredItems", i18n.language],
-    queryFn: () => fetchFeaturedItems(undefined, i18n.language),
+    queryKey: ["featuredItems", propertyId, i18n.language],
+    queryFn: () => fetchFeaturedItems(propertyId, i18n.language),
+    enabled: !!propertyId,
     staleTime: 1000 * 60 * 5,
   });
 
