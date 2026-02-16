@@ -201,11 +201,6 @@ const ReviewPage = () => {
 
 
       <main className="flex-1 px-4 relative z-10 pb-4">
-        {currentStep <= totalSteps && (
-          <div className="flex justify-center mb-3">
-            <ReviewProgressBar />
-          </div>
-        )}
         {/* Step 1: Global Rating */}
         {currentStep === 1 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
@@ -223,6 +218,9 @@ const ReviewPage = () => {
                 handleRatingChange('ratingGlobal', rating)
               )}
               <CTAButton onClick={handleNext} label={t('review.next')} />
+              <div className="flex justify-center mt-4">
+                <ReviewProgressBar />
+              </div>
             </div>
           </div>
         )}
@@ -244,6 +242,9 @@ const ReviewPage = () => {
                 handleRatingChange('ratingStaff', rating)
               )}
               <CTAButton onClick={handleNext} label={t('review.next')} />
+              <div className="flex justify-center mt-4">
+                <ReviewProgressBar />
+              </div>
             </div>
           </div>
         )}
@@ -265,6 +266,9 @@ const ReviewPage = () => {
                 handleRatingChange('ratingCleanliness', rating)
               )}
               <CTAButton onClick={handleNext} label={t('review.next')} />
+              <div className="flex justify-center mt-4">
+                <ReviewProgressBar />
+              </div>
             </div>
           </div>
         )}
@@ -309,6 +313,9 @@ const ReviewPage = () => {
                 />
               )}
               <CTAButton onClick={handleNext} label={t('review.next')} />
+              <div className="flex justify-center mt-4">
+                <ReviewProgressBar />
+              </div>
             </div>
           </div>
         )}
@@ -338,6 +345,9 @@ const ReviewPage = () => {
                 label={isSubmitting ? t('review.submitting') : t('review.submit')}
                 disabled={isSubmitting}
               />
+              <div className="flex justify-center mt-4">
+                <ReviewProgressBar />
+              </div>
             </div>
           </div>
         )}
