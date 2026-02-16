@@ -22,11 +22,27 @@ interface AppContextValue {
 
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
+const STORAGE_KEY = 'guest_app_token';
+
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [searchParams] = useSearchParams();
   
-  // Read token from URL on every render (reactive to URL changes)
-  const token = useMemo(() => searchParams.get('token'), [searchParams]);
+  // Read token from URL or localStorage (with URL priority)
+  const token = useMemo(() => {
+    const urlToken = searchParams.get('token');
+    const storedToken = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null;
+    
+    // URL token takes priority (new session)
+    if (urlToken) {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEY, urlToken);
+      }
+      return urlToken;
+    }
+    
+    // Fallback to stored token if no URL token
+    return storedToken;
+  }, [searchParams]);
 
   // Validate token if present (includes branding in response)
   const {
