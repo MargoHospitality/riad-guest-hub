@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
 import { fetchAvailablePages } from "@/lib/api";
+import { withToken } from "@/lib/navigation";
 import { 
   Globe, 
   PersonStanding, 
@@ -34,7 +35,7 @@ const iconMap: Record<string, LucideIcon> = {
 
 const StayInfo = () => {
   const { t, i18n } = useTranslation();
-  const { validation } = useApp();
+  const { validation, token } = useApp();
   const propertyId = validation?.reservation?.property_id;
   
   const { data: pages, isLoading } = useQuery({
@@ -77,7 +78,7 @@ const StayInfo = () => {
     }
 
     return (
-      <Link key={page.code} to={page.route} className="group block">
+      <Link key={page.code} to={withToken(page.route, token)} className="group block">
         {content}
         {index < pages.length - 1 && <div className="ml-11 mr-4 h-px bg-border/50" />}
       </Link>

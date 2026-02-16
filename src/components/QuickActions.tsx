@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { fetchFeaturedItems } from "@/lib/api";
 import { useApp } from "@/contexts/AppContext";
+import { withToken } from "@/lib/navigation";
 import useEmblaCarousel from "embla-carousel-react";
 import { useCallback, useEffect, useState } from "react";
 
@@ -52,6 +53,7 @@ interface FeaturedItem {
 }
 
 const FeaturedCard = ({ item }: { item: FeaturedItem }) => {
+  const { token } = useApp();
   const isExternal = item.link_url?.startsWith('http');
   const content = (
     <div className="bg-card rounded-2xl shadow-sm overflow-hidden group">
@@ -79,7 +81,7 @@ const FeaturedCard = ({ item }: { item: FeaturedItem }) => {
   }
 
   return (
-    <Link to={item.link_url || "#"}>
+    <Link to={withToken(item.link_url || "#", token)}>
       {content}
     </Link>
   );
