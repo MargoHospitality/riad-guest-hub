@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useApp } from "@/contexts/AppContext";
+import { withToken } from "@/lib/navigation";
 import {
   X,
   Home,
@@ -21,6 +23,7 @@ interface MenuDrawerProps {
 
 const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
   const { t } = useTranslation();
+  const { token } = useApp();
   
   const menuItems = [
     { icon: Home, labelKey: "menu.home", path: "/" },
@@ -129,7 +132,7 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
               return (
                 <li key={index}>
                   <Link
-                    to={item.path || "/"}
+                    to={withToken(item.path || "/", token)}
                     onClick={onClose}
                     className={`flex items-center px-5 py-4 border-b border-gray-100 transition-colors ${
                       active

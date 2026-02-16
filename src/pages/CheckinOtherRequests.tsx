@@ -4,6 +4,7 @@ import { MessageSquare, CheckCircle2, Check, Home, ArrowRight } from "lucide-rea
 import { useForm, Controller } from "react-hook-form";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { withToken } from "@/lib/navigation";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
@@ -95,7 +96,7 @@ const CheckinOtherRequests = () => {
             </div>
 
             <button
-              onClick={() => navigate("/")}
+              onClick={() => navigate(withToken("/", token))}
               className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors"
             >
               <span className="text-sm font-semibold text-primary flex items-center gap-2">
