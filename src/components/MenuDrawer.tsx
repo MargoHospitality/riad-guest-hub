@@ -51,23 +51,24 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
   // Build menu items from dynamic pages
   const menuItems = pages && pages.length > 0 ? [
     // Always show Home first
-    { icon: Home, title: t('menu.home'), path: "/" },
+    { icon: Home, title: t('menu.home'), path: "/", externalUrl: null },
     // Add dynamic pages
     ...pages.map(page => ({
       icon: iconMap[page.icon] || FileText, // Fallback to FileText if icon not found
       title: i18n.language === 'fr' ? page.title_fr : page.title_en,
       path: page.route,
+      externalUrl: page.external_url || null,
     })),
   ] : [
     // Fallback menu if pages not loaded
-    { icon: Home, title: t('menu.home'), path: "/" },
-    { icon: FileText, title: t('menu.howToUse'), path: "/guide" },
-    { icon: UserCheck, title: t('menu.checkinCheckout'), path: "/checkin-info" },
-    { icon: UtensilsCrossed, title: t('menu.restaurant'), path: "/restauration" },
-    { icon: Sparkles, title: t('menu.wellness'), path: "/wellness" },
-    { icon: Car, title: t('menu.parking'), path: "/parking" },
-    { icon: Wifi, title: t('menu.wifi'), path: "/wifi" },
-    { icon: MapPin, title: t('menu.map'), path: "/location" },
+    { icon: Home, title: t('menu.home'), path: "/", externalUrl: null },
+    { icon: FileText, title: t('menu.howToUse'), path: "/guide", externalUrl: null },
+    { icon: UserCheck, title: t('menu.checkinCheckout'), path: "/checkin-info", externalUrl: null },
+    { icon: UtensilsCrossed, title: t('menu.restaurant'), path: "/restauration", externalUrl: null },
+    { icon: Sparkles, title: t('menu.wellness'), path: "/wellness", externalUrl: null },
+    { icon: Car, title: t('menu.parking'), path: "/parking", externalUrl: null },
+    { icon: Wifi, title: t('menu.wifi'), path: "/wifi", externalUrl: null },
+    { icon: MapPin, title: t('menu.map'), path: "/location", externalUrl: null },
   ];
 
   // Focus trap and keyboard navigation
@@ -130,6 +131,7 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
             {menuItems.map((item, index) => {
               const Icon = item.icon;
               const active = item.path ? isActive(item.path) : false;
+              const isExternal = !!item.externalUrl;
               
               const content = (
                 <>
@@ -145,19 +147,33 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
                 </>
               );
 
+              const className = `flex items-center px-5 py-4 border-b border-gray-100 transition-colors ${
+                active
+                  ? "bg-[#8B9B5A]/10 font-semibold"
+                  : "hover:bg-[#8B9B5A]/5"
+              }`;
+
               return (
                 <li key={index}>
-                  <Link
-                    to={withToken(item.path || "/", token)}
-                    onClick={onClose}
-                    className={`flex items-center px-5 py-4 border-b border-gray-100 transition-colors ${
-                      active
-                        ? "bg-[#8B9B5A]/10 font-semibold"
-                        : "hover:bg-[#8B9B5A]/5"
-                    }`}
-                  >
-                    {content}
-                  </Link>
+                  {isExternal ? (
+                    <a
+                      href={item.externalUrl!}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={onClose}
+                      className={className}
+                    >
+                      {content}
+                    </a>
+                  ) : (
+                    <Link
+                      to={withToken(item.path || "/", token)}
+                      onClick={onClose}
+                      className={className}
+                    >
+                      {content}
+                    </Link>
+                  )}
                 </li>
               );
             })}
