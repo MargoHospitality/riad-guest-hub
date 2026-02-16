@@ -200,7 +200,7 @@ const ReviewPage = () => {
       <HeroSection />
 
 
-      <main className="flex-1 px-4 relative z-10 pb-4">
+      <main className="flex-1 px-4 -mt-6 relative z-10 pb-4">
         {/* Step 1: Global Rating */}
         {currentStep === 1 && (
           <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
