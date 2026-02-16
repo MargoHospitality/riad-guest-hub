@@ -10,6 +10,8 @@ export interface BrandingData {
   primary_color: string;
   secondary_color: string;
   background_image_url: string | null;
+  google_review_url?: string;
+  contact_email?: string;
 }
 
 export interface ValidationData {
