@@ -211,5 +211,54 @@
     "oct": "oct.",
     "nov": "nov.",
     "dec": "déc."
+  },
+  "review": {
+    "q1": {
+      "title": "Comment évalueriez-vous votre expérience globale ?",
+      "subtitle": "Votre avis compte énormément pour nous"
+    },
+    "q2": {
+      "title": "Le personnel a-t-il répondu à vos attentes ?",
+      "subtitle": "En termes de courtoisie et de disponibilité"
+    },
+    "q3": {
+      "title": "Comment évaluez-vous la propreté et le confort ?",
+      "subtitle": "De votre chambre et des espaces communs"
+    },
+    "q4": {
+      "title": "Quels services avez-vous le plus appréciés ?",
+      "subtitle": "Sélectionnez un ou plusieurs choix",
+      "services": {
+        "breakfast": "Le petit-déjeuner",
+        "rooms": "Les chambres",
+        "location": "L'emplacement",
+        "other": "Autre (précisez)"
+      },
+      "otherPlaceholder": "Précisez ce que vous avez apprécié..."
+    },
+    "q5": {
+      "title": "Auriez-vous des suggestions pour améliorer nos services ?",
+      "subtitle": "Optionnel - Vos retours nous aident à progresser",
+      "placeholder": "Partagez vos idées ou remarques..."
+    },
+    "next": "Suivant",
+    "submit": "Envoyer",
+    "submitting": "Envoi en cours...",
+    "success": {
+      "positiveTitle": "Merci pour votre aide précieuse !",
+      "positiveMessage": "Si vous avez apprécié votre séjour, nous serions ravis que vous partagiez votre expérience sur Google. Votre avis compte énormément pour nous et aide d'autres voyageurs à découvrir notre établissement ! ⭐️",
+      "googleButton": "Laisser un avis Google",
+      "negativeTitle": "Merci beaucoup d'avoir pris le temps de partager votre avis",
+      "negativeMessage": "Cela nous aide réellement à progresser et à nous améliorer. Comme vous le savez, les avis en ligne ont un impact très important sur notre riad. Si quelque chose lors de votre séjour n'a pas été pleinement satisfaisant, nous aurions aimé en discuter directement avec vous afin de comprendre et d'améliorer immédiatement. Vos retours constructifs comptent énormément, et nous restons toujours à votre écoute. 🌿",
+      "emailButton": "Nous contacter",
+      "backHome": "Retour à l'accueil"
+    },
+    "error": {
+      "ratingRequired": "Veuillez sélectionner une note",
+      "serviceRequired": "Veuillez sélectionner au moins un service",
+      "tokenMissing": "Token manquant",
+      "invalidToken": "Token invalide ou expiré",
+      "submissionFailed": "Erreur lors de l'envoi"
+    }
   }
 }

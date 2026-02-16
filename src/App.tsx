@@ -18,6 +18,7 @@ import CheckinRestaurant from "./pages/CheckinRestaurant";
 import CheckinBedding from "./pages/CheckinBedding";
 import CheckinOther from "./pages/CheckinOther";
 import CheckinSuccess from "./pages/CheckinSuccess";
+import ReviewPage from "./pages/ReviewPage";
 import DynamicContentPage from "./components/DynamicContentPage";
 import NotFound from "./pages/NotFound";
 
@@ -48,6 +49,8 @@ const App = () => (
             <Route path="/checkin/step3" element={<CheckinRestaurant />} />
             <Route path="/checkin/step4" element={<CheckinBedding />} />
             <Route path="/checkin/step5" element={<CheckinOther />} />
+            {/* Review form */}
+            <Route path="/review" element={<ReviewPage />} />
             {/* Dynamic custom pages from GEA (e.g. /page/how-to-use) */}
             <Route path="/page/:pageCode" element={<DynamicContentPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

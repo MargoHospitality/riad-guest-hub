@@ -211,5 +211,54 @@
     "oct": "oct.",
     "nov": "nov.",
     "dec": "dec."
+  },
+  "review": {
+    "q1": {
+      "title": "How would you rate your overall experience?",
+      "subtitle": "Your feedback means a lot to us"
+    },
+    "q2": {
+      "title": "Did the staff meet your expectations?",
+      "subtitle": "In terms of courtesy and availability"
+    },
+    "q3": {
+      "title": "How do you rate the cleanliness and comfort?",
+      "subtitle": "Of your room and common areas"
+    },
+    "q4": {
+      "title": "Which services did you appreciate the most?",
+      "subtitle": "Select one or more options",
+      "services": {
+        "breakfast": "Breakfast",
+        "rooms": "Rooms",
+        "location": "Location",
+        "other": "Other (please specify)"
+      },
+      "otherPlaceholder": "Tell us what you appreciated..."
+    },
+    "q5": {
+      "title": "Would you have any suggestions to improve our services?",
+      "subtitle": "Optional - Your feedback helps us improve",
+      "placeholder": "Share your ideas or comments..."
+    },
+    "next": "Next",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "success": {
+      "positiveTitle": "Thank you for your valuable feedback!",
+      "positiveMessage": "If you enjoyed your stay, we would be delighted if you could share your experience on Google. Your review means a lot to us and helps other travelers discover our property! ⭐️",
+      "googleButton": "Leave a Google Review",
+      "negativeTitle": "Thank you so much for taking the time to share your feedback",
+      "negativeMessage": "This really helps us improve and get better. As you know, online reviews have a significant impact on our riad. If something during your stay was not fully satisfactory, we would have loved to discuss it directly with you to understand and improve immediately. Your constructive feedback matters tremendously, and we remain always at your service. 🌿",
+      "emailButton": "Contact Us",
+      "backHome": "Back to Home"
+    },
+    "error": {
+      "ratingRequired": "Please select a rating",
+      "serviceRequired": "Please select at least one service",
+      "tokenMissing": "Token missing",
+      "invalidToken": "Invalid or expired token",
+      "submissionFailed": "Submission failed"
+    }
   }
 }
