@@ -40,22 +40,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 
-  // Fallback: Fetch default branding if no token
-  const {
-    data: fallbackBrandingData,
-    isLoading: isLoadingFallbackBranding,
-    error: fallbackBrandingError,
-  } = useQuery({
-    queryKey: ['branding'],
-    queryFn: () => fetchBranding(),
-    enabled: !token, // Only fetch if no token
-    staleTime: 1000 * 60 * 60, // 1 hour
-  });
-
-  // Use branding from token validation if available, otherwise fallback
-  const brandingData = validationData?.branding || fallbackBrandingData || null;
-  const isLoadingBranding = token ? isLoadingValidation : isLoadingFallbackBranding;
-  const brandingError = token ? validationError : fallbackBrandingError;
+  // Use branding from token validation (no fallback without token)
+  const brandingData = validationData?.branding || null;
+  const isLoadingBranding = isLoadingValidation;
+  const brandingError = validationError;
 
   // Apply branding colors when loaded
   useEffect(() => {

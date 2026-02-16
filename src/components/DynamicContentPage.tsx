@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { fetchPageContent } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
+import { useApp } from "@/contexts/AppContext";
 import Header from "./Header";
 import HeroSection from "./HeroSection";
 
@@ -21,11 +22,15 @@ const DynamicContentPage = ({
 }: DynamicContentPageProps) => {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
+  const { validation } = useApp();
   const { pageCode } = useParams<{ pageCode: string }>();
   const pageSlug = pageSlugProp || pageCode || "";
+  const propertyId = validation?.reservation?.property_id;
+  
   const { data: pageData, isLoading, error } = useQuery({
-    queryKey: ["pageContent", pageSlug, i18n.language],
-    queryFn: () => fetchPageContent(pageSlug, undefined, i18n.language),
+    queryKey: ["pageContent", pageSlug, propertyId, i18n.language],
+    queryFn: () => fetchPageContent(pageSlug, propertyId!, i18n.language),
+    enabled: !!propertyId,
     staleTime: 1000 * 60 * 60, // 1 hour
   });
 

@@ -1,7 +1,6 @@
 // GEA API Client for Guest App
 
 const GEA_API_URL = 'https://gea.margo-hospitality.com/api/v1';
-const PROPERTY_ID = '3'; // Riad Massiba
 
 export interface BrandingData {
   property_id: string;
@@ -35,7 +34,7 @@ export interface ValidationData {
 /**
  * Fetch branding data for the property
  */
-export async function fetchBranding(propertyId: string = PROPERTY_ID): Promise<BrandingData> {
+export async function fetchBranding(propertyId: string): Promise<BrandingData> {
   const response = await fetch(`${GEA_API_URL}/branding/${propertyId}`);
   
   if (!response.ok) {
@@ -79,7 +78,7 @@ export async function validateToken(token: string): Promise<ValidationData> {
 /**
  * Fetch page content for the property
  */
-export async function fetchPageContent(pageSlug: string, propertyId: string = PROPERTY_ID, lang: string = 'fr') {
+export async function fetchPageContent(pageSlug: string, propertyId: string, lang: string = 'fr') {
   const response = await fetch(`${GEA_API_URL}/content/${propertyId}/${pageSlug}?lang=${lang}`);
   
   if (!response.ok) {
@@ -106,8 +105,8 @@ export interface FeaturedItem {
 /**
  * Fetch featured items for the property
  */
-export async function fetchFeaturedItems(propertyId?: string, lang: string = 'fr'): Promise<FeaturedItem[]> {
-  const id = propertyId || PROPERTY_ID;
+export async function fetchFeaturedItems(propertyId: string, lang: string = 'fr'): Promise<FeaturedItem[]> {
+  const id = propertyId;
   const response = await fetch(`${GEA_API_URL}/featured-items/${id}?lang=${lang}`);
   
   if (!response.ok) {
@@ -136,7 +135,7 @@ export interface PageInfo {
 /**
  * Fetch available pages for the property
  */
-export async function fetchAvailablePages(propertyId: string = PROPERTY_ID, lang: string = 'fr'): Promise<PageInfo[]> {
+export async function fetchAvailablePages(propertyId: string, lang: string = 'fr'): Promise<PageInfo[]> {
   const response = await fetch(`${GEA_API_URL}/pages/${propertyId}?lang=${lang}`);
   
   if (!response.ok) {

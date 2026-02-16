@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { useApp } from "@/contexts/AppContext";
 import { fetchAvailablePages } from "@/lib/api";
 import { 
   Globe, 
@@ -33,9 +34,13 @@ const iconMap: Record<string, LucideIcon> = {
 
 const StayInfo = () => {
   const { t, i18n } = useTranslation();
+  const { validation } = useApp();
+  const propertyId = validation?.reservation?.property_id;
+  
   const { data: pages, isLoading } = useQuery({
-    queryKey: ["availablePages", i18n.language],
-    queryFn: () => fetchAvailablePages(undefined, i18n.language),
+    queryKey: ["availablePages", propertyId, i18n.language],
+    queryFn: () => fetchAvailablePages(propertyId!, i18n.language),
+    enabled: !!propertyId,
     staleTime: 1000 * 60 * 60,
   });
 
