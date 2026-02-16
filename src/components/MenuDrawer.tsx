@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
+import { usePages } from "@/hooks/usePages";
 import { withToken } from "@/lib/navigation";
 import {
   X,
@@ -14,6 +15,10 @@ import {
   Wifi,
   MapPin,
   ChevronRight,
+  FileText,
+  UserCheck,
+  Sparkles,
+  LucideIcon,
 } from "lucide-react";
 
 interface MenuDrawerProps {
@@ -21,22 +26,49 @@ interface MenuDrawerProps {
   onClose: () => void;
 }
 
+// Map icon names from API to Lucide components
+const iconMap: Record<string, LucideIcon> = {
+  'home': Home,
+  'globe': Globe,
+  'file-text': FileText,
+  'user-check': UserCheck,
+  'sparkles': Sparkles,
+  'person-standing': PersonStanding,
+  'utensils': UtensilsCrossed,
+  'leaf': Leaf,
+  'car': Car,
+  'wifi': Wifi,
+  'map-pin': MapPin,
+};
+
 const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { token } = useApp();
-  
-  const menuItems = [
-    { icon: Home, labelKey: "menu.home", path: "/" },
-    { icon: Globe, labelKey: "menu.howToUse", path: "/guide" },
-    { icon: PersonStanding, labelKey: "menu.checkinCheckout", path: "/checkin-info" },
-    { icon: UtensilsCrossed, labelKey: "menu.restaurant", path: "/restauration" },
-    { icon: Leaf, labelKey: "menu.wellness", path: "/wellness" },
-    { icon: Car, labelKey: "menu.parking", path: "/parking" },
-    { icon: Wifi, labelKey: "menu.wifi", path: "/wifi" },
-    { icon: MapPin, labelKey: "menu.map", externalUrl: "https://maps.app.goo.gl/iACvR7utyjxYs4bv8" },
-  ];
+  const { data: pages, isLoading: isLoadingPages } = usePages();
   const location = useLocation();
   const drawerRef = useRef<HTMLDivElement>(null);
+  
+  // Build menu items from dynamic pages
+  const menuItems = pages && pages.length > 0 ? [
+    // Always show Home first
+    { icon: Home, title: t('menu.home'), path: "/" },
+    // Add dynamic pages
+    ...pages.map(page => ({
+      icon: iconMap[page.icon] || FileText, // Fallback to FileText if icon not found
+      title: i18n.language === 'fr' ? page.title_fr : page.title_en,
+      path: page.route,
+    })),
+  ] : [
+    // Fallback menu if pages not loaded
+    { icon: Home, title: t('menu.home'), path: "/" },
+    { icon: FileText, title: t('menu.howToUse'), path: "/guide" },
+    { icon: UserCheck, title: t('menu.checkinCheckout'), path: "/checkin-info" },
+    { icon: UtensilsCrossed, title: t('menu.restaurant'), path: "/restauration" },
+    { icon: Sparkles, title: t('menu.wellness'), path: "/wellness" },
+    { icon: Car, title: t('menu.parking'), path: "/parking" },
+    { icon: Wifi, title: t('menu.wifi'), path: "/wifi" },
+    { icon: MapPin, title: t('menu.map'), path: "/location" },
+  ];
 
   // Focus trap and keyboard navigation
   useEffect(() => {
@@ -107,27 +139,11 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
                       active ? "font-semibold" : "font-medium"
                     }`}
                   >
-                    {t(item.labelKey)}
+                    {item.title}
                   </span>
                   <ChevronRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
                 </>
               );
-
-              if (item.externalUrl) {
-                return (
-                  <li key={index}>
-                    <a
-                      href={item.externalUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={onClose}
-                      className="flex items-center px-5 py-4 border-b border-gray-100 transition-colors hover:bg-[#8B9B5A]/5"
-                    >
-                      {content}
-                    </a>
-                  </li>
-                );
-              }
 
               return (
                 <li key={index}>
