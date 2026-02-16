@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '@/contexts/AppContext';
-import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Star, Mail, ExternalLink, Check } from 'lucide-react';
+import { Star, Mail, ExternalLink, Check, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
+import FooterBar from '@/components/FooterBar';
 import { useToast } from '@/hooks/use-toast';
 
 const API_BASE_URL = import.meta.env.VITE_GEA_API_URL || 'https://gea.margo-hospitality.com/api/v1';
@@ -107,7 +107,6 @@ const ReviewPage = () => {
         throw new Error(data.error || 'Submission failed');
       }
 
-      // Show final screen based on rating
       setCurrentStep(6);
     } catch (error) {
       console.error('Review submission error:', error);
@@ -122,17 +121,17 @@ const ReviewPage = () => {
   };
 
   const renderStarRating = (value: number, onChange: (rating: number) => void) => (
-    <div className="flex gap-2 justify-center my-6">
+    <div className="flex gap-3 justify-center my-5">
       {[1, 2, 3, 4, 5].map((rating) => (
         <button
           key={rating}
           type="button"
           onClick={() => onChange(rating)}
-          className="transition-transform hover:scale-110"
+          className="transition-transform hover:scale-110 active:scale-95"
         >
           <Star
-            className={`w-12 h-12 ${
-              rating <= value ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'
+            className={`w-10 h-10 ${
+              rating <= value ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/30'
             }`}
           />
         </button>
@@ -144,193 +143,289 @@ const ReviewPage = () => {
   const contactEmail = validation?.branding?.contact_email;
   const shouldRedirectToGoogle = formData.ratingGlobal >= 4;
 
+  // CTA button component matching app style
+  const CTAButton = ({ onClick, label, disabled = false }: { onClick: () => void; label: string; disabled?: boolean }) => (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+    >
+      <span className="text-sm font-semibold text-primary">{label}</span>
+      <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center group-hover:bg-primary/90 transition-colors">
+        <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+      </div>
+    </button>
+  );
+
   if (!token || !validation) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+      <div className="min-h-screen bg-background max-w-md mx-auto">
         <Header />
-        <div className="container mx-auto px-4 py-12 text-center">
-          <p className="text-slate-600">{t('review.error.invalidToken')}</p>
+        <HeroSection />
+        <div className="px-4 -mt-6 relative z-10">
+          <div className="bg-card rounded-2xl shadow-md p-6 text-center">
+            <p className="text-sm text-muted-foreground">{t('review.error.invalidToken')}</p>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Step indicator
+  const totalSteps = 5;
+  const stepLabel = currentStep <= totalSteps ? `${currentStep} / ${totalSteps}` : '';
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white pb-20">
+    <div className="min-h-screen bg-background max-w-md mx-auto flex flex-col">
       <Header />
       <HeroSection />
 
-      <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="flex-1 px-4 -mt-6 relative z-10 pb-4">
         {/* Step 1: Global Rating */}
         {currentStep === 1 && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in">
-            <h2 className="text-2xl font-bold text-center text-slate-800 mb-2">
-              {t('review.q1.title')}
-            </h2>
-            <p className="text-center text-slate-600 mb-4">{t('review.q1.subtitle')}</p>
-            {renderStarRating(formData.ratingGlobal, (rating) =>
-              handleRatingChange('ratingGlobal', rating)
-            )}
-            <Button onClick={handleNext} className="w-full mt-6" size="lg">
-              {t('review.next')}
-            </Button>
+          <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-0.5 h-4 rounded-full bg-accent" />
+                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                    {t('review.q1.title')}
+                  </h1>
+                </div>
+                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q1.subtitle')}</p>
+            </div>
+            <div className="border-t border-border px-4 pb-4 pt-3">
+              {renderStarRating(formData.ratingGlobal, (rating) =>
+                handleRatingChange('ratingGlobal', rating)
+              )}
+              <CTAButton onClick={handleNext} label={t('review.next')} />
+            </div>
           </div>
         )}
 
         {/* Step 2: Staff Rating */}
         {currentStep === 2 && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in">
-            <h2 className="text-2xl font-bold text-center text-slate-800 mb-2">
-              {t('review.q2.title')}
-            </h2>
-            <p className="text-center text-slate-600 mb-4">{t('review.q2.subtitle')}</p>
-            {renderStarRating(formData.ratingStaff, (rating) =>
-              handleRatingChange('ratingStaff', rating)
-            )}
-            <Button onClick={handleNext} className="w-full mt-6" size="lg">
-              {t('review.next')}
-            </Button>
+          <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-0.5 h-4 rounded-full bg-accent" />
+                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                    {t('review.q2.title')}
+                  </h1>
+                </div>
+                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q2.subtitle')}</p>
+            </div>
+            <div className="border-t border-border px-4 pb-4 pt-3">
+              {renderStarRating(formData.ratingStaff, (rating) =>
+                handleRatingChange('ratingStaff', rating)
+              )}
+              <CTAButton onClick={handleNext} label={t('review.next')} />
+            </div>
           </div>
         )}
 
         {/* Step 3: Cleanliness Rating */}
         {currentStep === 3 && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in">
-            <h2 className="text-2xl font-bold text-center text-slate-800 mb-2">
-              {t('review.q3.title')}
-            </h2>
-            <p className="text-center text-slate-600 mb-4">{t('review.q3.subtitle')}</p>
-            {renderStarRating(formData.ratingCleanliness, (rating) =>
-              handleRatingChange('ratingCleanliness', rating)
-            )}
-            <Button onClick={handleNext} className="w-full mt-6" size="lg">
-              {t('review.next')}
-            </Button>
+          <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-0.5 h-4 rounded-full bg-accent" />
+                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                    {t('review.q3.title')}
+                  </h1>
+                </div>
+                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q3.subtitle')}</p>
+            </div>
+            <div className="border-t border-border px-4 pb-4 pt-3">
+              {renderStarRating(formData.ratingCleanliness, (rating) =>
+                handleRatingChange('ratingCleanliness', rating)
+              )}
+              <CTAButton onClick={handleNext} label={t('review.next')} />
+            </div>
           </div>
         )}
 
         {/* Step 4: Services Appreciated */}
         {currentStep === 4 && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in">
-            <h2 className="text-2xl font-bold text-center text-slate-800 mb-2">
-              {t('review.q4.title')}
-            </h2>
-            <p className="text-center text-slate-600 mb-6">{t('review.q4.subtitle')}</p>
-            <div className="space-y-3">
+          <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-0.5 h-4 rounded-full bg-accent" />
+                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                    {t('review.q4.title')}
+                  </h1>
+                </div>
+                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q4.subtitle')}</p>
+            </div>
+            <div className="border-t border-border px-4 pb-4 pt-3 space-y-2">
               {SERVICES.map((service) => (
                 <button
                   key={service}
                   type="button"
                   onClick={() => handleServiceToggle(service)}
-                  className={`w-full p-4 rounded-lg border-2 transition-all flex items-center justify-between ${
+                  className={`w-full p-3.5 rounded-xl border transition-all flex items-center justify-between text-left ${
                     formData.servicesAppreciated.includes(service)
                       ? 'border-primary bg-primary/5'
-                      : 'border-slate-200 hover:border-slate-300'
+                      : 'border-border hover:bg-muted/50'
                   }`}
                 >
-                  <span className="text-left font-medium">{t(`review.q4.services.${service}`)}</span>
+                  <span className="text-sm font-medium text-foreground">{t(`review.q4.services.${service}`)}</span>
                   {formData.servicesAppreciated.includes(service) && (
-                    <Check className="w-5 h-5 text-primary" />
+                    <Check className="w-4 h-4 text-primary" />
                   )}
                 </button>
               ))}
+              {formData.servicesAppreciated.includes('other') && (
+                <Textarea
+                  value={formData.otherService}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, otherService: e.target.value }))}
+                  placeholder={t('review.q4.otherPlaceholder')}
+                  className="mt-2 bg-card border-border text-sm min-h-[60px]"
+                  rows={2}
+                />
+              )}
+              <CTAButton onClick={handleNext} label={t('review.next')} />
             </div>
-            {formData.servicesAppreciated.includes('other') && (
-              <Textarea
-                value={formData.otherService}
-                onChange={(e) => setFormData((prev) => ({ ...prev, otherService: e.target.value }))}
-                placeholder={t('review.q4.otherPlaceholder')}
-                className="mt-4"
-                rows={2}
-              />
-            )}
-            <Button onClick={handleNext} className="w-full mt-6" size="lg">
-              {t('review.next')}
-            </Button>
           </div>
         )}
 
         {/* Step 5: Suggestions */}
         {currentStep === 5 && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 animate-fade-in">
-            <h2 className="text-2xl font-bold text-center text-slate-800 mb-2">
-              {t('review.q5.title')}
-            </h2>
-            <p className="text-center text-slate-600 mb-6">{t('review.q5.subtitle')}</p>
-            <Textarea
-              value={formData.suggestions}
-              onChange={(e) => setFormData((prev) => ({ ...prev, suggestions: e.target.value }))}
-              placeholder={t('review.q5.placeholder')}
-              className="min-h-32"
-              rows={5}
-            />
-            <Button
-              onClick={handleSubmit}
-              className="w-full mt-6"
-              size="lg"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? t('review.submitting') : t('review.submit')}
-            </Button>
+          <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-0.5 h-4 rounded-full bg-accent" />
+                  <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                    {t('review.q5.title')}
+                  </h1>
+                </div>
+                <span className="text-xs text-muted-foreground">{stepLabel}</span>
+              </div>
+              <p className="text-xs text-muted-foreground mt-1.5 pl-[18px]">{t('review.q5.subtitle')}</p>
+            </div>
+            <div className="border-t border-border px-4 pb-4 pt-3">
+              <Textarea
+                value={formData.suggestions}
+                onChange={(e) => setFormData((prev) => ({ ...prev, suggestions: e.target.value }))}
+                placeholder={t('review.q5.placeholder')}
+                className="bg-card border-border text-sm min-h-[100px]"
+                rows={4}
+              />
+              <CTAButton
+                onClick={handleSubmit}
+                label={isSubmitting ? t('review.submitting') : t('review.submit')}
+                disabled={isSubmitting}
+              />
+            </div>
           </div>
         )}
 
         {/* Final Screen: Positive (4-5 stars) */}
         {currentStep === 6 && shouldRedirectToGoogle && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center animate-fade-in">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Star className="w-8 h-8 text-green-600 fill-green-600" />
+          <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-0.5 h-4 rounded-full bg-primary" />
+                <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                  {t('review.success.positiveTitle')}
+                </h1>
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">
-              {t('review.success.positiveTitle')}
-            </h2>
-            <p className="text-slate-600 mb-6">{t('review.success.positiveMessage')}</p>
-            {googleReviewUrl && (
-              <Button
-                asChild
-                className="w-full mb-4"
-                size="lg"
-              >
-                <a href={googleReviewUrl} target="_blank" rel="noopener noreferrer">
-                  <ExternalLink className="w-5 h-5 mr-2" />
-                  {t('review.success.googleButton')}
+            <div className="border-t border-border px-4 pb-4 pt-4">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <Star className="w-5 h-5 text-primary fill-primary" />
+                </div>
+                <p className="text-sm text-muted-foreground flex-1">{t('review.success.positiveMessage')}</p>
+              </div>
+              {googleReviewUrl && (
+                <a
+                  href={googleReviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors mb-2"
+                >
+                  <span className="text-sm font-semibold text-primary flex items-center gap-2">
+                    <ExternalLink className="w-4 h-4" />
+                    {t('review.success.googleButton')}
+                  </span>
+                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center">
+                    <ArrowRight className="w-3.5 h-3.5 text-primary-foreground" />
+                  </div>
                 </a>
-              </Button>
-            )}
-            <Button variant="outline" onClick={() => navigate(`/?token=${token}`)} className="w-full">
-              {t('review.success.backHome')}
-            </Button>
+              )}
+              <button
+                onClick={() => navigate(`/?token=${token}`)}
+                className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border group hover:bg-muted/50 transition-colors"
+              >
+                <span className="text-sm font-semibold text-foreground">{t('review.success.backHome')}</span>
+                <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
+                  <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+                </div>
+              </button>
+            </div>
           </div>
         )}
 
         {/* Final Screen: Negative (1-3 stars) */}
         {currentStep === 6 && !shouldRedirectToGoogle && (
-          <div className="bg-white rounded-2xl shadow-lg p-8 text-center animate-fade-in">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Mail className="w-8 h-8 text-blue-600" />
+          <div className="bg-card rounded-2xl shadow-md overflow-hidden animate-fade-in">
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-0.5 h-4 rounded-full bg-accent" />
+                <h1 className="text-base font-bold text-foreground font-serif tracking-tight">
+                  {t('review.success.negativeTitle')}
+                </h1>
+              </div>
             </div>
-            <h2 className="text-2xl font-bold text-slate-800 mb-4">
-              {t('review.success.negativeTitle')}
-            </h2>
-            <p className="text-slate-600 mb-6">{t('review.success.negativeMessage')}</p>
-            {contactEmail && (
-              <Button
-                asChild
-                className="w-full mb-4"
-                size="lg"
-              >
-                <a href={`mailto:${contactEmail}`}>
-                  <Mail className="w-5 h-5 mr-2" />
-                  {t('review.success.emailButton')}
+            <div className="border-t border-border px-4 pb-4 pt-4">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center shrink-0">
+                  <Mail className="w-5 h-5 text-accent" />
+                </div>
+                <p className="text-sm text-muted-foreground flex-1">{t('review.success.negativeMessage')}</p>
+              </div>
+              {contactEmail && (
+                <a
+                  href={`mailto:${contactEmail}`}
+                  className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors mb-2"
+                >
+                  <span className="text-sm font-semibold text-accent flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    {t('review.success.emailButton')}
+                  </span>
+                  <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center">
+                    <ArrowRight className="w-3.5 h-3.5 text-accent-foreground" />
+                  </div>
                 </a>
-              </Button>
-            )}
-            <Button variant="outline" onClick={() => navigate(`/?token=${token}`)} className="w-full">
-              {t('review.success.backHome')}
-            </Button>
+              )}
+              <button
+                onClick={() => navigate(`/?token=${token}`)}
+                className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl border border-border group hover:bg-muted/50 transition-colors"
+              >
+                <span className="text-sm font-semibold text-foreground">{t('review.success.backHome')}</span>
+                <div className="w-7 h-7 rounded-full bg-muted flex items-center justify-center">
+                  <ArrowRight className="w-3.5 h-3.5 text-muted-foreground" />
+                </div>
+              </button>
+            </div>
           </div>
         )}
-      </div>
+      </main>
+
+      <FooterBar />
     </div>
   );
 };
