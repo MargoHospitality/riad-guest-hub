@@ -41,12 +41,13 @@ async function fetchCheckinConfig(propertyId: string): Promise<CheckinConfig> {
 
 export function useCheckinConfig() {
   const { validation } = useApp();
-  const propertyId = validation?.reservation?.property_id;
+  // Use cloudbeds_property_id for checkin config endpoint
+  const cloudbedsPropertyId = validation?.reservation?.cloudbeds_property_id;
   
   return useQuery({
-    queryKey: ['checkinConfig', propertyId],
-    queryFn: () => fetchCheckinConfig(propertyId!),
-    enabled: !!propertyId,
+    queryKey: ['checkinConfig', cloudbedsPropertyId],
+    queryFn: () => fetchCheckinConfig(cloudbedsPropertyId!),
+    enabled: !!cloudbedsPropertyId,
     staleTime: 1000 * 60 * 60, // 1 hour
   });
 }
