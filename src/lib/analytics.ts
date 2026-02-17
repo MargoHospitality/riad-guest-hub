@@ -31,14 +31,31 @@ export function initAnalytics(): void {
 /**
  * Identify the guest session using their token (pseudonymous).
  * Call once after successful token validation.
+ * 
+ * @param checkInDate ISO date string from validate-token response (e.g. "2026-03-15")
  */
-export function identifySession(token: string, propertyId: string, propertyName: string): void {
+export function identifySession(
+  token: string,
+  propertyId: string,
+  propertyName: string,
+  checkInDate?: string,
+): void {
   if (!POSTHOG_KEY) return;
 
   posthog.identify(token, {
     property_id: propertyId,
     property_name: propertyName,
   });
+
+  // Register days_before_checkin as a super property (auto-added to all subsequent events)
+  if (checkInDate) {
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const daysBeforeCheckin = Math.ceil(
+      (new Date(checkInDate).getTime() - Date.now()) / msPerDay,
+    );
+    // Positive = before check-in, 0 = check-in day, negative = during/after stay
+    posthog.register({ days_before_checkin: daysBeforeCheckin });
+  }
 }
 
 // ─── Events ──────────────────────────────────────────────────────────────────

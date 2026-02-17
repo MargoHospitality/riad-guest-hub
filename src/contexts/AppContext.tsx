@@ -75,9 +75,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   // Identify PostHog session once validation is available
   useEffect(() => {
     if (token && validationData?.reservation) {
-      const { property_id } = validationData.reservation;
+      const { property_id, check_in_date } = validationData.reservation;
       const propertyName = validationData.branding?.property_name || '';
-      identifySession(token, property_id, propertyName);
+      identifySession(token, property_id, propertyName, check_in_date);
       analytics.sessionStarted(property_id, propertyName);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
