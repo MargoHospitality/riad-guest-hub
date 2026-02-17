@@ -51,6 +51,8 @@ Tous les liens de navigation construits via `withToken(path, token)` (`src/lib/n
 - Lib : `src/lib/analytics.ts` — wrapper PostHog, no-op si `VITE_POSTHOG_KEY` absent
 - Mode : sans cookie (`persistence: 'memory'`), EU region, autocapture désactivé
 - Identification : `posthog.identify(token)` — token comme distinct_id (pseudonymous, no PII)
+- Super property `days_before_checkin` enregistrée via `posthog.register()` → présente sur TOUS les events
+  (positif = avant arrivée, 0 = jour J, négatif = pendant/après séjour — calculé depuis `check_in_date`)
 - Events trackés :
   - `app_session_started` → AppContext, après validation token
   - `page_viewed` → à brancher sur DynamicContentPage

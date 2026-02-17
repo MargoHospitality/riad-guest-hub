@@ -26,6 +26,12 @@ colonnes explicites dans les requêtes GEA.
 
 ## Résolus
 
+### [2026-02-17] days_before_checkin super property ajoutée
+- Calculée depuis `check_in_date` (retourné par `validate-token`)
+- Enregistrée via `posthog.register()` → présente sur tous les events automatiquement
+- Valeurs : positif = avant check-in, 0 = jour J, négatif = pendant/après séjour
+- Commit : `a2bfa8f`
+
 ### [2026-02-17] PostHog analytics intégré
 - `src/lib/analytics.ts` créé — wrapper complet, mode cookieless, EU region
 - Events couverts : session, check-in funnel (5 steps), Margo Flow round-trip, review (4 events)
