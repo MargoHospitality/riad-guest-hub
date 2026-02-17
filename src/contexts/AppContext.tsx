@@ -9,6 +9,7 @@ import {
   type BrandingData,
   type ValidationData 
 } from '@/lib/api';
+import { initAnalytics, identifySession, analytics } from '@/lib/analytics';
 
 interface AppContextValue {
   branding: BrandingData | null;
@@ -23,6 +24,9 @@ interface AppContextValue {
 const AppContext = createContext<AppContextValue | undefined>(undefined);
 
 const STORAGE_KEY = 'guest_app_token';
+
+// Initialize PostHog once (no-op if VITE_POSTHOG_KEY not set)
+initAnalytics();
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [searchParams] = useSearchParams();
@@ -67,6 +71,17 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       applyBrandingColors(brandingData);
     }
   }, [brandingData]);
+
+  // Identify PostHog session once validation is available
+  useEffect(() => {
+    if (token && validationData?.reservation) {
+      const { property_id } = validationData.reservation;
+      const propertyName = validationData.branding?.property_name || '';
+      identifySession(token, property_id, propertyName);
+      analytics.sessionStarted(property_id, propertyName);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [validationData?.reservation?.property_id]);
 
   const value: AppContextValue = {
     branding: brandingData,

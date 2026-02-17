@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '@/contexts/AppContext';
 import { checkTransportStatus } from '@/lib/api';
+import { analytics } from '@/lib/analytics';
 import { useSaveCheckinResponse, useCheckinResponse } from '@/hooks/useCheckinResponse';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -59,12 +60,17 @@ const CheckinGate = () => {
   
   const handleRequestTransport = () => {
     if (!validation?.reservation) return;
-    const { cloudbeds_property_id, reservation_id, check_in_date, adults, children } = validation.reservation;
+    const { cloudbeds_property_id, property_id, reservation_id, check_in_date, adults, children } = validation.reservation;
     if (!cloudbeds_property_id) {
       console.error('No Cloudbeds property ID available');
       return;
     }
     const totalPassengers = (adults || 0) + (children || 0);
+    const pax = totalPassengers > 0 ? totalPassengers : 2;
+
+    // Track departure to Margo Flow
+    analytics.checkinMargoflowLeft(property_id, pax);
+
     const params = new URLSearchParams({
       riad: cloudbeds_property_id,
       reservation: reservation_id,
@@ -72,12 +78,15 @@ const CheckinGate = () => {
       returnTo: 'checkin',
       token: token!,
       lang: i18n.language,
-      pax: (totalPassengers > 0 ? totalPassengers : 2).toString(),
+      pax: pax.toString(),
     });
     window.location.href = `https://flow.margo-hospitality.com/?${params.toString()}`;
   };
   
   const handleContinue = () => {
+    const propertyId = validation?.reservation?.property_id || '';
+    analytics.checkinStarted(propertyId);
+
     const status = transportStatus?.status || 'none';
     if (status === 'confirmed' || status === 'pending') {
       navigate(`/checkin/guest-details?token=${token}`);

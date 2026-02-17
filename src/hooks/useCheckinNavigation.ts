@@ -8,6 +8,7 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useCheckinConfig } from './useCheckinConfig';
 import { useApp } from '@/contexts/AppContext';
+import { analytics } from '@/lib/analytics';
 
 type CheckinStep = 
   | 'transport'
@@ -82,26 +83,33 @@ export function useCheckinNavigation() {
    * Navigate to next enabled step
    */
   const goToNextStep = (currentStep: CheckinStep) => {
+    const propertyId = validation?.reservation?.property_id || '';
     const enabledSteps = getEnabledSteps();
     const currentIndex = enabledSteps.indexOf(currentStep);
-    
+
+    // Track step completed
+    if (currentStep !== 'success') {
+      analytics.checkinStepCompleted(propertyId, currentStep);
+    }
+
     if (currentIndex === -1) {
-      // Current step not found, go to first enabled step
       const firstStep = enabledSteps[0];
       const path = STEP_PATHS[firstStep];
       navigate(`${path}?token=${token}`);
       return;
     }
     
-    // Get next step
     const nextStep = enabledSteps[currentIndex + 1];
     
     if (!nextStep) {
-      // No next step, go to success
+      analytics.checkinCompleted(propertyId);
       navigate(`/checkin/success?token=${token}`);
       return;
     }
-    
+
+    // Track next step viewed
+    analytics.checkinStepViewed(propertyId, nextStep);
+
     const path = STEP_PATHS[nextStep];
     navigate(`${path}?token=${token}`);
   };

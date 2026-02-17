@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { useApp } from "@/contexts/AppContext";
+import { analytics } from "@/lib/analytics";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import ReservationSummary from "@/components/ReservationSummary";
@@ -16,7 +17,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import ReservationLookup from "@/components/ReservationLookup";
 
 const Index = () => {
-  const { token, isLoadingValidation } = useApp();
+  const { token, isLoadingValidation, validation } = useApp();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -26,7 +27,13 @@ const Index = () => {
     const from = searchParams.get('from');
     if (from === 'margo-flow' && token) {
       console.log('[Index] Returned from Margo Flow - invalidating cache');
-      
+
+      // Track return from Margo Flow
+      const transportStatus = searchParams.get('transport_status') || 'unknown';
+      if (validation?.reservation?.property_id) {
+        analytics.checkinMargoflowBack(validation.reservation.property_id, transportStatus);
+      }
+
       // Invalidate check-in response cache to refetch fresh data
       queryClient.invalidateQueries({ queryKey: ['checkinResponse', token] });
       queryClient.invalidateQueries({ queryKey: ['transportStatus'] });

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '@/contexts/AppContext';
+import { analytics } from '@/lib/analytics';
 import { Textarea } from '@/components/ui/textarea';
 import { Star, Mail, ExternalLink, Check, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
@@ -107,6 +108,9 @@ const ReviewPage = () => {
         throw new Error(data.error || 'Submission failed');
       }
 
+      // Track submission (Google click + email fallback tracked separately on button click)
+      analytics.reviewSubmitted(propertyId, formData.ratingGlobal);
+
       setCurrentStep(6);
     } catch (error) {
       console.error('Review submission error:', error);
@@ -142,6 +146,13 @@ const ReviewPage = () => {
   const googleReviewUrl = validation?.branding?.google_review_url;
   const contactEmail = validation?.branding?.contact_email;
   const shouldRedirectToGoogle = formData.ratingGlobal >= 4;
+  const propertyId = validation?.reservation?.property_id || '';
+
+  // Track review page opened (once)
+  useEffect(() => {
+    if (propertyId) analytics.reviewOpened(propertyId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propertyId]);
 
   // CTA button component matching app style
   const CTAButton = ({ onClick, label, disabled = false }: { onClick: () => void; label: string; disabled?: boolean }) => (
@@ -375,6 +386,7 @@ const ReviewPage = () => {
                   href={googleReviewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => analytics.reviewGoogleClicked(propertyId)}
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors mb-2"
                 >
                   <span className="text-sm font-semibold text-primary flex items-center gap-2">
@@ -420,6 +432,7 @@ const ReviewPage = () => {
               {contactEmail && (
                 <a
                   href={`mailto:${contactEmail}`}
+                  onClick={() => analytics.reviewEmailFallback(propertyId)}
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors mb-2"
                 >
                   <span className="text-sm font-semibold text-accent flex items-center gap-2">
