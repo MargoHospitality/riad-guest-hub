@@ -31,3 +31,10 @@ Stocker les vraies valeurs dans un `.env.local` non commité ou dans ton gestion
 - Auto-deploy sur push `main` (aucune action manuelle)
 - Confirmer le commit déployé : https://vercel.com/margo-hospitality/riad-guest-hub → onglet "Deployments"
 - URL de preview : `https://riad-guest-hub-git-<branche>.vercel.app`
+
+## Activer / vérifier PostHog
+1. Ajouter `VITE_POSTHOG_KEY=<clé>` dans Vercel → Settings → Environment Variables
+2. Redéployer (push sur main suffit)
+3. Vérifier les events : PostHog dashboard → Live Events
+4. En dev local : ajouter `VITE_POSTHOG_KEY=<clé>` dans `.env.local` (non commité)
+5. Sans clé configurée : aucun event envoyé, aucune erreur — app fonctionne normalement

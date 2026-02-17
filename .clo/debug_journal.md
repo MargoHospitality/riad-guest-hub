@@ -2,7 +2,8 @@
 
 ## Focus actuel
 Aucun incident bloquant.
-Focus : validation E2E Sierra (flow check-in complet → note Cloudbeds → mise à jour statuts).
+PostHog intégré (commit `aa7074c`) — en attente de `VITE_POSTHOG_KEY` pour activation.
+Focus suivant : déploiement contenu réel Massiba + Sierra, puis E2E Sierra complet.
 
 ---
 
@@ -24,6 +25,12 @@ colonnes explicites dans les requêtes GEA.
 ---
 
 ## Résolus
+
+### [2026-02-17] PostHog analytics intégré
+- `src/lib/analytics.ts` créé — wrapper complet, mode cookieless, EU region
+- Events couverts : session, check-in funnel (5 steps), Margo Flow round-trip, review (4 events)
+- Commit : `aa7074c`
+- Activation : `VITE_POSTHOG_KEY` dans Vercel env vars
 
 ### [2026-02-16] Suppression des IDs property codés en dur
 Tous les composants utilisent désormais `validation.reservation.property_id` depuis le contexte.

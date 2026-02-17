@@ -46,3 +46,15 @@ Tous les liens de navigation construits via `withToken(path, token)` (`src/lib/n
 - `MenuDrawer` — nav dynamique via `usePages()`, `external_url` → `<a target="_blank">`
 - `CheckinGate` → `useCheckinNavigation` (saut automatique des étapes désactivées)
 - `ReviewPage` — formulaire post-séjour, redirige vers Google Review si note ≥ 4
+
+## Analytics (PostHog)
+- Lib : `src/lib/analytics.ts` — wrapper PostHog, no-op si `VITE_POSTHOG_KEY` absent
+- Mode : sans cookie (`persistence: 'memory'`), EU region, autocapture désactivé
+- Identification : `posthog.identify(token)` — token comme distinct_id (pseudonymous, no PII)
+- Events trackés :
+  - `app_session_started` → AppContext, après validation token
+  - `page_viewed` → à brancher sur DynamicContentPage
+  - `checkin_started` / `checkin_step_viewed` / `checkin_step_completed` / `checkin_completed`
+  - `checkin_margoflow_left` / `checkin_margoflow_back`
+  - `review_opened` / `review_submitted` / `review_google_clicked` / `review_email_fallback`
+- Activation : ajouter `VITE_POSTHOG_KEY=phc_xxx` dans Vercel env vars
