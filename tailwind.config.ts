@@ -17,19 +17,17 @@ export default {
         sans: ['DM Sans', 'sans-serif'],
         serif: ['DM Serif Display', 'serif'],
       },
-      typography: {
+      typography: ({ theme }) => ({
         DEFAULT: {
           css: {
-            fontFamily: "'DM Sans', sans-serif",
-            h1: { fontFamily: "'DM Serif Display', serif" },
-            h2: { fontFamily: "'DM Serif Display', serif" },
-            h3: { fontFamily: "'DM Serif Display', serif" },
-            h4: { fontFamily: "'DM Serif Display', serif" },
+            '--tw-prose-body': theme('colors.foreground'),
+            '--tw-prose-headings': theme('colors.foreground'),
+            fontFamily: theme('fontFamily.sans').join(', '),
             strong: { fontWeight: '600' },
             p: { marginTop: '1em', marginBottom: '1em' },
           },
         },
-      },
+      }),
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
