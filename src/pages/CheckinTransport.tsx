@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Plane, Check, Clock, ArrowRight, Car, MapPin } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,7 @@ interface ManualTransportForm {
 }
 
 const CheckinTransport = () => {
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "demo";
@@ -91,7 +93,7 @@ const CheckinTransport = () => {
 
   const handleMargoFlowRedirect = () => {
     const callbackUrl = `${window.location.origin}/?token=${token}&resume=checkin`;
-    window.location.href = `https://flow.margo-hospitality.com/transport/request?token=${token}&callback=${encodeURIComponent(callbackUrl)}`;
+    window.location.href = `https://flow.margo-hospitality.com/transport/request?token=${token}&lang=${i18n.language}&callback=${encodeURIComponent(callbackUrl)}`;
   };
 
   const handleNoTransport = () => {

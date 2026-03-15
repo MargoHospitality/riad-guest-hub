@@ -120,7 +120,7 @@ const CheckinGate = () => {
   const handleViewDetails = () => {
     if (transportStatus?.request?.public_token) {
       window.open(
-        `https://flow.margo-hospitality.com/confirmation/${transportStatus.request.public_token}`,
+        `https://flow.margo-hospitality.com/confirmation/${transportStatus.request.public_token}?lang=${i18n.language}`,
         '_blank'
       );
     }

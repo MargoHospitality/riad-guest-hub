@@ -92,7 +92,7 @@ const TransportCard = () => {
   if (status === 'confirmed' && request) {
     const handleViewDetails = () => {
       if (request.public_token) {
-        window.location.href = `https://flow.margo-hospitality.com/confirmation/${request.public_token}`;
+        window.location.href = `https://flow.margo-hospitality.com/confirmation/${request.public_token}?lang=${i18n.language}`;
       }
     };
 
