@@ -50,8 +50,12 @@ const Index = () => {
     return <LoadingScreen />;
   }
   
-  // No token → show reservation lookup form
-  if (!token) {
+  // No token OR invalid token (validation failed) → show reservation lookup form
+  if (!token || (!isLoadingValidation && !validation)) {
+    // Clear invalid token from localStorage
+    if (token && !validation) {
+      localStorage.removeItem('guest_app_token');
+    }
     return <ReservationLookup />;
   }
   
