@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useApp } from "@/contexts/AppContext";
 import Header from "./Header";
 import HeroSection from "./HeroSection";
+import ReactMarkdown from "react-markdown";
 
 import { Loader2, ArrowLeft } from "lucide-react";
 import margoLogo from "@/assets/margo-hospitality-logo.png";
@@ -72,11 +73,14 @@ const DynamicContentPage = ({
                 </h1>
               </div>
 
-              {/* Dynamic HTML Content */}
-              <article
-                className="prose prose-sm max-w-none text-foreground leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: pageData.content_html }}
-              />
+              {/* Dynamic Content (Markdown or HTML) */}
+              <article className="prose prose-sm max-w-none text-foreground leading-relaxed">
+                {pageData.content_markdown ? (
+                  <ReactMarkdown>{pageData.content_markdown}</ReactMarkdown>
+                ) : pageData.content_html ? (
+                  <div dangerouslySetInnerHTML={{ __html: pageData.content_html }} />
+                ) : null}
+              </article>
             </div>
           ) : (
             <div className="flex flex-col items-center py-10 px-6 space-y-5">
