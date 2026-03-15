@@ -7,6 +7,7 @@ import { useApp } from "@/contexts/AppContext";
 import Header from "./Header";
 import HeroSection from "./HeroSection";
 import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
 
 import { Loader2, ArrowLeft } from "lucide-react";
 import margoLogo from "@/assets/margo-hospitality-logo.png";
@@ -76,7 +77,7 @@ const DynamicContentPage = ({
               {/* Dynamic Content (Markdown or HTML) */}
               <article className="prose prose-sm max-w-none text-foreground leading-relaxed">
                 {pageData.content_markdown ? (
-                  <ReactMarkdown>{pageData.content_markdown}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkBreaks]}>{pageData.content_markdown}</ReactMarkdown>
                 ) : pageData.content_html ? (
                   <div dangerouslySetInnerHTML={{ __html: pageData.content_html }} />
                 ) : null}
