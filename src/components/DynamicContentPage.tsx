@@ -75,7 +75,7 @@ const DynamicContentPage = ({
               </div>
 
               {/* Dynamic Content (Markdown or HTML) */}
-              <article className="prose prose-sm max-w-none text-foreground leading-relaxed prose-p:my-4 prose-headings:mt-6 prose-headings:mb-2">
+              <article className="prose prose-sm max-w-none text-foreground">
                 {pageData.content_markdown ? (
                   <ReactMarkdown remarkPlugins={[remarkBreaks]}>{pageData.content_markdown}</ReactMarkdown>
                 ) : pageData.content_html ? (

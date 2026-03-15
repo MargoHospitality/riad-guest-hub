@@ -17,6 +17,19 @@ export default {
         sans: ['DM Sans', 'sans-serif'],
         serif: ['DM Serif Display', 'serif'],
       },
+      typography: {
+        DEFAULT: {
+          css: {
+            fontFamily: "'DM Sans', sans-serif",
+            h1: { fontFamily: "'DM Serif Display', serif" },
+            h2: { fontFamily: "'DM Serif Display', serif" },
+            h3: { fontFamily: "'DM Serif Display', serif" },
+            h4: { fontFamily: "'DM Serif Display', serif" },
+            strong: { fontWeight: '600' },
+            p: { marginTop: '1em', marginBottom: '1em' },
+          },
+        },
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -95,5 +108,10 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require("@tailwindcss/typography")({
+      className: 'prose',
+    }),
+  ],
 } satisfies Config;
