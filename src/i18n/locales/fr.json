@@ -150,7 +150,8 @@
       "saving": "Enregistrement...",
       "continue": "Continuer",
       "error": "Erreur",
-      "failedToSave": "Impossible de sauvegarder votre choix"
+      "failedToSave": "Impossible de sauvegarder votre choix",
+      "availabilityNotice": "Votre préférence sera prise en compte sous réserve de la configuration de literie disponible dans votre chambre."
     },
     "other": {
       "title": "Demandes supplémentaires",
