@@ -150,7 +150,8 @@
       "saving": "Saving...",
       "continue": "Continue",
       "error": "Error",
-      "failedToSave": "Failed to save your choice"
+      "failedToSave": "Failed to save your choice",
+      "availabilityNotice": "Your preference will be taken into account subject to the bedding configuration available in your room."
     },
     "other": {
       "title": "Additional requests",
