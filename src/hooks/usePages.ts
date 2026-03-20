@@ -13,6 +13,7 @@ export interface Page {
   title_en: string;
   route: string;
   icon: string;
+  external_url?: string;
 }
 
 const GEA_API_URL = 'https://gea.margo-hospitality.com/api/v1';
