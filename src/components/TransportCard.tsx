@@ -29,7 +29,7 @@ const TransportCard = () => {
       riad: cloudbeds_property_id,
       reservation: reservation_id,
       checkin: check_in_date,
-      returnTo: 'homepage',
+      returnTo: 'home',  // Returns to Guest App home (not check-in form)
       token: token,
       lang: i18n.language,
       pax: (totalPassengers > 0 ? totalPassengers : 2).toString(),

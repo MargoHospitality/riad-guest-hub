@@ -92,8 +92,13 @@ const CheckinTransport = () => {
   }, [resume, searchParams]);
 
   const handleMargoFlowRedirect = () => {
-    const callbackUrl = `${window.location.origin}/?token=${token}&resume=checkin`;
-    window.location.href = `https://flow.margo-hospitality.com/transport/request?token=${token}&lang=${i18n.language}&callback=${encodeURIComponent(callbackUrl)}`;
+    // Redirect to Margo Flow with returnTo=checkin so it returns to check-in form
+    const params = new URLSearchParams({
+      token: token,
+      returnTo: 'checkin',
+      lang: i18n.language,
+    });
+    window.location.href = `https://flow.margo-hospitality.com/?${params.toString()}`;
   };
 
   const handleNoTransport = () => {
