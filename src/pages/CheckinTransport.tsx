@@ -42,6 +42,7 @@ const CheckinTransport = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "demo";
   const resume = searchParams.get("resume");
+  const fromMargoFlow = searchParams.get("from") === "margo-flow";
   const { goToNextStep, isStepEnabled } = useCheckinNavigation();
 
   const [status, setStatus] = useState<TransportStatus>("none");
@@ -70,6 +71,14 @@ const CheckinTransport = () => {
       goToNextStep('transport');
     }
   }, [config, goToNextStep]);
+
+  // Auto-continue if returning from Margo Flow (transport already requested)
+  useEffect(() => {
+    if (fromMargoFlow) {
+      console.log('[CheckinTransport] Returning from Margo Flow, auto-continuing to next step');
+      goToNextStep('transport');
+    }
+  }, [fromMargoFlow, goToNextStep]);
 
   useEffect(() => {
     const checkTransport = async () => {
