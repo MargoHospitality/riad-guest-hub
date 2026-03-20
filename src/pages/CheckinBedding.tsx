@@ -130,6 +130,10 @@ const CheckinBedding = () => {
                 />
               </div>
             )}
+
+            <p className="text-[11px] text-muted-foreground/70 italic leading-relaxed">
+              {t('checkin.bedding.availabilityNotice', 'Votre préférence sera prise en compte sous réserve de la configuration de literie disponible dans votre chambre.')}
+            </p>
           </div>
           
           <button
