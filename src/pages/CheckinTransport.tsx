@@ -16,6 +16,7 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
+import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 
 
 
@@ -60,6 +61,7 @@ const CheckinTransport = () => {
   const arrivalMethod = form.watch("arrivalMethod");
   
   const { data: config } = useCheckinConfig();
+  const saveCheckin = useSaveCheckinResponse();
   
   // Auto-skip if step is disabled
   useEffect(() => {
@@ -91,7 +93,17 @@ const CheckinTransport = () => {
     checkTransport();
   }, [resume, searchParams]);
 
-  const handleMargoFlowRedirect = () => {
+  const handleMargoFlowRedirect = async () => {
+    // Save transport status as "margo_flow" before redirecting
+    try {
+      await saveCheckin.mutateAsync({
+        token,
+        transport_status: 'margo_flow',
+      });
+    } catch (err) {
+      console.error('[CheckinTransport] Failed to save transport status:', err);
+    }
+    
     // Redirect to Margo Flow with returnTo=checkin so it returns to check-in form
     const params = new URLSearchParams({
       token: token,
@@ -106,7 +118,18 @@ const CheckinTransport = () => {
   };
 
   const handleManualSubmit = async (data: ManualTransportForm) => {
-    console.log("Submitting manual transport:", data);
+    // Save manual transport details
+    try {
+      await saveCheckin.mutateAsync({
+        token,
+        transport_status: 'manual',
+        transport_method: data.arrivalMethod,
+        transport_details: data.details || undefined,
+        arrival_time: data.arrivalTime,
+      });
+    } catch (err) {
+      console.error('[CheckinTransport] Failed to save manual transport:', err);
+    }
     goToNextStep('transport');
   };
 

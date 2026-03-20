@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
-import { useCompleteCheckin } from "@/hooks/useCheckinResponse";
+import { useCompleteCheckin, useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
@@ -32,6 +32,7 @@ const CheckinOther = () => {
   
   const [otherRequests, setOtherRequests] = useState("");
   
+  const saveCheckin = useSaveCheckinResponse();
   const completeCheckin = useCompleteCheckin();
   const { data: config } = useCheckinConfig();
   
@@ -47,9 +48,16 @@ const CheckinOther = () => {
     if (!token) return;
     
     try {
+      // Save other_requests before completing
+      if (otherRequests) {
+        await saveCheckin.mutateAsync({
+          token,
+          other_requests: otherRequests,
+        });
+      }
+      
       await completeCheckin.mutateAsync({
         token,
-        other: otherRequests || undefined,
       });
       
       // Navigate to success page
