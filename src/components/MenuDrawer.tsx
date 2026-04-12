@@ -135,7 +135,7 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
               
               const content = (
                 <>
-                  <Icon className="w-5 h-5 flex-shrink-0 text-[#A04040]" />
+                  <Icon className="w-5 h-5 flex-shrink-0 text-primary" />
                   <span
                     className={`ml-4 flex-1 text-[#2C2C2C] text-[15px] ${
                       active ? "font-semibold" : "font-medium"
@@ -149,8 +149,8 @@ const MenuDrawer = ({ isOpen, onClose }: MenuDrawerProps) => {
 
               const className = `flex items-center px-5 py-4 border-b border-gray-100 transition-colors ${
                 active
-                  ? "bg-[#8B9B5A]/10 font-semibold"
-                  : "hover:bg-[#8B9B5A]/5"
+                  ? "bg-primary/10 font-semibold"
+                  : "hover:bg-primary/5"
               }`;
 
               return (
