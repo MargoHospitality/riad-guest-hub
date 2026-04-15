@@ -9,11 +9,10 @@
  */
 
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { UtensilsCrossed, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
@@ -26,11 +25,10 @@ import { useToast } from "@/hooks/use-toast";
 
 const CheckinRestaurant = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
+  const { goToNextStep } = useCheckinNavigation();
   
   const [mealChoice, setMealChoice] = useState<string>("");
   const [menuType, setMenuType] = useState<string>("");
@@ -73,6 +71,7 @@ const CheckinRestaurant = () => {
         token,
         restaurant: {
           mealChoice,
+          menuType: menuType || undefined,
           dietaryRestrictions: dietaryRestrictions || undefined,
         },
       });

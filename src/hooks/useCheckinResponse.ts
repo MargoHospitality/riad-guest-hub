@@ -23,6 +23,7 @@ interface SaveCheckinResponseParams {
   }>;
   restaurant?: {
     mealChoice: string;
+    menuType?: string;
     dietaryRestrictions?: string;
   };
   restauration_preferences?: string; // Legacy field
@@ -31,6 +32,31 @@ interface SaveCheckinResponseParams {
   bedding_details?: string; // Legacy field
   other?: string;
   other_requests?: string; // Legacy field
+}
+
+const MEAL_CHOICE_LABELS: Record<string, string> = {
+  lunch: 'Lunch',
+  dinner: 'Dinner',
+  none: 'No meal',
+};
+
+const MENU_TYPE_LABELS: Record<string, string> = {
+  traditional: 'Traditional Moroccan menu',
+  vegetarian: 'Vegetarian menu',
+};
+
+function formatRestaurantPreferences(params: SaveCheckinResponseParams['restaurant']): string {
+  if (!params) {
+    return '';
+  }
+
+  const parts = [
+    MEAL_CHOICE_LABELS[params.mealChoice] || params.mealChoice,
+    params.menuType ? (MENU_TYPE_LABELS[params.menuType] || params.menuType) : null,
+    params.dietaryRestrictions?.trim() || null,
+  ].filter((value): value is string => Boolean(value));
+
+  return parts.join(' | ');
 }
 
 interface CompleteCheckinParams {
@@ -45,10 +71,9 @@ async function saveCheckinResponse(params: SaveCheckinResponseParams): Promise<a
   // Transform frontend format to API format
   const apiParams: any = { ...params };
   
-  // Map restaurant object to restauration_preferences text
+  // Map restaurant object to a readable restauration_preferences text
   if (params.restaurant) {
-    const { mealChoice, dietaryRestrictions } = params.restaurant;
-    apiParams.restauration_preferences = `${mealChoice}${dietaryRestrictions ? ` - ${dietaryRestrictions}` : ''}`;
+    apiParams.restauration_preferences = formatRestaurantPreferences(params.restaurant);
     delete apiParams.restaurant;
   }
   
