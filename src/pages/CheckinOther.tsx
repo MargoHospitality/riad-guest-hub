@@ -9,40 +9,45 @@
  */
 
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { MessageSquare, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
-import { useCompleteCheckin, useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
-import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
+import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
+import { useCheckinAdvance } from "@/hooks/useCheckinAdvance";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinOther = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
+  const { advanceFromStep, isAdvancing } = useCheckinAdvance();
   
   const [otherRequests, setOtherRequests] = useState("");
   
   const saveCheckin = useSaveCheckinResponse();
-  const completeCheckin = useCompleteCheckin();
   const { data: config } = useCheckinConfig();
   
   // Auto-skip if step is disabled
   useEffect(() => {
     if (config && config.step_other_requests_enabled === false) {
       console.log('[CheckinOther] Step disabled, auto-skipping to next');
-      goToNextStep('other');
+      void advanceFromStep('other').catch((error) => {
+        console.error('[CheckinOther] Failed to auto-skip other step:', error);
+        toast({
+          title: t('checkin.other.error'),
+          description: error instanceof Error ? error.message : t('checkin.other.failedToComplete'),
+          variant: "destructive",
+        });
+      });
     }
-  }, [config, goToNextStep]);
+  }, [advanceFromStep, config, t, toast]);
   
   const handleComplete = async () => {
     if (!token) return;
@@ -56,17 +61,12 @@ const CheckinOther = () => {
         });
       }
       
-      await completeCheckin.mutateAsync({
-        token,
-      });
-      
-      // Navigate to success page
-      goToNextStep('other');
+      await advanceFromStep('other');
     } catch (error) {
       console.error('Failed to complete check-in:', error);
       toast({
         title: t('checkin.other.error'),
-        description: t('checkin.other.failedToComplete'),
+        description: error instanceof Error ? error.message : t('checkin.other.failedToComplete'),
         variant: "destructive",
       });
     }
@@ -114,11 +114,11 @@ const CheckinOther = () => {
           
           <button
             onClick={handleComplete}
-            disabled={completeCheckin.isPending}
+            disabled={saveCheckin.isPending || isAdvancing}
             className="w-full flex items-center justify-between px-4 py-3.5 bg-green-600/10 border-t border-border group hover:bg-green-600/20 transition-colors disabled:opacity-50"
           >
             <span className="text-sm font-semibold text-green-600">
-              {completeCheckin.isPending ? t('checkin.other.finalizing') : t('checkin.other.completeCheckin')}
+              {saveCheckin.isPending || isAdvancing ? t('checkin.other.finalizing') : t('checkin.other.completeCheckin')}
             </span>
             <div className="w-7 h-7 rounded-full bg-green-600 flex items-center justify-center group-hover:bg-green-700 transition-colors">
               <CheckCircle className="w-3.5 h-3.5 text-white" />

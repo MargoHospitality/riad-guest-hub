@@ -8,9 +8,9 @@
  */
 
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Bed, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -18,17 +18,16 @@ import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
-import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
+import { useCheckinAdvance } from "@/hooks/useCheckinAdvance";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinBedding = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
+  const { advanceFromStep, isAdvancing } = useCheckinAdvance();
   
   const [beddingChoice, setBeddingChoice] = useState<string>("");
   const [otherBedding, setOtherBedding] = useState<string>("");
@@ -40,9 +39,16 @@ const CheckinBedding = () => {
   useEffect(() => {
     if (config && config.step_bedding_enabled === false) {
       console.log('[CheckinBedding] Step disabled, auto-skipping to next');
-      goToNextStep('bedding');
+      void advanceFromStep('bedding').catch((error) => {
+        console.error('[CheckinBedding] Failed to auto-skip bedding step:', error);
+        toast({
+          title: t('checkin.bedding.error'),
+          description: error instanceof Error ? error.message : t('checkin.other.failedToComplete'),
+          variant: "destructive",
+        });
+      });
     }
-  }, [config, goToNextStep]);
+  }, [advanceFromStep, config, t, toast]);
   
   const handleContinue = async () => {
     if (!token) return;
@@ -71,13 +77,12 @@ const CheckinBedding = () => {
         bedding: beddingChoice === 'other' ? otherBedding : beddingChoice,
       });
       
-      // Navigate to next step
-      goToNextStep('bedding');
+      await advanceFromStep('bedding');
     } catch (error) {
       console.error('Failed to save:', error);
       toast({
         title: t('checkin.bedding.error'),
-        description: t('checkin.bedding.failedToSave'),
+        description: error instanceof Error ? error.message : t('checkin.bedding.failedToSave'),
         variant: "destructive",
       });
     }
@@ -138,7 +143,7 @@ const CheckinBedding = () => {
           
           <button
             onClick={handleContinue}
-            disabled={!beddingChoice || saveResponse.isPending}
+            disabled={!beddingChoice || saveResponse.isPending || isAdvancing}
             className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors disabled:opacity-50"
           >
             <span className="text-sm font-semibold text-primary">

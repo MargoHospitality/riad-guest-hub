@@ -254,6 +254,41 @@ export interface TransportStatus {
   } | null;
 }
 
+export interface CheckinTransportPayload {
+  transport_status: 'pending' | 'confirmed';
+  transport_method?: string;
+  transport_details?: string;
+  arrival_time?: string;
+}
+
+export function mapTransportStatusToCheckinPayload(
+  transportStatus: TransportStatus,
+): CheckinTransportPayload | null {
+  if (
+    (transportStatus.status !== 'pending' && transportStatus.status !== 'confirmed') ||
+    !transportStatus.request
+  ) {
+    return null;
+  }
+
+  const details = [
+    transportStatus.request.transport_date
+      ? `Date: ${transportStatus.request.transport_date}`
+      : null,
+    transportStatus.request.guest_comment?.trim() || null,
+  ].filter((value): value is string => Boolean(value));
+
+  return {
+    transport_status: transportStatus.status,
+    transport_method:
+      transportStatus.request.transport_type_name ||
+      transportStatus.request.transport_type ||
+      undefined,
+    transport_details: details.join(' | ') || undefined,
+    arrival_time: transportStatus.request.transport_time || undefined,
+  };
+}
+
 /**
  * Check transport request status for a reservation
  */

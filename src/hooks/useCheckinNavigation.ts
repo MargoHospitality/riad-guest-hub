@@ -10,7 +10,7 @@ import { useCheckinConfig } from './useCheckinConfig';
 import { useApp } from '@/contexts/AppContext';
 import { analytics } from '@/lib/analytics';
 
-type CheckinStep = 
+export type CheckinStep =
   | 'transport'
   | 'guest-details'
   | 'restaurant'
@@ -80,6 +80,20 @@ export function useCheckinNavigation() {
   };
   
   /**
+   * Get the next enabled step from the current step
+   */
+  const getNextStep = (currentStep: CheckinStep): CheckinStep | null => {
+    const enabledSteps = getEnabledSteps();
+    const currentIndex = enabledSteps.indexOf(currentStep);
+
+    if (currentIndex === -1) {
+      return enabledSteps[0] || null;
+    }
+
+    return enabledSteps[currentIndex + 1] || null;
+  };
+
+  /**
    * Navigate to next enabled step
    */
   const goToNextStep = (currentStep: CheckinStep) => {
@@ -94,13 +108,18 @@ export function useCheckinNavigation() {
 
     if (currentIndex === -1) {
       const firstStep = enabledSteps[0];
+      if (!firstStep) {
+        navigate(`/checkin/success?token=${token}`);
+        return;
+      }
+
       const path = STEP_PATHS[firstStep];
       navigate(`${path}?token=${token}`);
       return;
     }
-    
+
     const nextStep = enabledSteps[currentIndex + 1];
-    
+
     if (!nextStep) {
       analytics.checkinCompleted(propertyId);
       navigate(`/checkin/success?token=${token}`);
@@ -155,6 +174,7 @@ export function useCheckinNavigation() {
   
   return {
     goToNextStep,
+    getNextStep,
     goToPreviousStep,
     getEnabledSteps,
     getStepProgress,

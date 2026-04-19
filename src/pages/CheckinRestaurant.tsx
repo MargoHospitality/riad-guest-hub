@@ -20,7 +20,7 @@ import HeroSection from "@/components/HeroSection";
 
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
-import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
+import { useCheckinAdvance } from "@/hooks/useCheckinAdvance";
 import { useToast } from "@/hooks/use-toast";
 
 const CheckinRestaurant = () => {
@@ -28,7 +28,7 @@ const CheckinRestaurant = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep } = useCheckinNavigation();
+  const { advanceFromStep, isAdvancing } = useCheckinAdvance();
   
   const [mealChoice, setMealChoice] = useState<string>("");
   const [menuType, setMenuType] = useState<string>("");
@@ -41,9 +41,16 @@ const CheckinRestaurant = () => {
   useEffect(() => {
     if (config && config.step_restauration_enabled === false) {
       console.log('[CheckinRestaurant] Step disabled, auto-skipping to next');
-      goToNextStep('restaurant');
+      void advanceFromStep('restaurant').catch((error) => {
+        console.error('[CheckinRestaurant] Failed to auto-skip restaurant step:', error);
+        toast({
+          title: t('checkin.restaurant.error'),
+          description: error instanceof Error ? error.message : t('checkin.other.failedToComplete'),
+          variant: "destructive",
+        });
+      });
     }
-  }, [config, goToNextStep]);
+  }, [advanceFromStep, config, t, toast]);
   
   const handleContinue = async () => {
     if (!token) return;
@@ -76,13 +83,12 @@ const CheckinRestaurant = () => {
         },
       });
       
-      // Navigate to next step
-      goToNextStep('restaurant');
+      await advanceFromStep('restaurant');
     } catch (error) {
       console.error('Failed to save:', error);
       toast({
         title: t('checkin.restaurant.error'),
-        description: t('checkin.restaurant.failedToSave'),
+        description: error instanceof Error ? error.message : t('checkin.restaurant.failedToSave'),
         variant: "destructive",
       });
     }
@@ -170,7 +176,7 @@ const CheckinRestaurant = () => {
           
           <button
             onClick={handleContinue}
-            disabled={!mealChoice || saveResponse.isPending}
+            disabled={!mealChoice || saveResponse.isPending || isAdvancing}
             className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors disabled:opacity-50"
           >
             <span className="text-sm font-semibold text-primary">

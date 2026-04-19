@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Plane, Check, Clock, ArrowRight, Car, MapPin } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -14,9 +13,12 @@ import {
 } from "@/components/ui/select";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
-import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
+import { useApp } from "@/contexts/AppContext";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
+import { useCheckinAdvance } from "@/hooks/useCheckinAdvance";
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
+import { useToast } from "@/hooks/use-toast";
+import { checkTransportStatus, mapTransportStatusToCheckinPayload } from "@/lib/api";
 
 
 
@@ -38,12 +40,13 @@ interface ManualTransportForm {
 
 const CheckinTransport = () => {
   const { i18n } = useTranslation();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "demo";
   const resume = searchParams.get("resume");
   const fromMargoFlow = searchParams.get("from") === "margo-flow";
-  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
+  const { validation } = useApp();
+  const { advanceFromStep, isAdvancing } = useCheckinAdvance();
+  const { toast } = useToast();
 
   const [status, setStatus] = useState<TransportStatus>("none");
   const [details, setDetails] = useState<TransportDetails | null>(null);
@@ -68,17 +71,50 @@ const CheckinTransport = () => {
   useEffect(() => {
     if (config && config.step_transport_enabled === false) {
       console.log('[CheckinTransport] Step disabled, auto-skipping to next');
-      goToNextStep('transport');
+      void advanceFromStep('transport').catch((error) => {
+        console.error('[CheckinTransport] Failed to auto-skip transport step:', error);
+        toast({
+          title: "Erreur",
+          description: error instanceof Error ? error.message : "Impossible de finaliser l'enregistrement",
+          variant: "destructive",
+        });
+      });
     }
-  }, [config, goToNextStep]);
+  }, [advanceFromStep, config, toast]);
 
   // Auto-continue if returning from Margo Flow (transport already requested)
   useEffect(() => {
     if (fromMargoFlow) {
-      console.log('[CheckinTransport] Returning from Margo Flow, auto-continuing to next step');
-      goToNextStep('transport');
+      void (async () => {
+        console.log('[CheckinTransport] Returning from Margo Flow, syncing transport data before continuing');
+
+        try {
+          const reservationId = validation?.reservation?.reservation_id;
+
+          if (reservationId && token) {
+            const liveTransportStatus = await checkTransportStatus(reservationId);
+            const payload = mapTransportStatusToCheckinPayload(liveTransportStatus);
+
+            if (payload) {
+              await saveCheckin.mutateAsync({
+                token,
+                ...payload,
+              });
+            }
+          }
+
+          await advanceFromStep('transport');
+        } catch (error) {
+          console.error('[CheckinTransport] Failed to continue after Margo Flow:', error);
+          toast({
+            title: "Erreur",
+            description: error instanceof Error ? error.message : "Impossible de finaliser l'enregistrement",
+            variant: "destructive",
+          });
+        }
+      })();
     }
-  }, [fromMargoFlow, goToNextStep]);
+  }, [advanceFromStep, fromMargoFlow, saveCheckin, toast, token, validation?.reservation?.reservation_id]);
 
   useEffect(() => {
     const checkTransport = async () => {
@@ -138,12 +174,36 @@ const CheckinTransport = () => {
       });
     } catch (err) {
       console.error('[CheckinTransport] Failed to save manual transport:', err);
+      toast({
+        title: "Erreur",
+        description: "Impossible de sauvegarder vos informations de transport",
+        variant: "destructive",
+      });
+      return;
     }
-    goToNextStep('transport');
+    try {
+      await advanceFromStep('transport');
+    } catch (error) {
+      console.error('[CheckinTransport] Failed to continue transport step:', error);
+      toast({
+        title: "Erreur",
+        description: error instanceof Error ? error.message : "Impossible de finaliser l'enregistrement",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleContinue = () => {
-    goToNextStep('transport');
+  const handleContinue = async () => {
+    try {
+      await advanceFromStep('transport');
+    } catch (error) {
+      console.error('[CheckinTransport] Failed to continue transport step:', error);
+      toast({
+        title: "Erreur",
+        description: error instanceof Error ? error.message : "Impossible de finaliser l'enregistrement",
+        variant: "destructive",
+      });
+    }
   };
 
   const canContinue = () => {
@@ -312,7 +372,7 @@ const CheckinTransport = () => {
             <button
               type="button"
               onClick={showManualForm ? form.handleSubmit(handleManualSubmit) : handleContinue}
-              disabled={!canContinue()}
+              disabled={!canContinue() || isAdvancing}
               className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span className="text-sm font-semibold text-primary">Continuer</span>

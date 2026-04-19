@@ -4,10 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useApp } from '@/contexts/AppContext';
-import { checkTransportStatus } from '@/lib/api';
+import { checkTransportStatus, mapTransportStatusToCheckinPayload } from '@/lib/api';
 import { analytics } from '@/lib/analytics';
 import { useSaveCheckinResponse, useCheckinResponse } from '@/hooks/useCheckinResponse';
-import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -28,6 +28,7 @@ const CheckinGate = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const { validation } = useApp();
+  const { toast } = useToast();
   const [showManualForm, setShowManualForm] = useState(false);
   const saveResponse = useSaveCheckinResponse();
   const { data: checkinData } = useCheckinResponse(token);
@@ -57,9 +58,26 @@ const CheckinGate = () => {
     enabled: !!validation?.reservation?.reservation_id,
     refetchOnMount: true,
   });
+
+  const persistExistingTransport = async () => {
+    if (!token || !transportStatus) {
+      return;
+    }
+
+    const payload = mapTransportStatusToCheckinPayload(transportStatus);
+
+    if (!payload) {
+      return;
+    }
+
+    await saveResponse.mutateAsync({
+      token,
+      ...payload,
+    });
+  };
   
-  const handleRequestTransport = () => {
-    if (!validation?.reservation) return;
+  const handleRequestTransport = async () => {
+    if (!validation?.reservation || !token) return;
     const { cloudbeds_property_id, property_id, reservation_id, check_in_date, adults, children } = validation.reservation;
     if (!cloudbeds_property_id) {
       console.error('No Cloudbeds property ID available');
@@ -70,6 +88,15 @@ const CheckinGate = () => {
 
     // Track departure to Margo Flow
     analytics.checkinMargoflowLeft(property_id, pax);
+
+    try {
+      await saveResponse.mutateAsync({
+        token,
+        transport_status: 'margo_flow',
+      });
+    } catch (error) {
+      console.error('Failed to save Margo Flow departure status:', error);
+    }
 
     const params = new URLSearchParams({
       riad: cloudbeds_property_id,
@@ -83,12 +110,24 @@ const CheckinGate = () => {
     window.location.href = `https://flow.margo-hospitality.com/?${params.toString()}`;
   };
   
-  const handleContinue = () => {
+  const handleContinue = async () => {
     const propertyId = validation?.reservation?.property_id || '';
     analytics.checkinStarted(propertyId);
 
     const status = transportStatus?.status || 'none';
     if (status === 'confirmed' || status === 'pending') {
+      try {
+        await persistExistingTransport();
+      } catch (error) {
+        console.error('Failed to persist transport status:', error);
+        toast({
+          title: 'Erreur',
+          description: "Impossible d'enregistrer les informations de transport",
+          variant: 'destructive',
+        });
+        return;
+      }
+
       navigate(`/checkin/guest-details?token=${token}`);
       return;
     }
@@ -114,6 +153,11 @@ const CheckinGate = () => {
       navigate(`/checkin/guest-details?token=${token}`);
     } catch (error) {
       console.error('Failed to save transport details:', error);
+      toast({
+        title: 'Erreur',
+        description: "Impossible d'enregistrer les informations de transport",
+        variant: 'destructive',
+      });
     }
   };
   
@@ -188,6 +232,7 @@ const CheckinGate = () => {
               
               <button
                 onClick={handleContinue}
+                disabled={saveResponse.isPending}
                 className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
               >
                 <span className="text-sm font-semibold text-primary">{t('checkin.gate.continue')}</span>
@@ -215,6 +260,7 @@ const CheckinGate = () => {
               
               <button
                 onClick={handleContinue}
+                disabled={saveResponse.isPending}
                 className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 rounded-xl group hover:bg-primary/10 transition-colors"
               >
                 <span className="text-sm font-semibold text-primary">{t('checkin.gate.continue')}</span>
@@ -243,6 +289,7 @@ const CheckinGate = () => {
               <div className="px-4 pb-4 space-y-2">
                 <button
                   onClick={handleRequestTransport}
+                  disabled={saveResponse.isPending}
                   className="w-full flex items-center justify-between px-4 py-3.5 bg-accent/5 rounded-xl group hover:bg-accent/10 transition-colors"
                 >
                   <span className="text-sm font-semibold text-accent">{t('checkin.gate.requestWithMargoFlow')}</span>

@@ -3,7 +3,7 @@
  */
 
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { User, Users, Plus, CheckCircle, ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -15,7 +15,7 @@ import HeroSection from "@/components/HeroSection";
 
 import { useSaveCheckinResponse } from "@/hooks/useCheckinResponse";
 import { useCheckinConfig } from "@/hooks/useCheckinConfig";
-import { useCheckinNavigation } from "@/hooks/useCheckinNavigation";
+import { useCheckinAdvance } from "@/hooks/useCheckinAdvance";
 import { useToast } from "@/hooks/use-toast";
 
 interface GuestForm {
@@ -39,11 +39,10 @@ function parseGuestName(guestName: string): { firstName: string; lastName: strin
 
 const CheckinGuestDetails = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const { toast } = useToast();
-  const { goToNextStep, isStepEnabled } = useCheckinNavigation();
+  const { advanceFromStep, isAdvancing } = useCheckinAdvance();
   
   const [guests, setGuests] = useState<Guest[]>([]);
   const [currentGuestIndex, setCurrentGuestIndex] = useState(0);
@@ -67,9 +66,16 @@ const CheckinGuestDetails = () => {
   useEffect(() => {
     if (config && config.step_guest_details_enabled === false) {
       console.log('[CheckinGuestDetails] Step disabled, auto-skipping to next');
-      goToNextStep('guest-details');
+      void advanceFromStep('guest-details').catch((error) => {
+        console.error('[CheckinGuestDetails] Failed to auto-skip guest details step:', error);
+        toast({
+          title: t('checkin.guestDetails.error'),
+          description: error instanceof Error ? error.message : t('checkin.other.failedToComplete'),
+          variant: "destructive",
+        });
+      });
     }
-  }, [config, goToNextStep]);
+  }, [advanceFromStep, config, t, toast]);
   
   useEffect(() => {
     if (!token) return;
@@ -227,8 +233,17 @@ const CheckinGuestDetails = () => {
     setCurrentGuestIndex(guests.length);
   };
   
-  const handleContinue = () => {
-    goToNextStep('guest-details');
+  const handleContinue = async () => {
+    try {
+      await advanceFromStep('guest-details');
+    } catch (error) {
+      console.error('[CheckinGuestDetails] Failed to continue guest details step:', error);
+      toast({
+        title: t('checkin.guestDetails.error'),
+        description: error instanceof Error ? error.message : t('checkin.other.failedToComplete'),
+        variant: "destructive",
+      });
+    }
   };
   
   const handleSelectGuest = (index: number) => {
@@ -415,6 +430,7 @@ const CheckinGuestDetails = () => {
             <button
               type="button"
               onClick={handleContinue}
+              disabled={isAdvancing}
               className="w-full flex items-center justify-between px-4 py-3.5 bg-primary/5 border-t border-border group hover:bg-primary/10 transition-colors"
             >
               <span className="text-sm font-semibold text-primary">{t('checkin.guestDetails.continue')}</span>
