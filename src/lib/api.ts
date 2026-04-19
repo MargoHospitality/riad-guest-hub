@@ -261,6 +261,21 @@ export interface CheckinTransportPayload {
   arrival_time?: string;
 }
 
+function normalizeArrivalTime(value?: string | null): string | undefined {
+  const raw = value?.trim();
+
+  if (!raw) {
+    return undefined;
+  }
+
+  const match = raw.match(/^(\d{2}):(\d{2})(?::\d{2})?$/);
+  if (!match) {
+    return raw;
+  }
+
+  return `${match[1]}:${match[2]}`;
+}
+
 export function mapTransportStatusToCheckinPayload(
   transportStatus: TransportStatus,
 ): CheckinTransportPayload | null {
@@ -285,7 +300,7 @@ export function mapTransportStatusToCheckinPayload(
       transportStatus.request.transport_type ||
       undefined,
     transport_details: details.join(' | ') || undefined,
-    arrival_time: transportStatus.request.transport_time || undefined,
+    arrival_time: normalizeArrivalTime(transportStatus.request.transport_time),
   };
 }
 
