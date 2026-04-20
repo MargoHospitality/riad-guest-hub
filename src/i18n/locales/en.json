@@ -104,6 +104,8 @@
       "adultsExpected_other": "{{count}} adults expected",
       "saved": "Saved",
       "guestSaved": "Guest {{number}} details saved",
+      "allGuestsRequired": "Please complete and save all fields for every guest before continuing",
+      "primaryGuestRequired": "Please complete and save all fields for the primary guest before continuing",
       "error": "Error",
       "failedToSave": "Failed to save guest details",
       "maxGuestsReached": "Maximum guests reached",

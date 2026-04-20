@@ -104,6 +104,8 @@
       "adultsExpected_other": "{{count}} adultes attendus",
       "saved": "Enregistré",
       "guestSaved": "Informations du voyageur {{number}} sauvegardées",
+      "allGuestsRequired": "Veuillez renseigner et enregistrer tous les champs pour chaque voyageur avant de continuer",
+      "primaryGuestRequired": "Veuillez renseigner et enregistrer tous les champs du voyageur principal avant de continuer",
       "error": "Erreur",
       "failedToSave": "Impossible d'enregistrer les informations",
       "maxGuestsReached": "Nombre maximum atteint",

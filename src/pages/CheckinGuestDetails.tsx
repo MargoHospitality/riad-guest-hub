@@ -30,11 +30,30 @@ interface Guest extends GuestForm {
   isSaved: boolean;
 }
 
+const EMAIL_PATTERN = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+
 function parseGuestName(guestName: string): { firstName: string; lastName: string } {
   const parts = guestName.trim().split(/\s+/);
   if (parts.length === 0) return { firstName: '', lastName: '' };
   if (parts.length === 1) return { firstName: parts[0], lastName: '' };
   return { firstName: parts[0], lastName: parts.slice(1).join(' ') };
+}
+
+function isRequiredValueFilled(value: string): boolean {
+  return value.trim().length > 0;
+}
+
+function isPhoneFilled(value: string): boolean {
+  return value.replace(/\D/g, '').length >= 6;
+}
+
+function isGuestComplete(guest: Guest): boolean {
+  return (
+    isRequiredValueFilled(guest.firstName) &&
+    isRequiredValueFilled(guest.lastName) &&
+    EMAIL_PATTERN.test(guest.email.trim()) &&
+    isPhoneFilled(guest.phone)
+  );
 }
 
 const CheckinGuestDetails = () => {
@@ -130,6 +149,8 @@ const CheckinGuestDetails = () => {
   }, [token]);
   
   const currentGuest = guests[currentGuestIndex];
+  const primaryGuest = guests[0];
+  const canContinue = Boolean(primaryGuest && primaryGuest.isSaved && isGuestComplete(primaryGuest));
   
   useEffect(() => {
     if (currentGuest) {
@@ -177,10 +198,17 @@ const CheckinGuestDetails = () => {
   
   const onSubmit = async (data: GuestForm) => {
     if (!token) return;
+
+    const sanitizedData: GuestForm = {
+      firstName: data.firstName.trim(),
+      lastName: data.lastName.trim(),
+      email: data.email.trim(),
+      phone: data.phone.trim(),
+    };
     
     const updatedGuests = [...guests];
     updatedGuests[currentGuestIndex] = {
-      ...data,
+      ...sanitizedData,
       isPrimary: currentGuest.isPrimary,
       isSaved: true,
     };
@@ -234,6 +262,15 @@ const CheckinGuestDetails = () => {
   };
   
   const handleContinue = async () => {
+    if (!canContinue) {
+      toast({
+        title: t('checkin.guestDetails.error'),
+        description: t('checkin.guestDetails.primaryGuestRequired'),
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       await advanceFromStep('guest-details');
     } catch (error) {
@@ -322,35 +359,30 @@ const CheckinGuestDetails = () => {
             </div>
             
             <div className="px-4 pb-4 space-y-4">
-              {/* First & Last Name (always shown for non-primary, disabled if pre-filled) */}
-              {!currentGuest?.isPrimary && (
-                <>
-                  <div>
-                    <Label htmlFor="firstName" className="text-xs text-muted-foreground">{t('checkin.guestDetails.firstName')} *</Label>
-                    <Input
-                      id="firstName"
-                      {...register("firstName", { required: t('checkin.guestDetails.firstNameRequired') })}
-                      disabled={!!currentGuest?.firstName}
-                      className="mt-1 disabled:opacity-70 disabled:cursor-not-allowed"
-                    />
-                    {errors.firstName && (
-                      <p className="text-xs text-destructive mt-1">{errors.firstName.message}</p>
-                    )}
-                  </div>
-                  <div>
-                    <Label htmlFor="lastName" className="text-xs text-muted-foreground">{t('checkin.guestDetails.lastName')} *</Label>
-                    <Input
-                      id="lastName"
-                      {...register("lastName", { required: t('checkin.guestDetails.lastNameRequired') })}
-                      disabled={!!currentGuest?.lastName}
-                      className="mt-1 disabled:opacity-70 disabled:cursor-not-allowed"
-                    />
-                    {errors.lastName && (
-                      <p className="text-xs text-destructive mt-1">{errors.lastName.message}</p>
-                    )}
-                  </div>
-                </>
-              )}
+              <div>
+                <Label htmlFor="firstName" className="text-xs text-muted-foreground">{t('checkin.guestDetails.firstName')} *</Label>
+                <Input
+                  id="firstName"
+                  {...register("firstName", { required: t('checkin.guestDetails.firstNameRequired') })}
+                  readOnly={Boolean(currentGuest?.firstName?.trim())}
+                  className={`mt-1 ${currentGuest?.firstName?.trim() ? 'opacity-70 cursor-not-allowed' : ''}`}
+                />
+                {errors.firstName && (
+                  <p className="text-xs text-destructive mt-1">{errors.firstName.message}</p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="lastName" className="text-xs text-muted-foreground">{t('checkin.guestDetails.lastName')} *</Label>
+                <Input
+                  id="lastName"
+                  {...register("lastName", { required: t('checkin.guestDetails.lastNameRequired') })}
+                  readOnly={Boolean(currentGuest?.lastName?.trim())}
+                  className={`mt-1 ${currentGuest?.lastName?.trim() ? 'opacity-70 cursor-not-allowed' : ''}`}
+                />
+                {errors.lastName && (
+                  <p className="text-xs text-destructive mt-1">{errors.lastName.message}</p>
+                )}
+              </div>
               
               {/* Email */}
               <div>
@@ -361,7 +393,7 @@ const CheckinGuestDetails = () => {
                   {...register("email", { 
                     required: t('checkin.guestDetails.emailRequired'),
                     pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      value: EMAIL_PATTERN,
                       message: t('checkin.guestDetails.emailInvalid')
                     }
                   })}
@@ -376,6 +408,12 @@ const CheckinGuestDetails = () => {
               {/* Phone */}
               <div>
                 <Label htmlFor="phone" className="text-xs text-muted-foreground">{t('checkin.guestDetails.phone')} *</Label>
+                <input
+                  type="hidden"
+                  {...register("phone", {
+                    validate: (value) => isPhoneFilled(value) || t('checkin.guestDetails.phoneRequired'),
+                  })}
+                />
                 <div className="mt-1">
                   <PhoneInputComplete
                     value={phoneNumber}
@@ -408,6 +446,12 @@ const CheckinGuestDetails = () => {
                   <CheckCircle className="w-3.5 h-3.5 text-primary-foreground" />
                 </div>
               </button>
+
+              {!canContinue && currentGuest?.isPrimary && (
+                <p className="text-xs text-muted-foreground">
+                  {t('checkin.guestDetails.primaryGuestRequired')}
+                </p>
+              )}
             </div>
           </form>
           
@@ -426,7 +470,7 @@ const CheckinGuestDetails = () => {
           )}
           
           {/* Continue */}
-          {currentGuest?.isSaved && (
+          {canContinue && (
             <button
               type="button"
               onClick={handleContinue}
