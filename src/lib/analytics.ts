@@ -9,6 +9,7 @@
  */
 
 import posthog from 'posthog-js';
+import { parseDateOnly } from '@/lib/date';
 
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY as string | undefined;
 const POSTHOG_HOST = 'https://eu.posthog.com'; // EU region (RGPD)
@@ -49,9 +50,14 @@ export function identifySession(
 
   // Register days_before_checkin as a super property (auto-added to all subsequent events)
   if (checkInDate) {
+    const parsedCheckInDate = parseDateOnly(checkInDate);
+    if (!parsedCheckInDate) {
+      return;
+    }
+
     const msPerDay = 1000 * 60 * 60 * 24;
     const daysBeforeCheckin = Math.ceil(
-      (new Date(checkInDate).getTime() - Date.now()) / msPerDay,
+      (parsedCheckInDate.getTime() - Date.now()) / msPerDay,
     );
     // Positive = before check-in, 0 = check-in day, negative = during/after stay
     posthog.register({ days_before_checkin: daysBeforeCheckin });

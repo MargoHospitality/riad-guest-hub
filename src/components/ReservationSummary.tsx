@@ -2,6 +2,7 @@ import { CalendarDays, BedDouble, Users, Baby } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
 import TransportCard from "@/components/TransportCard";
+import { formatCalendarDateParts } from "@/lib/date";
 
 const ReservationSummary = () => {
   const { t, i18n } = useTranslation();
@@ -20,22 +21,14 @@ const ReservationSummary = () => {
 
   const roomCount = (reservation as any).room_count as number | undefined;
 
-
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
-    const locale = i18n.language === 'en' ? 'en-US' : 'fr-FR';
-    const day = date.getDate();
-    const month = date.toLocaleDateString(locale, { month: 'short' });
-    const weekday = date.toLocaleDateString(locale, { weekday: 'short' });
-    return { day, month, weekday };
-  };
+  const locale = i18n.language === 'en' ? 'en-US' : 'fr-FR';
 
   const checkInDate = reservation.check_in_date 
-    ? formatDate(reservation.check_in_date)
+    ? formatCalendarDateParts(reservation.check_in_date, locale)
     : { day: 11, month: 'févr.', weekday: 'mer.' };
     
   const checkOutDate = reservation.check_out_date
-    ? formatDate(reservation.check_out_date)
+    ? formatCalendarDateParts(reservation.check_out_date, locale)
     : { day: 14, month: 'févr.', weekday: 'sam.' };
 
   return (

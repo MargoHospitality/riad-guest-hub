@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useApp } from "@/contexts/AppContext";
 import { useCheckinResponse, useCancelCheckin } from "@/hooks/useCheckinResponse";
 import { toast } from "sonner";
+import { parseDateOnly } from "@/lib/date";
 
 const CheckinCTA = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const CheckinCTA = () => {
 
   // Check if within 48 hours of check-in
   const checkInDate = validation?.reservation?.check_in_date 
-    ? new Date(validation.reservation.check_in_date) 
+    ? parseDateOnly(validation.reservation.check_in_date) 
     : null;
   const hoursUntilCheckin = checkInDate 
     ? (checkInDate.getTime() - new Date().getTime()) / (1000 * 60 * 60)
